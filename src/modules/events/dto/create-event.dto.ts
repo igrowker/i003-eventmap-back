@@ -2,7 +2,6 @@ import {IsString, IsNotEmpty, IsDateString, Matches} from 'class-validator';
 // import { IsTime } from 'src/decorators/IsHourFormat.decorator';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
-
 export class CreateEventDto{
     @IsString()
     @IsNotEmpty()
