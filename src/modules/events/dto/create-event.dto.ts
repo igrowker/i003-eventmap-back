@@ -17,7 +17,7 @@ export class CreateEventDto{
     
     @IsNotEmpty()
     // @IsTime() --> el Matches hace el mismo laburo pero mas rapido incluso, se podria usar tambien en date
-    @Matches(/^(1[0-2]|0?[1-9]):([0-5]?[0-9]):([0-5]?[0-9])$/)
+    @Matches(/^(1[0-2]|0?[1-9]):([0-5]?[0-9])$/)
     time : TimeStringFormat
     
     @IsNotEmpty()
