@@ -16,9 +16,17 @@ model Event {
   location Json[]
 }
 
-// model User {
-//   id     Int    @id @default(autoincrement())
-//   name   String
-//   email  String
-//   logout String
-// }
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  lastName  String
+  email     String   @unique
+  password  String
+  cuit      String   @unique
+  rol       String
+  lastLogin DateTime @default(now())
+  events    String[]
+  state     Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
