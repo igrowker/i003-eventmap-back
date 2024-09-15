@@ -30,4 +30,19 @@ export class EventsService {
     updateEvent(event : UpdateEventDto){
         return 'event'
     }
+    
+  // actualizacion de los eventos
+  updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
+    return this.prisma.event.update({
+      where: { id },
+      data: updateData,
+    });
+  }
+
+  // eliminar evento
+  deleteEvent(id: number) {
+    return this.prisma.event.delete({
+      where: { id },
+    });
+  }
 }
