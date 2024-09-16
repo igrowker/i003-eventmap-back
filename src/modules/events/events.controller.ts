@@ -15,11 +15,9 @@ export class EventsController{
     }
 
     @Get('/event/:id')
-    getEventById(@Param('id', ParseIntPipe) id : number){
-
+    async getEventById(@Param('id', ParseIntPipe) id : number){
         console.log(typeof id);
-
-        return this.eventsService.getEvent(id);
+        return await this.eventsService.getEvent(id);
     }
 
     //pipe validation perzonalizada
