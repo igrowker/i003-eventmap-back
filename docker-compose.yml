@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: balbito
+      POSTGRES_PASSWORD: balbito123
+      POSTGRES_DB: eventmap
+    ports:
+      - "5500:5432"
