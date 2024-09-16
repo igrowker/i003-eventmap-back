@@ -46,13 +46,15 @@ export class EventsController{
     }
 
     @Patch('/:id')
-    updateEventStatus(){
-        return 'actulizando el status';
+    updateEventStatus(
+      @Param('id', ParseIntPipe) id: number,
+      @Body() updateData: Partial<UpdateEventDto>, // recibo solo una parte del evento
+    ) {
+      return this.eventsService.updateEventStatus(id, updateData);
     }
-
+  
     @Delete('/:id')
-    // @UseGuards(AuthGuard)
-    deleteEvent(){
-        return 'eliminando un evento';
+    deleteEvent(@Param('id', ParseIntPipe) id: number) {
+      return this.eventsService.deleteEvent(id);
     }
-}
+  }
