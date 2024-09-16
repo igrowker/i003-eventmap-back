@@ -7,9 +7,8 @@ export class LoggerMiddleware implements NestMiddleware {
     const { method, originalUrl } = req;
     const ip = req.ip;
 
-    const startTime = Date.now(); // Marca el tiempo de inicio
+    const startTime = Date.now();
 
-    // Cuando la respuesta se haya enviado, calculamos el tiempo y mostramos el código de estado
     res.on('finish', () => {
       const statusCode = res.statusCode;
       const endTime = Date.now();
@@ -23,3 +22,5 @@ export class LoggerMiddleware implements NestMiddleware {
     next();
   }
 }
+
+// test
