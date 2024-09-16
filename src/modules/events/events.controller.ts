@@ -1,10 +1,9 @@
-import {Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, Req, Res, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpException, Param, ParseIntPipe, Patch, Post, Put, Query, Req, Res, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { ValidateuserPipe } from './pipes/validateuser/validateuser.pipe';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
-
 
 @Controller('/events')
 export class EventsController{
@@ -15,7 +14,7 @@ export class EventsController{
         return this.eventsService.getEvents();
     }
 
-    @Get('/:id')
+    @Get('/event/:id')
     getEventById(@Param('id', ParseIntPipe) id : number){
 
         console.log(typeof id);
