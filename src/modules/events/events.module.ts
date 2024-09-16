@@ -14,7 +14,6 @@ export class EventsModule implements NestModule{
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(LoggerMiddleware).forRoutes('events') //ahora todos los events controller se les va a aplicar este middleware
         // .apply(AuthMiddleware).forRoutes('events')
-
     }
 }
 
