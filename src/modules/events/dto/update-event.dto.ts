@@ -5,3 +5,5 @@ export interface UpdateEventDto{
     visibility ?: string
     comment ?: string 
 }
+
+// modificar esto

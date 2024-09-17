@@ -22,16 +22,21 @@ export class UsersService {
     if (errors.length > 0) throw new ConflictException(errors);
 
     const passwordHash : string = await bcrypt.hash(createUserDto.password, 10);
-  
-    const newUser = await this.prisma.user.create({
-      data: {
-        ...createUserDto, password: passwordHash, lastLogin: new Date().toLocaleString(),
-      },
-    });
+
+    // const newUser = await this.prisma.user.create({
+    //   data: {
+    //     ...createUserDto, password: passwordHash, lastLogin: new Date().toLocaleString(),
+    //   },
+    // });
+
+    const newUser = {
+      name : "pepe",
+      lastName : "pepe2"
+    }
     
-    const payload = { id: newUser.id, username: newUser.name, rol: newUser.rol };
-    const jwt = await this.jwtService.signAsync(payload);
-    res.cookie('token', jwt);
+    // const payload = { id: newUser.id, username: newUser.name, rol: newUser.rol };
+    // const jwt = await this.jwtService.signAsync(payload);
+    // res.cookie('token', jwt);
     
     return `¡¡¡Bienvenid@ ${newUser.name + ' ' + newUser.lastName}, gracias por registrarte!!!`;
   }
@@ -43,7 +48,10 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const userFound = await this.prisma.user.findUnique({ where: { id } });
+    const userFound = await this.prisma.user.findUnique({ where: { id } ,
+      include: {
+        events: true,
+      }, });
 
     if (!userFound) throw new NotFoundException('Usuario no encontrado');
     return userFound;
@@ -51,13 +59,15 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     try {
-      const userFound = await this.prisma.user.update({
-        where: { id },
-        data: {
-          ...updateUserDto
-        },
-      });
-      return userFound; 
+      // const userFound = await this.prisma.user.update({
+      //   where: { id },
+      //   data: {
+      //     ...updateUserDto
+      //   },
+      // });
+      // return userFound; 
+
+      return {}
     }
     catch(error) {
       if (error.code === 'P2025') throw new NotFoundException('Usuario no encontrado');

@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "User" ALTER COLUMN "lastLogin" DROP DEFAULT,
-ALTER COLUMN "lastLogin" SET DATA TYPE TEXT;

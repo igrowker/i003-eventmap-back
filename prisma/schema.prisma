@@ -7,13 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Type {
+  Deportivo
+  Artistico
+  Gastronomico
+}
+
 model Event {
-  id       Int    @id @default(autoincrement())
-  name     String
-  type     String
-  date     String
-  time     String
-  location Json[]
+  id          Int      @id @default(autoincrement())
+  name        String
+  type        Type
+  date        String
+  time        String
+  location    Json[]
+  photos      String[]
+  description String
+  amount      Int      @default(100)
+  createdAt   DateTime @default(now())
+  user        User     @relation(name: "EventToUser", fields: [userId], references: [id])
+  userId      Int
 }
 
 model User {
@@ -24,7 +36,7 @@ model User {
   password  String
   cuit      String   @unique
   rol       String
-  events    String[]
+  events    Event[]  @relation(name: "EventToUser")
   state     Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
