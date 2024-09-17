@@ -42,11 +42,11 @@ export class EventsController {
     //dif entre Put y Patch --> Put actuliza todo el objeto y Patch actuliza alguna prop en particular
     @Put('/:id')
     updateEvent(
-      @Param('id', ParseIntPipe) id: number,
-      @Body() event: UpdateEventDto // actualizando datos 
+        @Param('id', ParseIntPipe) id: number,
+        @Body() event: UpdateEventDto // actualizando datos 
     ) {
-      return this.eventsService.updateEvent(id, event);
-      }
+        return this.eventsService.updateEvent(id, event);
+    }
 
     @Patch('/:id')
     updateEventStatus(
