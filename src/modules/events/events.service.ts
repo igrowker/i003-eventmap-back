@@ -26,6 +26,11 @@ export class EventsService {
     createEvent(event : CreateEventDto){
         console.log(event);
 
+
+        //hacer validaciones
+
+
+
         //aca faltaria toda la logica para controlar q las fecha y hora esten en formato fecha y hora
         //de momento en el create-event.dto lo puse como strings
 
