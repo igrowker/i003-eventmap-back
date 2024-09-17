@@ -1,17 +1,26 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import {Request,Response} from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-//esto lo tendrias q injectar en el modulo q quieras usar, para este ejem en event.module.ts
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: () => void) {
+  use(req: Request, res: Response, next: NextFunction) {
+    const { method, originalUrl } = req;
+    const ip = req.ip;
 
-    const aux = {
-      url : req.originalUrl
-    }
+    const startTime = Date.now();
 
-    console.log(aux);
+    res.on('finish', () => {
+      const statusCode = res.statusCode;
+      const endTime = Date.now();
+      const duration = endTime - startTime;
+
+      console.log(
+        `[Request] Method: ${method}, URL: ${originalUrl}, IP: ${ip}, Status: ${statusCode}, Duration: ${duration}ms`
+      );
+    });
 
     next();
   }
 }
+
+// test
