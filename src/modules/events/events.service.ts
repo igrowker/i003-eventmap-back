@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import {PrismaService} from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
@@ -12,8 +12,13 @@ export class EventsService {
         return this.prisma.event.findMany();
     }
 
-    getEvent(id : number){
-        return id;
+    async getEvent(id : number){
+        try {
+            return await this.prisma.event.findFirst({where : {id}});
+        } catch (error) {
+            console.error("Erro al crear el evento");
+            throw new HttpException('Error al crear el evento',HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     //ojo el dto no te sirve para hacer validaciones osea si faltan datos podria crearse el evento igual
@@ -27,7 +32,26 @@ export class EventsService {
         return this.prisma.event.create({data : event});
     }
 
-    updateEvent(event : UpdateEventDto){
-        return 'event'
-    }
+  updateEvent(id: number, event: UpdateEventDto) {
+    return this.prisma.event.update({
+      where: { id: id },
+      data: event, // actualizar datos
+    });
+  }
+    
+    
+  // actualizacion de los eventos
+  updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
+    return this.prisma.event.update({
+      where: { id },
+      data: updateData,
+    });
+  }
+
+  // eliminar evento
+  deleteEvent(id: number) {
+    return this.prisma.event.delete({
+      where: { id },
+    });
+  }
 }
