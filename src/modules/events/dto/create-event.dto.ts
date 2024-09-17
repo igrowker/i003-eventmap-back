@@ -9,7 +9,7 @@ export class CreateEventDto{
     
     @IsString()
     @IsNotEmpty()
-    type : string
+    type : string //agregar los 3 tipos de eventos: deportivo, artistico, el otro
 
     @IsDateString()
     @IsNotEmpty()
@@ -22,6 +22,7 @@ export class CreateEventDto{
     
     @IsNotEmpty()
     location : [{
+        //mete decoradores
         id : string,
         //habalr con franco xq el title seria lo mismo q name ?
         title : string,
@@ -31,9 +32,15 @@ export class CreateEventDto{
                 log : string,
             }
         ],
-        phontos : string,
+        phontos : string, //consultar si se pasa una url o se puede seleccionar una imagen desde el front --> input file
         description : string
     }]
 }
 
-// {"id":"669c42a6fdd4ca72f282d5dc","title":"La Colonial","location":[-34.638017,-59.27014],"photos":["https://res.cloudinary.com/dyi5til4r/image/upload/v1721516995/669c42a6fdd4ca72f282d5dc/restaurant-photos/669c42a6fdd4ca72f282d5dc/1721516995007.webp"], "description":"Restaurante y bar clásico al costado de la ruta 5"}
+// {
+// "id":"669c42a6fdd4ca72f282d5dc",
+// "title":"La Colonial",
+// "location":[-34.638017,-59.27014],
+// "photos":["https://res.cloudinary.com/dyi5til4r/image/upload/v1721516995/669c42a6fdd4ca72f282d5dc/restaurant-photos/669c42a6fdd4ca72f282d5dc/1721516995007.webp"], 
+// "description":"Restaurante y bar clásico al costado de la ruta 5"
+// }
