@@ -61,7 +61,7 @@ export class AuthService {
     console.log(user.password)
     console.log(passwordValid)
     console.log('llego 1')
-    if(passwordValid) {
+    if(!passwordValid) {
       // hasta que los usuario no esten creados, probarlo sin el !
       throw new UnauthorizedException('Credenciales incorrectas')
     }
