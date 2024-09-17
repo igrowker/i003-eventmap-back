@@ -22,20 +22,22 @@ model Event {
   location    Json[]
   photos      String[]
   description String
-  user        User    @relation(name: "EventToUser", fields: [userId], references: [id])
+  amount      Int      @default(100)
+  createdAt   DateTime @default(now())
+  user        User     @relation(name: "EventToUser", fields: [userId], references: [id])
   userId      Int
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   lastName  String
-  email     String  @unique
+  email     String   @unique
   password  String
-  cuit      String  @unique
+  cuit      String   @unique
   rol       String
-  events    Event[] @relation(name: "EventToUser")
-  state     Boolean @default(true)
+  events    Event[]  @relation(name: "EventToUser")
+  state     Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   lastLogin String

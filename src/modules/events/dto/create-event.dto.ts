@@ -40,6 +40,14 @@ export class CreateEventDto{
     @IsNotEmpty()
     @IsString()
     description : string
+
+    @IsNotEmpty()
+    @IsNumber()
+    amount : number
+
+    @IsNotEmpty()
+    @IsDateString()
+    createdAt : Date
 }
 
 //el token setearlo desde al back en las cookies
