@@ -23,16 +23,16 @@ export class UsersService {
 
     const passwordHash : string = await bcrypt.hash(createUserDto.password, 10);
 
-    // const newUser = await this.prisma.user.create({
-    //   data: {
-    //     ...createUserDto, password: passwordHash, lastLogin: new Date().toLocaleString(),
-    //   },
-    // });
+    const newUser = await this.prisma.user.create({
+      data: {
+        ...createUserDto, password: passwordHash, lastLogin: new Date().toLocaleString(),
+      },
+    });
 
-    const newUser = {
-      name : "pepe",
-      lastName : "pepe2"
-    }
+    // const newUser = {
+    //   name : "pepe",
+    //   lastName : "pepe2"
+    // }
     
     // const payload = { id: newUser.id, username: newUser.name, rol: newUser.rol };
     // const jwt = await this.jwtService.signAsync(payload);
