@@ -40,5 +40,5 @@ model User {
   state     Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  lastLogin String
+  lastLogin String?  @default("")
 }

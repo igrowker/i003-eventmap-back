@@ -34,10 +34,6 @@ export class CreateUserDto {
     @IsNotEmpty()
     @IsString()
     rol: string;
-
-    @IsOptional()
-    @IsString()
-    lastLogin?: string;
   
     @IsOptional()
     @IsArray()
@@ -46,4 +42,6 @@ export class CreateUserDto {
     @IsBoolean()
     @IsOptional()
     state?: boolean;
+
+    
 }

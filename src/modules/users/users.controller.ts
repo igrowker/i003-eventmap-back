@@ -20,7 +20,7 @@ export class UsersController {
 
   @Post()
   create(@Res({ passthrough: true}) res: Response, @Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto, res);
+    return this.usersService.create(createUserDto);
   }
   
   @Patch(':id')

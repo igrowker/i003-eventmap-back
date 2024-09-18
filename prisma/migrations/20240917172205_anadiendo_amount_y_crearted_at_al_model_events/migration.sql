@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Event" ADD COLUMN     "amount" INTEGER NOT NULL DEFAULT 100,
-ADD COLUMN     "createdAt" TEXT NOT NULL DEFAULT '';

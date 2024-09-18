@@ -9,6 +9,10 @@ CREATE TABLE "Event" (
     "date" TEXT NOT NULL,
     "time" TEXT NOT NULL,
     "location" JSONB[],
+    "photos" TEXT[],
+    "description" TEXT NOT NULL,
+    "amount" INTEGER NOT NULL DEFAULT 100,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" INTEGER NOT NULL,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
@@ -23,7 +27,6 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "cuit" TEXT NOT NULL,
     "rol" TEXT NOT NULL,
-    "events" TEXT[],
     "state" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

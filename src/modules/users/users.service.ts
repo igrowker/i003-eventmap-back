@@ -1,45 +1,60 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from '../../prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt'; 
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-  async create(createUserDto: CreateUserDto, res) {
-    const errors = [];
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const errors = [];
 
-    const existingUserEmail = await this.prisma.user.findUnique({ where: { email: createUserDto.email } });
-    if (existingUserEmail) errors.push('Email already in use');
-
-    const existingUserCuit = await this.prisma.user.findUnique({ where: { cuit: createUserDto.cuit } });
-    if (existingUserCuit) errors.push('CUIT already in use');
-
-    if (errors.length > 0) throw new ConflictException(errors);
-
-    const passwordHash : string = await bcrypt.hash(createUserDto.password, 10);
-
-    // const newUser = await this.prisma.user.create({
-    //   data: {
-    //     ...createUserDto, password: passwordHash, lastLogin: new Date().toLocaleString(),
-    //   },
-    // });
-
-    const newUser = {
-      name : "pepe",
-      lastName : "pepe2"
+      const existingUserEmail = await this.prisma.user.findUnique({ where: { email: createUserDto.email } });
+      if (existingUserEmail) {
+        errors.push('Email already in use');
+      }
+  
+      const existingUserCuit = await this.prisma.user.findUnique({ where: { cuit: createUserDto.cuit } });
+      if (existingUserCuit) {
+        errors.push('CUIT already in use');
+      }
+  
+      // busca exepciones si hay errores
+      if (errors.length > 0) {
+        throw new ConflictException(errors);
+      }
+  
+      const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
+  
+      // Crear el nuevo usuario en la base de datos
+      const newUser = await this.prisma.user.create({
+        data: {
+          name: createUserDto.name,
+          lastName: createUserDto.lastName,
+          email: createUserDto.email,
+          password: passwordHash,
+          cuit: createUserDto.cuit,
+          rol: createUserDto.rol,
+          lastLogin: "",
+          state: createUserDto.state,
+        },
+      });
+  
+      return `Usuario creado con éxito.`;
+      
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Error al crear el usuario');
     }
-    
-    // const payload = { id: newUser.id, username: newUser.name, rol: newUser.rol };
-    // const jwt = await this.jwtService.signAsync(payload);
-    // res.cookie('token', jwt);
-    
-    return `¡¡¡Bienvenid@ ${newUser.name + ' ' + newUser.lastName}, gracias por registrarte!!!`;
   }
+  
 
   async findAll() {
     const users = await this.prisma.user.findMany();
