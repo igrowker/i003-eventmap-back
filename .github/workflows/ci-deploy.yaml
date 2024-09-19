@@ -77,8 +77,8 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:${{ github.sha }}
 
-      # - name: Deploy to Dev - Render
-      #   uses: fjogeleit/http-request-action@v1
-      #   with:
-      #       url: ${{ secrets.RENDER_DEPLOY_HOOK }}
-      #       method: GET
+      - name: Deploy to Dev - Render
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ secrets.RENDER_DEPLOY_DEV_HOOK }}
+          method: GET
