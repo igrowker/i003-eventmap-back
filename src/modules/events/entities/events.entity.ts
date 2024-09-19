@@ -1,4 +1,4 @@
-import { $Enums, Type } from '@prisma/client';
+
 import { IsString, IsNumber, IsOptional, IsDate } from 'class-validator';
 import { User } from 'src/modules/users/entities/user.entity';
 //OJO aca puede q en ves de User de entity sea el de prisma (o capaz sean lo mismo)
@@ -6,7 +6,7 @@ import { User } from 'src/modules/users/entities/user.entity';
 export class Event {
     id: number;
     name: string;
-    type: $Enums.Type;
+    type: string;
     date: Date;
     time: string;
     location: string[];

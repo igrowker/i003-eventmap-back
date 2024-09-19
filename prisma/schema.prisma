@@ -16,7 +16,7 @@ enum Type {
 model Event {
   id          Int      @id @default(autoincrement())
   name        String
-  type        Type
+  type        String
   date        String
   time        String
   location    Json[]

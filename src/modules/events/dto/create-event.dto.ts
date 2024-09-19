@@ -1,4 +1,3 @@
-import { Type } from '@prisma/client';
 import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray} from 'class-validator';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
@@ -15,7 +14,7 @@ export class CreateEventDto{
     @IsString()
     @IsNotEmpty()
     @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, {message : "El evento debe de ser una de estas opciones: Deportivo, Artistico, Gastronomico"})
-    type : Type
+    type : string
 
     @IsDateString()
     @IsNotEmpty()
