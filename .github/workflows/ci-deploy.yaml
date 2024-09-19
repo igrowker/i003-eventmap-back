@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --verbose --frozen-lockfile
 
+      - name: Dependencies fix  
+        run: npm audit fix
+
       - name: Verify Dependencies
         run: npm audit
 
