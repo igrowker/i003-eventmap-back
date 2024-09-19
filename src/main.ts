@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { LoggerMiddleware } from './middlewares/logger/logger.middleware';
-// import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import dotenvOptions, {dotenvFun}  from './config/dotenvConfig';
 
