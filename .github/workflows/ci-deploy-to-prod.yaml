@@ -1,4 +1,4 @@
-name: Deploy to Dev
+name: Deploy to Prod
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -47,7 +47,7 @@ jobs:
         run: npm ci --verbose --frozen-lockfile
 
       - name: Verify Dependencies
-        run: npm audit
+        run: npm audit --production
 
       - name: Build
         run: npm run build
@@ -64,12 +64,12 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-            push: true
-            cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:cache
-            cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:cache,mode=max
-            tags: |
-                ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:-dev:latest
-                ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:${{github.sha}}
+          push: true
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:cache
+          cache-to: type=inline
+          tags: |
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:${{ github.sha }}
 
       # - name: Deploy to Dev - Render
       #   uses: fjogeleit/http-request-action@v1
