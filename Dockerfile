@@ -21,6 +21,7 @@ USER appuser
 # Copiar artefactos compilados y dependencias necesarias
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
 # Exponer puerto y ejecutar en producción
 EXPOSE 3000
