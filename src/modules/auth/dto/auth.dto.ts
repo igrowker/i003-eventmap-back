@@ -1,13 +1,13 @@
-import { IsEmail, IsString, MinLength, Matches } from 'class-validator';
+import { IsEmail, Matches, IsNotEmpty } from 'class-validator';
 
 export class AuthLoginDto {
-  @IsEmail({}, { message: 'El email debe ser válido' })
+  @IsEmail({}, { message: 'Formato de correo electrónico no válido' })
+  @IsNotEmpty({ message: 'Correo electrónico es obligatorio' })
   email: string;
 
-  @IsString()
-  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
-  @Matches(/[A-Z]/, { message: 'La contraseña debe contener al menos una letra mayúscula' })
-  @Matches(/[a-z]/, { message: 'La contraseña debe contener al menos una letra minúscula' })
-  @Matches(/[0-9]/, { message: 'La contraseña debe contener al menos un número' })
+  @IsNotEmpty({ message: 'Contraseña es obligatoria' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/, { 
+    message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número' 
+  })
   password: string;
 }

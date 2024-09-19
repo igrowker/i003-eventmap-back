@@ -16,19 +16,13 @@ export class EventsService {
         try {
             return await this.prisma.event.findFirst({where : {id}});
         } catch (error) {
-            console.error("Erro al crear el evento");
+            console.error("Error al crear el evento");
             throw new HttpException('Error al crear el evento',HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    //ojo el dto no te sirve para hacer validaciones osea si faltan datos podria crearse el evento igual
-    //el dto es mas q nada el autocompletado y analisis de erores
     createEvent(event : CreateEventDto){
         console.log(event);
-
-        //aca faltaria toda la logica para controlar q las fecha y hora esten en formato fecha y hora
-        //de momento en el create-event.dto lo puse como strings
-
         return this.prisma.event.create({data : event});
     }
 
