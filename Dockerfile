@@ -8,6 +8,7 @@ RUN npm outdated --exit 0 || true && npm update --save || true
 # Etapa 2: Construcción de la aplicación
 FROM deps AS builder
 COPY . . 
+RUN npx prisma generate
 RUN npm run build
 
 # Etapa 3: Servidor de producción
