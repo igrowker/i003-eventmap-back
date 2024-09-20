@@ -1,5 +1,6 @@
-import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray} from 'class-validator';
+import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, ArrayNotEmpty} from 'class-validator';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
+
 
 export class CreateEventDto{
     
@@ -24,13 +25,17 @@ export class CreateEventDto{
     @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
     time : TimeStringFormat
     
-    @IsNotEmpty()
-    location : [
-        {
-            lat : string, //y
-            log : string, //x
-        }
-    ]
+    // @IsNotEmpty()
+    // location : [
+    //     {
+    //         lat : string, //y
+    //         log : string, //x
+    //     }
+    // ]
+
+    @ArrayNotEmpty()
+    location : [{ lat: number; lon: number }] //fijate aca de capaz cambiar estos valores por number
+    //hablar con el pibe de front si ellos hacen la convercion o prefiere q le llegue como number
 
     @IsArray()
     @IsString({ each: true })
@@ -42,19 +47,11 @@ export class CreateEventDto{
 
     @IsNotEmpty()
     @IsNumber()
-    amount : number //hacer validacion con rango ejem: 0 a 3000 o 0 a 10
+    @Min(0, { message: 'El valor debe ser mayor o igual a 0' })
+    @Max(1, { message: 'El valor debe ser menor o igual a 1' })
+    amount : number
 
     @IsNotEmpty()
     @IsDateString()
     createdAt : Date
 }
-
-//el token setearlo desde al back en las cookies
-
-// {
-// "id":"669c42a6fdd4ca72f282d5dc",
-// "title":"La Colonial",
-// "location":[-34.638017,-59.27014],
-// "photos":["https://res.cloudinary.com/dyi5til4r/image/upload/v1721516995/669c42a6fdd4ca72f282d5dc/restaurant-photos/669c42a6fdd4ca72f282d5dc/1721516995007.webp"], 
-// "description":"Restaurante y bar clásico al costado de la ruta 5"
-// }
