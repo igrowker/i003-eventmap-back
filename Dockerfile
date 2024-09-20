@@ -1,4 +1,4 @@
-# Etapa 1: Instalación de dependencias
+# Etapa 1: Instalación de dependencias 
 FROM node:alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -24,6 +24,12 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
-# Exponer puerto y ejecutar en producción
+# Establecer la variable de entorno para el modo
+ARG NODE_ENV=developer
+ENV NODE_ENV=${NODE_ENV}
+
+# Exponer puerto
 EXPOSE 3000
-CMD [ "npm", "run", "start:prod" ]
+
+# Iniciar la aplicación dependiendo del entorno
+CMD ["sh", "-c", "npm run start:${NODE_ENV}"]

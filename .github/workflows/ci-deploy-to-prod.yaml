@@ -65,13 +65,14 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:cache
+          build-args: NODE_ENV=production
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-common-cache
           cache-to: type=inline
           tags: |
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:latest
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:${{ github.sha }}
 
-      # - name: Deploy to Dev - Render
+      # - name: Deploy to Prod - Render
       #   uses: fjogeleit/http-request-action@v1
       #   with:
       #       url: ${{ secrets.RENDER_DEPLOY_HOOK }}
