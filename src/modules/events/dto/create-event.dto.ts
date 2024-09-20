@@ -42,8 +42,7 @@ export class CreateEventDto{
 
     @IsNotEmpty()
     @IsNumber()
-    amount : number //hacer validacion con rango ejem: 0 a 3000 o 0 a 10
-
+    amount : number //este numero tiene q ser de un rango de 0.0 a 1
     @IsNotEmpty()
     @IsDateString()
     createdAt : Date

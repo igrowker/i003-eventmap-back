@@ -4,10 +4,17 @@ import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { ValidateuserPipe } from './pipes/validateuser/validateuser.pipe';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
+import { ValidationDateRangePipe } from './pipes/validation-date-range/validation-date-range.pipe';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
+
+    //consultar a franco si startDate: string, endDate: string q formato van a tener
+    // @Get('/')
+    // getAllEvents(@Query(ValidationDateRangePipe) query : {type : string, startDate: string, endDate: string}) {
+    //     return this.eventsService.getEvents();
+    // }
 
     @Get('/')
     getAllEvents() {
