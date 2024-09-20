@@ -23,14 +23,15 @@ export class UsersService {
       if (existingUserCuit) {
         errors.push('CUIT already in use');
       }
+  
       // busca exepciones si hay errores
       if (errors.length > 0) {
         throw new ConflictException(errors);
       }
   
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
-      // Crear el nuevo usuario en la base de datos
-      const newUser = await this.prisma.user.create({
+  
+      await this.prisma.user.create({
         data: {
           name: createUserDto.name,
           lastName: createUserDto.lastName,
@@ -42,6 +43,7 @@ export class UsersService {
           state: createUserDto.state,
         },
       });
+  
       return `Usuario creado con éxito.`;
       
     } catch (error) {

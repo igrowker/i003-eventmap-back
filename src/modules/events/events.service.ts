@@ -42,7 +42,7 @@ export class EventsService {
   updateEvent(id: number, event: UpdateEventDto) {
     return this.prisma.event.update({
       where: { id: id },
-      data: event, // actualizar datos
+      data: event,
     });
   }
 
