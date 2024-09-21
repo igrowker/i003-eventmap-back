@@ -13,13 +13,12 @@ export class EventsController {
     constructor(private eventsService: EventsService) { }
 
     //consultar a franco si startDate: string, endDate: string q formato van a tener
-    // @Get('/')
-    // getAllEvents(@Query(ValidationDateRangePipe) query : {type : string, startDate: string, endDate: string}) {
-    //     return this.eventsService.getEvents();
-    // }
-
     @Get('/')
-    getAllEvents() {
+    getAllEvents(@Query(ValidationDateRangePipe) query : {type : string, startDate: string, endDate: string}) {
+        console.log(query.type);
+        console.log(query.endDate);
+        console.log(query.startDate);
+        
         return this.eventsService.getEvents();
     }
 
@@ -29,22 +28,10 @@ export class EventsController {
         return await this.eventsService.getEvent(id);
     }
 
-    //pipe validation perzonalizada
-    @Get('/validation')
-    validation(@Query(ValidateuserPipe) query: { age: number, name: string }) {
-
-        console.log(typeof query.age);
-        console.log(typeof query.name);
-
-        return `${query.name} ${query.age}`;
-    }
-
     @Post('/')
     //en ves de estar añadiendo el pipe en cada controller podes añadierlo en main.ts y ahora no te haria falta poner  @UsePipes(new ValidationPipe()) en todos lados 
     // @UsePipes(new ValidationPipe()) //esto para indicar q queremos q se hagan las validaciones q creamos en CreateEventDto
-    createEvent(@Body() event: CreateEventDto) { //ahora q tenes el dto podes acceder a las porps del evento con el "."
-        // console.log(event);
-
+    createEvent(@Body() event: CreateEventDto) {
         const eventLocation : Location = {location : event.location}
 
         if (locationValidation(eventLocation)) {
@@ -53,11 +40,10 @@ export class EventsController {
         }
     }
 
-    //dif entre Put y Patch --> Put actuliza todo el objeto y Patch actuliza alguna prop en particular
     @Put('/:id')
     updateEvent(
         @Param('id', ParseIntPipe) id: number,
-        @Body() event: UpdateEventDto // actualizando datos 
+        @Body() event: UpdateEventDto
     ) {
         return this.eventsService.updateEvent(id, event);
     }
@@ -65,7 +51,7 @@ export class EventsController {
     @Patch('/:id')
     updateEventStatus(
         @Param('id', ParseIntPipe) id: number,
-        @Body() updateData: Partial<UpdateEventDto>, // recibo solo una parte del evento
+        @Body() updateData: Partial<UpdateEventDto>,
     ) {
         return this.eventsService.updateEventStatus(id, updateData);
     }

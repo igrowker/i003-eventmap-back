@@ -10,3 +10,11 @@ export interface Location {
         }
     ]
 }
+
+export interface EventQuerys {
+    query : {
+        type : string,
+        startDate : DateStringFormat,
+        endDate : DateStringFormat
+    }
+}

@@ -24,14 +24,6 @@ export class CreateEventDto{
     @IsNotEmpty()
     @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
     time : TimeStringFormat
-    
-    // @IsNotEmpty()
-    // location : [
-    //     {
-    //         lat : string, //y
-    //         log : string, //x
-    //     }
-    // ]
 
     @ArrayNotEmpty()
     location : [{ lat: number; lon: number }] //fijate aca de capaz cambiar estos valores por number
