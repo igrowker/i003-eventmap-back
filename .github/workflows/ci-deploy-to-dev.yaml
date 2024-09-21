@@ -74,8 +74,8 @@ jobs:
           push: true
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-common-cache
           cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:cache,mode=max
-          build-args:
-            NODE_ENV: development
+          build-args: |
+            NODE_ENV=development
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:${{ github.sha }}

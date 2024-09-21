@@ -68,8 +68,8 @@ jobs:
           push: true
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-common-cache
           cache-to: type=inline
-          build-args: 
-            NODE_ENV: production
+          build-args: |
+            NODE_ENV=production
           tags: |
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:latest
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-prod:${{ github.sha }}
