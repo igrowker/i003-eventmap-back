@@ -31,20 +31,27 @@ export class UsersService {
   
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
   
-      await this.prisma.user.create({
+      console.log("llego 1");
+
+      console.log(createUserDto);
+      console.log(createUserDto.rol);
+
+      const newUser = await this.prisma.user.create({
         data: {
           name: createUserDto.name,
           lastName: createUserDto.lastName,
           email: createUserDto.email,
           password: passwordHash,
           cuit: createUserDto.cuit,
-          rol: createUserDto.rol,
+          rol: createUserDto.rol || "",
           lastLogin: "",
-          state: createUserDto.state,
+          state: createUserDto.state || true,
         },
       });
+
+      console.log("llego 2");
   
-      return `Usuario creado con éxito.`;
+      return {message : `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!`};
       
     } catch (error) {
       if (error instanceof ConflictException) {
