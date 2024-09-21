@@ -24,11 +24,11 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
-# Establecer la variable de entorno para el modo
-ARG NODE_ENV=production
+# Definir el argumento
+ARG NODE_ENV
+# Establecer la variable de entorno
 ENV NODE_ENV=${NODE_ENV}
 
 # Exponer puerto y ejecutar en producción o desarrollo
 EXPOSE 3000
-# Ejecutar el script adecuado dependiendo del entorno
-CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then npm run dev; else npm run start; fi"]
+CMD ["npm", "run", "start"]
