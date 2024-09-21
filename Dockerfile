@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install and update dependencies
-RUN npm ci --frozen-lockfile && npm outdated && npm update --save
+RUN npm ci --frozen-lockfile
 
 # Etapa 2: Construcción de la aplicación
 FROM deps AS builder
