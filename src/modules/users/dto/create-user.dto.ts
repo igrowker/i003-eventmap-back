@@ -3,32 +3,34 @@ import {
   IsNotEmpty, 
   IsString, 
   IsBoolean, 
-  IsOptional, 
-  IsNumber, 
-  IsDate, 
+  IsOptional,
+  MinLength,
   Matches,
   IsArray 
 } from 'class-validator';
 
 export class CreateUserDto {
     @IsString()
-    @Matches(/^[A-Za-z\s]+$/, { message: 'El nombre debe contener sólo letras y espacios' })
+    @MinLength(2)
+    @Matches(/^[A-Za-z\s]+$/, { message: 'El nombre debe contener sólo letras' })
     name: string;
   
     @IsString()
-    @Matches(/^[A-Za-z\s]+$/, { message: 'El apellido debe contener solo letras y espacios' })
+    @Matches(/^[A-Za-z\s]+$/, { message: 'El apellido debe contener solo letras' })
     lastName: string;
 
-    @IsEmail({}, { message: 'El correo electrónico debe ser una dirección de correo electrónico válida' })
+    @IsEmail({}, { message: 'El correo electrónico debe ser una dirección de correo electrónico válida y tener un dominio permitido' })
+    @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
     email: string;
 
     @IsString()
-    @Matches(/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/, { message: 'Los requisitos de contraseña incluyen una longitud de entre 8 y 16 caracteres, con al menos un dígito, una letra minúscula y una letra mayúscula' })
+    @Matches(/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,20}$/, { message: 'La contraseña debe tener entre 8 y 16 caracteres, al menos una letra mayúscula, una letra minúscula y un número' })
+    @Matches(/^(?!.*(password|123456|admin))/, { message: 'La contraseña no puede ser "password", "123456" o "admin"' })
     password: string;
   
     @IsNotEmpty()
     @IsString()
-    @Matches(/^\d{2}-\d{8}-\d{1}$/, { message: 'La CUIT deberá seguir el formato XX-XXXXXXXXX-X' })
+    @Matches(/^\d{2}-?\d{8}-?\d{1}$/, { message: 'La CUIT deberá seguir el formato XX-XXXXXXXXX-X o XXXXXXXXXXX' })
     cuit: string;
   
     @IsNotEmpty()
@@ -39,9 +41,7 @@ export class CreateUserDto {
     @IsArray()
     events?: any[];
     
-    @IsBoolean()
     @IsOptional()
+    @IsBoolean()
     state?: boolean;
-
-    
 }
