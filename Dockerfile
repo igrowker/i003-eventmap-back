@@ -16,4 +16,5 @@ FROM node:20-alpine AS runner
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts
+COPY --from=builder /app ./
 CMD [ "npm", "run", "start" ]
