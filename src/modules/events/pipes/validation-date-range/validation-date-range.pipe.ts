@@ -1,8 +1,20 @@
-import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform } from '@nestjs/common';
+import { IsString } from 'class-validator';
+import { EventQuerys } from 'src/utils/types';
+import { checkDateFormatQuery, checkTypeQuery } from 'src/utils/utils';
+
+// npm audit fix --> probar esto para las vulnerabilidades
 
 @Injectable()
 export class ValidationDateRangePipe implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata) {
+  transform(value: EventQuerys, metadata: ArgumentMetadata) {
+
+    console.log(value.query.type);
+
+    if (!checkTypeQuery(value.query.type) && !checkDateFormatQuery(value.query.startDate) && !checkDateFormatQuery(value.query.endDate)) {
+      throw new HttpException('Los datos ingresados no son correctos o no cumplen con el formato esperado',HttpStatus.BAD_REQUEST);
+    }
+    
     return value;
   }
 }

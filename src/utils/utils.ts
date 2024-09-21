@@ -9,6 +9,8 @@ export class TimeValidator implements ValidatorConstraintInterface {
     }
 }
 
+
+//esto pasarlo a middleware o guard
 export function locationValidation(location: Location) {
     if (typeof location !== "object") {
         throw new HttpException('El campo location debe ser un array', HttpStatus.BAD_REQUEST);
@@ -36,4 +38,39 @@ export function locationValidation(location: Location) {
     }
 
     return true
+}
+
+export function isString(type: any) {
+    if (typeof type !== 'string') return false;
+
+    return true;
+}
+
+export function isValidDate(date: any) {
+
+    if (!isString(date)) {
+        throw new HttpException('La fecha del evento debe de tener el formato : yyyy-mm-dd', HttpStatus.BAD_REQUEST);
+    }
+
+    if (!date.match("^\d{4}-\d{2}-\d{2}$")) {
+        throw new HttpException('El tipo de evento debe ser : Deportivo, Gastronomico, Artistico', HttpStatus.BAD_REQUEST);
+    }
+
+    return true;
+}
+
+export function checkTypeQuery(type: string) {
+    if (!isString(type)) {
+        throw new HttpException('El tipo de evento debe ser : Deportivo, Gastronomico, Artistico', HttpStatus.BAD_REQUEST);
+    }
+
+    return true;
+}
+
+export function checkDateFormatQuery(date: string) {
+    if (!isValidDate(date)) {
+        throw new HttpException('La fehca ingresada no es correcta', HttpStatus.BAD_REQUEST);
+    }
+
+    return true;
 }

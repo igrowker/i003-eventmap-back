@@ -18,6 +18,9 @@ export class EventsService {
 
     //con los datos de fecha fijate si los eventos estan dentro del rango
 
+    //falta aplicar la formula matematica del doc
+    //hacer el filtrado segun
+
     return this.prisma.event.findMany();
   }
 
