@@ -35,7 +35,7 @@ export class CreateUserDto {
   
     @IsNotEmpty()
     @IsString()
-    rol: string;
+    rol?: string;
   
     @IsOptional()
     @IsArray()
