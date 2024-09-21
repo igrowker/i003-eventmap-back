@@ -62,7 +62,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          registry: docker.io
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -74,14 +73,12 @@ jobs:
           push: true
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-common-cache
           cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:cache,mode=max
-          build-args: |
-            NODE_ENV=development
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}-dev:${{ github.sha }}
 
-      - name: Deploy to Dev - Render
-        uses: fjogeleit/http-request-action@v1
+      - name: Deploy to Render
+        uses: tyrrrz/action-http-request@master
         with:
           url: ${{ secrets.RENDER_DEPLOY_DEV_HOOK }}
           method: GET
