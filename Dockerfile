@@ -6,6 +6,7 @@ WORKDIR /app
 COPY package*.json ./ 
 COPY prisma ./prisma
 RUN npm ci && npm install @prisma/client
+RUN npm outdated --exit 0 || true && npm update --save || true
 
 # Etapa 2: Construcción de la aplicación
 FROM deps AS builder
