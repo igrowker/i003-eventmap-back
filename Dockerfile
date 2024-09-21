@@ -25,11 +25,7 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/start.sh ./start.sh
 
-# Hacer ejecutable el script de inicio
-RUN chmod +x start.sh
-
-# Exponer puerto y ejecutar en producción
+# Exponer puerto y ejecutar en producción o desarrollo
 EXPOSE 3000
-CMD ["./start.sh"]
+CMD ["npm", "run", "start"]
