@@ -5,11 +5,11 @@
 
 */
 -- CreateEnum
-CREATE TYPE "Type" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
+CREATE TYPE "TypeEvent" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
 
 -- AlterTable
 ALTER TABLE "Event" DROP COLUMN "type",
-ADD COLUMN     "type" TEXT NOT NULL;
+ADD COLUMN     "type" "TypeEvent" NOT NULL;
 
 -- DropEnum
-DROP TYPE "Typeasd";
+DROP TYPE "Type";

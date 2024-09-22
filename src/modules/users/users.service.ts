@@ -10,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 export class UsersService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
+  //resgiter
   async create(createUserDto: CreateUserDto) {
     try {
       const errors = [];
@@ -43,7 +44,7 @@ export class UsersService {
           email: createUserDto.email,
           password: passwordHash,
           cuit: createUserDto.cuit,
-          rol: createUserDto.rol || "",
+          // rol: createUserDto.rol || "",
           lastLogin: "",
           state: createUserDto.state || true,
         },

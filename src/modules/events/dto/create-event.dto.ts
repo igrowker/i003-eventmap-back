@@ -1,3 +1,4 @@
+import { TypeEvent } from '@prisma/client';
 import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, ArrayNotEmpty} from 'class-validator';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
@@ -15,7 +16,7 @@ export class CreateEventDto{
     @IsString()
     @IsNotEmpty()
     @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, {message : "El evento debe de ser una de estas opciones: Deportivo, Artistico, Gastronomico"})
-    type : string
+    type : TypeEvent
 
     @IsDateString()
     @IsNotEmpty()
@@ -26,6 +27,7 @@ export class CreateEventDto{
     time : TimeStringFormat
 
     @ArrayNotEmpty()
+    // @DecorarorLocation
     location : [{ lat: number; lon: number }] //fijate aca de capaz cambiar estos valores por number
     //hablar con el pibe de front si ellos hacen la convercion o prefiere q le llegue como number
 

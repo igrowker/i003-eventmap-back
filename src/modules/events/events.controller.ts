@@ -32,10 +32,10 @@ export class EventsController {
     //en ves de estar añadiendo el pipe en cada controller podes añadierlo en main.ts y ahora no te haria falta poner  @UsePipes(new ValidationPipe()) en todos lados 
     // @UsePipes(new ValidationPipe()) //esto para indicar q queremos q se hagan las validaciones q creamos en CreateEventDto
     createEvent(@Body() event: CreateEventDto) {
-        const eventLocation : Location = {location : event.location}
+        const eventLocation : Location = {location : event.location} 
 
+        //crear decorardod perzonalizado q valide estos datos, move la logica al decorar
         if (locationValidation(eventLocation)) {
-            console.log("todo bien");
             return this.eventsService.createEvent(event);
         }
     }
