@@ -12,13 +12,9 @@ import { Location } from 'src/utils/types';
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
-    //consultar a franco si startDate: string, endDate: string q formato van a tener
     @Get('/')
     getAllEvents(@Query(ValidationDateRangePipe) query : {type : string, startDate: string, endDate: string}) {
-        console.log(query.type);
-        console.log(query.endDate);
-        console.log(query.startDate);
-        
+        console.log(query);
         return this.eventsService.getEvents();
     }
 
