@@ -9,14 +9,12 @@ export class EventsController {
     constructor(private eventsService: EventsService) { }
 
     @Get('/')
-    getAllEvents(@Query(ValidationDateRangePipe) query : {type : string, startDate: string, endDate: string}) {
-       
+    getAllEvents(@Query(ValidationDateRangePipe) query: { type: string, startDate: string, endDate: string }) {
         return this.eventsService.getEvents();
     }
 
     @Get('/event/:id')
     async getEventById(@Param('id', ParseIntPipe) id: number) {
-     
         return await this.eventsService.getEvent(id);
     }
 

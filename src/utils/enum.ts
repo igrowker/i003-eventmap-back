@@ -3,3 +3,8 @@ export enum TypeEvents {
     Artistico = "Artistico",
     Gastronomico = "Gastronomico",
 }
+
+export enum Role {
+    Admin = "Admin",
+    Company = "Company",
+}
