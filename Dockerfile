@@ -1,23 +1,34 @@
-# Etapa 1: Instalación de dependencias
-FROM node:20-alpine AS deps
+# Etapa 1: Instalación de dependencias y construcción de la aplicación
+FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
 
-# Install and update dependencies
+# Copiar los archivos de Prisma
+COPY package.json package-lock.json ./
+COPY ./prisma ./prisma
+
+# Instalar dependencias
 RUN npm ci --frozen-lockfile
 
-# Etapa 2: Construcción de la aplicación
-FROM deps AS builder
+# Copiar el resto de la aplicación
 COPY . .
-RUN npx prisma generate --schema ./prisma/schema.prisma \
-    && npx prisma migrate dev --schema ./prisma/schema.prisma \
-    && npx prisma db push --schema ./prisma/schema.prisma \
-    && npm run build
 
-# Etapa 3: Servidor de producción
+# Construir la aplicación
+RUN npm run build
+
+# Etapa 2: Servidor de producción
 FROM node:20-alpine AS runner
-WORKDIR /usr/src/app
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev --ignore-scripts
-COPY --from=builder /app ./
-CMD [ "npm", "run", "start" ]
+WORKDIR /app
+
+# Copiar archivos de la etapa de construcción
+COPY --from=builder /app/package.json ./ 
+COPY --from=builder /app/package-lock.json ./
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
+
+# Ejecutar Prisma generate en el contenedor de producción
+RUN npx prisma generate --schema ./prisma/schema.prisma
+
+RUN chmod 755 deploy.sh
+
+CMD ["./deploy.sh"]
