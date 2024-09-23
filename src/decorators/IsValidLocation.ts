@@ -29,6 +29,6 @@ export class IsValisLocation implements ValidatorConstraintInterface {
     }
 
     defaultMessage() {
-        return 'El numero de teléfono fijo ingresado debe ser positivo';
+        return 'Las coordenas no estan correctas';
     }
 }
