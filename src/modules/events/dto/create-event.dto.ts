@@ -1,5 +1,6 @@
-import { Type } from '@prisma/client';
-import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray} from 'class-validator';
+import { TypeEvent } from '@prisma/client';
+import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, ArrayNotEmpty, IsNotEmptyObject, Validate} from 'class-validator';
+import { IsValisLocation } from 'src/decorators/IsValidLocation';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
 export class CreateEventDto{
@@ -15,7 +16,7 @@ export class CreateEventDto{
     @IsString()
     @IsNotEmpty()
     @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, {message : "El evento debe de ser una de estas opciones: Deportivo, Artistico, Gastronomico"})
-    type : Type
+    type : TypeEvent
 
     @IsDateString()
     @IsNotEmpty()
@@ -24,18 +25,13 @@ export class CreateEventDto{
     @IsNotEmpty()
     @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
     time : TimeStringFormat
-    
-    @IsNotEmpty()
-    location : [
-        {
-            lat : string, //y
-            log : string, //x
-        }
-    ]
+
+    @Validate(IsValisLocation)
+    location : { lat: number, lon: number }
 
     @IsArray()
     @IsString({ each: true })
-    photos : string[] //queda a definir si es un array de strings y el uso de cloudinary
+    photos : string[]
     
     @IsNotEmpty()
     @IsString()
@@ -43,19 +39,11 @@ export class CreateEventDto{
 
     @IsNotEmpty()
     @IsNumber()
+    @Min(0, { message: 'El valor debe ser mayor o igual a 0' })
+    @Max(1, { message: 'El valor debe ser menor o igual a 1' })
     amount : number
 
     @IsNotEmpty()
     @IsDateString()
     createdAt : Date
 }
-
-//el token setearlo desde al back en las cookies
-
-// {
-// "id":"669c42a6fdd4ca72f282d5dc",
-// "title":"La Colonial",
-// "location":[-34.638017,-59.27014],
-// "photos":["https://res.cloudinary.com/dyi5til4r/image/upload/v1721516995/669c42a6fdd4ca72f282d5dc/restaurant-photos/669c42a6fdd4ca72f282d5dc/1721516995007.webp"], 
-// "description":"Restaurante y bar clásico al costado de la ruta 5"
-// }

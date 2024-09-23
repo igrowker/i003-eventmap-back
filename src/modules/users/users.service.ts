@@ -10,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 export class UsersService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
+  //resgiter
   async create(createUserDto: CreateUserDto) {
     try {
       const errors = [];
@@ -23,13 +24,19 @@ export class UsersService {
       if (existingUserCuit) {
         errors.push('CUIT already in use');
       }
+  
       // busca exepciones si hay errores
       if (errors.length > 0) {
         throw new ConflictException(errors);
       }
   
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
-      // Crear el nuevo usuario en la base de datos
+  
+      console.log("llego 1");
+
+      console.log(createUserDto);
+      console.log(createUserDto.rol);
+
       const newUser = await this.prisma.user.create({
         data: {
           name: createUserDto.name,
@@ -37,12 +44,15 @@ export class UsersService {
           email: createUserDto.email,
           password: passwordHash,
           cuit: createUserDto.cuit,
-          rol: createUserDto.rol,
+          // rol: createUserDto.rol || "",
           lastLogin: "",
-          state: createUserDto.state,
+          state: createUserDto.state || true,
         },
       });
-      return `Usuario creado con éxito.`;
+
+      console.log("llego 2");
+  
+      return {message : `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!`};
       
     } catch (error) {
       if (error instanceof ConflictException) {
