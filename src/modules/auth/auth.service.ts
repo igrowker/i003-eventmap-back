@@ -17,7 +17,6 @@ export class AuthService {
     const { email, password } = loginDto;
 
     try {
-      // Busca al usuario por correo electrónico
       const user = await this.prisma.user.findUnique({
         where: { email },
         include: {
@@ -34,7 +33,7 @@ export class AuthService {
         throw new UnauthorizedException('Contraseña incorrecta');
       }
 
-      const payload = { sub: user.id, email: user.email, rol: user.rol }; // sub suele ser el userId
+      const payload = { sub: user.id, email: user.email, rol: user.rol };
       const token = this.jwtService.sign(payload);
 
       await this.prisma.user.update({
@@ -54,9 +53,8 @@ export class AuthService {
         },
         token
       }
-
     } catch (error) {
-      throw error 
+      throw error
     }
   }
 }
