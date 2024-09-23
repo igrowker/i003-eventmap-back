@@ -26,10 +26,56 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Project setup
+## Project setup (Local)
 
+1. install PostgreSQL in your local PC
+https://www.postgresql.org/download/
+
+2. install dependencies
 ```bash
 $ npm install
+```
+
+3. Prisma ORM:
+```bash
+# install
+$ npm install -g @nestjs/cli
+```
+
+```bash
+# insede proyect folder
+$ npm install prisma --save-dev
+
+$ npm install @prisma/client
+```
+
+4. .env
+```
+create a .env file to store the following data and change:
+
+(all this info you can find or create by using pgAdmin4 after install PostgresSQL local)
+
+1. USER 
+2. PASSWORD 
+3. HOST
+4. PORT
+5. DATABASE
+
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA"
+
+Example:
+DATABASE_URL="postgresql://postgres:1234@localhost:5432/eventmap?schema=SCHEMA"
+```
+
+5. Migrate and synchronize to save changes
+```bash
+# migrate DB
+$ npx prisma migrate dev
+```
+
+```bash
+# synchronize DB
+$ npx prisma db push
 ```
 
 ## Compile and run the project
