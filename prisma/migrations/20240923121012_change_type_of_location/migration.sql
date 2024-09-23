@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Type" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
+CREATE TYPE "TypeEvent" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
 
 -- CreateEnum
 CREATE TYPE "Roles" AS ENUM ('admin', 'company');
@@ -8,10 +8,10 @@ CREATE TYPE "Roles" AS ENUM ('admin', 'company');
 CREATE TABLE "Event" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "type" "Type" NOT NULL,
+    "type" "TypeEvent" NOT NULL,
     "date" TEXT NOT NULL,
     "time" TEXT NOT NULL,
-    "location" JSONB[],
+    "location" JSONB NOT NULL,
     "photos" TEXT[],
     "description" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL DEFAULT 0.0,

@@ -35,7 +35,6 @@ export class EventsService {
 
   async createEvent(event: CreateEventDto) {
     try {
-      console.log(event);
       return await this.prisma.event.create({ data: event });
     } catch (error) {
       throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);

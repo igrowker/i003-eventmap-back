@@ -19,7 +19,7 @@ model Event {
   type        TypeEvent
   date        String
   time        String
-  location    Json[]
+  location    Json
   photos      String[]
   description String
   amount      Float    @default(0.0)
