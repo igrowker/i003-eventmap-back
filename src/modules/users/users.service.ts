@@ -11,56 +11,7 @@ export class UsersService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
   //resgiter
-  async create(createUserDto: CreateUserDto) {
-    try {
-      const errors = [];
-
-      const existingUserEmail = await this.prisma.user.findUnique({ where: { email: createUserDto.email } });
-      if (existingUserEmail) {
-        errors.push('Email already in use');
-      }
   
-      const existingUserCuit = await this.prisma.user.findUnique({ where: { cuit: createUserDto.cuit } });
-      if (existingUserCuit) {
-        errors.push('CUIT already in use');
-      }
-  
-      // busca exepciones si hay errores
-      if (errors.length > 0) {
-        throw new ConflictException(errors);
-      }
-  
-      const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
-  
-      console.log("llego 1");
-
-      console.log(createUserDto);
-      console.log(createUserDto.rol);
-
-      const newUser = await this.prisma.user.create({
-        data: {
-          name: createUserDto.name,
-          lastName: createUserDto.lastName,
-          email: createUserDto.email,
-          password: passwordHash,
-          cuit: createUserDto.cuit,
-          // rol: createUserDto.rol || "",
-          lastLogin: "",
-          state: createUserDto.state || true,
-        },
-      });
-
-      console.log("llego 2");
-  
-      return {message : `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!`};
-      
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        throw error;
-      }
-      throw new InternalServerErrorException('Error al crear el usuario');
-    }
-  }
   
 
   async findAll() {

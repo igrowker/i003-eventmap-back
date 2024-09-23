@@ -12,7 +12,7 @@ import dotenvOptions, {dotenvFun}  from './config/dotenvConfig';
 //1- probar si la db funciona sin la necesidad de dotenvFun(); o dotenv.config();
 //2- si 1- falla probar solo con dotenvFun();
 //3- si 2- falla dejar la opcion anterior dotenv.config();
-// dotenvFun();
+dotenvFun();
 
 async function bootstrap() {
   console.log(dotenvOptions.PRUEBA);
