@@ -10,13 +10,13 @@ export class EventsController {
 
     @Get('/')
     getAllEvents(@Query(ValidationDateRangePipe) query : {type : string, startDate: string, endDate: string}) {
-        console.log(query);
+       
         return this.eventsService.getEvents();
     }
 
     @Get('/event/:id')
     async getEventById(@Param('id', ParseIntPipe) id: number) {
-        console.log(typeof id);
+     
         return await this.eventsService.getEvent(id);
     }
 

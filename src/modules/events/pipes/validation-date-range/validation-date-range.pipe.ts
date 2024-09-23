@@ -9,11 +9,6 @@ import { checkDateFormatQuery, checkTypeQuery } from 'src/utils/utils';
 export class ValidationDateRangePipe implements PipeTransform {
   transform(value: EventQuerys, metadata: ArgumentMetadata) {
 
-    console.log(value);
-    console.log(value.endDate);
-    console.log(value.startDate);
-    console.log(value.type);
-
     if (!checkTypeQuery(value.type) && !checkDateFormatQuery(value.startDate) && !checkDateFormatQuery(value.endDate)) {
       throw new HttpException('Los datos ingresados no son correctos o no cumplen con el formato esperado',HttpStatus.BAD_REQUEST);
     }
