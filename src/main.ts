@@ -12,7 +12,7 @@ import dotenvOptions, {dotenvFun}  from './config/dotenvConfig';
 //1- probar si la db funciona sin la necesidad de dotenvFun(); o dotenv.config();
 //2- si 1- falla probar solo con dotenvFun();
 //3- si 2- falla dejar la opcion anterior dotenv.config();
-// dotenvFun();
+dotenvFun();
 
 async function bootstrap() {
   console.log(dotenvOptions.PRUEBA);
@@ -21,7 +21,8 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(new LoggerMiddleware().use);
   app.useGlobalPipes(new ValidationPipe({
-    whitelist : true //esto es para q cuando haga las validaciones tambien chekee q no te lleguen mas props de las q estan declaradas, con esto nest toma el body q le llega pero lo ignorar
+    whitelist : true, //esto es para q cuando haga las validaciones tambien chekee q no te lleguen mas props de las q estan declaradas, con esto nest toma el body q le llega pero lo ignorar
+    // transform : true
   }))
   await app.listen(3000); //cambiar numero de puerto xq el front corren en el mismo.
 }

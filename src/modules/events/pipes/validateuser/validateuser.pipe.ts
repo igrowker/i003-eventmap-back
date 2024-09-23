@@ -3,7 +3,7 @@ import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform 
 @Injectable()
 export class ValidateuserPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
-    console.log(value);
+
 
     const num = parseInt(value.age.toString(),10);
 

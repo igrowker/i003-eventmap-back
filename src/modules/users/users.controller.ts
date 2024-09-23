@@ -18,10 +18,7 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Post()
-  create(@Res({ passthrough: true}) res: Response, @Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
+
   
   @Patch(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
