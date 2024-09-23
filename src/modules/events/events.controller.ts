@@ -1,24 +1,16 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post, Put, Query, Req, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { ValidateuserPipe } from './pipes/validateuser/validateuser.pipe';
-import { AuthGuard } from 'src/guards/auth/auth.guard';
 import { ValidationDateRangePipe } from './pipes/validation-date-range/validation-date-range.pipe';
-import { locationValidation } from 'src/utils/utils';
-import { Location } from 'src/utils/types';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
-    //consultar a franco si startDate: string, endDate: string q formato van a tener
     @Get('/')
     getAllEvents(@Query(ValidationDateRangePipe) query : {type : string, startDate: string, endDate: string}) {
-        console.log(query.type);
-        console.log(query.endDate);
-        console.log(query.startDate);
-        
+        console.log(query);
         return this.eventsService.getEvents();
     }
 
@@ -29,15 +21,8 @@ export class EventsController {
     }
 
     @Post('/')
-    //en ves de estar añadiendo el pipe en cada controller podes añadierlo en main.ts y ahora no te haria falta poner  @UsePipes(new ValidationPipe()) en todos lados 
-    // @UsePipes(new ValidationPipe()) //esto para indicar q queremos q se hagan las validaciones q creamos en CreateEventDto
     createEvent(@Body() event: CreateEventDto) {
-        const eventLocation : Location = {location : event.location}
-
-        if (locationValidation(eventLocation)) {
-            console.log("todo bien");
-            return this.eventsService.createEvent(event);
-        }
+        return this.eventsService.createEvent(event);
     }
 
     @Put('/:id')

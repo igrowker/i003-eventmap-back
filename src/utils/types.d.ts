@@ -1,3 +1,5 @@
+import { TypeEvents } from "./enum";
+
 export type DateStringFormat = `${string}-${string}-${string}`;
 
 export type TimeStringFormat = `${string}:${string}`;
@@ -12,9 +14,7 @@ export interface Location {
 }
 
 export interface EventQuerys {
-    query : {
-        type : string,
+        type : TypeEvents,
         startDate : DateStringFormat,
         endDate : DateStringFormat
-    }
 }

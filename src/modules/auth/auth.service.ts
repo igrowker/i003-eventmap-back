@@ -25,6 +25,8 @@ export class AuthService {
         }
       });
 
+
+      //reemplazar los mensajes por algo generico para no dar pistas en q se equivoco
       if (!user) {
         throw new UnauthorizedException('No esta registrado ese email');
       }
