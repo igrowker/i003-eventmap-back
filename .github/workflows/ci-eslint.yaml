@@ -33,6 +33,9 @@ jobs:
       run: npx eslint . --ext .ts,.js --format json -o eslint-report.json || true
       env:
         NODE_ENV: development
+    
+    - name: Install ESLint SARIF Formatter
+      run: npm install @microsoft/eslint-formatter-sarif
 
     - name: Format ESLint report to SARIF
       run: npx eslint-formatter-sarif -o eslint-results.sarif eslint-report.json
