@@ -9,11 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService, private jwtService: JwtService) {}
-
-  //resgiter
   
-  
-
   async findAll() {
     const users = await this.prisma.user.findMany();
     if (users.length === 0) throw new NotFoundException('No existen usuarios en la DB');

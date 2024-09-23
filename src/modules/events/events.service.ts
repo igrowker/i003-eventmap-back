@@ -28,7 +28,7 @@ export class EventsService {
     try {
       return await this.prisma.event.findFirst({ where: { id } });
     } catch (error) {
-      console.error("Error al crear el evento");
+    
       throw new HttpException('Error al obtener el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

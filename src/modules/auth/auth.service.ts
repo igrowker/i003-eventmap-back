@@ -34,11 +34,6 @@ export class AuthService {
       }
   
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
-  
-      console.log("llego 1");
-
-      console.log(createUserDto);
-      console.log(createUserDto.rol);
 
       const newUser = await this.prisma.user.create({
         data: {
@@ -53,7 +48,6 @@ export class AuthService {
         },
       });
 
-      console.log("llego 2");
   
       return {message : `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!`};
       
