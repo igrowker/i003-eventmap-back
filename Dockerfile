@@ -26,6 +26,8 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 
+COPY deploy.sh ./
+
 # Ejecutar Prisma generate en el contenedor de producción
 RUN npx prisma generate --schema ./prisma/schema.prisma
 
