@@ -4,7 +4,7 @@ import {
     ValidatorConstraintInterface,
 } from 'class-validator';
 
-@ValidatorConstraint({ name: 'IsValisLocation', async: false })
+@ValidatorConstraint({ name: 'IsValisLocation', async: true })
 @Injectable()
 export class IsValisLocation implements ValidatorConstraintInterface {
     validate(value: any) {
