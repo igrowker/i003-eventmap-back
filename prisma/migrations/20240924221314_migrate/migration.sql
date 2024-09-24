@@ -1,14 +1,14 @@
 -- CreateEnum
-CREATE TYPE "TypeEvent" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
+CREATE TYPE "Type" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
 
 -- CreateEnum
-CREATE TYPE "Roles" AS ENUM ('admin', 'company');
+CREATE TYPE "Role" AS ENUM ('Company', 'Admin');
 
 -- CreateTable
 CREATE TABLE "Event" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
-    "type" "TypeEvent" NOT NULL,
+    "type" "Type" NOT NULL,
     "date" TEXT NOT NULL,
     "time" TEXT NOT NULL,
     "location" JSONB NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "cuit" TEXT NOT NULL,
-    "rol" "Roles" NOT NULL DEFAULT 'company',
+    "rol" "Role" NOT NULL DEFAULT 'Company',
     "state" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

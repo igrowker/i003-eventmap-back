@@ -7,16 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TypeEvent {
+enum Type {
   Deportivo
   Artistico
   Gastronomico
 }
 
+enum Role {
+  Company
+  Admin
+}
+
 model Event {
   id          Int      @id @default(autoincrement())
   name        String
-  type        TypeEvent
+  type        Type
   date        String
   time        String
   location    Json
@@ -28,19 +33,14 @@ model Event {
   userId      Int
 }
 
-enum Roles {
-  admin
-  company
-}
-
 model User {
   id        Int      @id @default(autoincrement())
   name      String
   lastName  String
   email     String   @unique
   password  String
-  cuit      String   @unique //cambiar tipo a number
-  rol       Roles    @default(company) //q sea el tipo enum : admin o company en ves de string
+  cuit      String   @unique
+  rol       Role     @default(Company)
   events    Event[]  @relation(name: "EventToUser")
   state     Boolean  @default(true)
   createdAt DateTime @default(now())

@@ -5,7 +5,6 @@ import { PrismaService } from '../../prisma.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/auth.register.dto';
 
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -57,6 +56,7 @@ export class AuthService {
       throw new InternalServerErrorException('Error al crear el usuario');
     }
   }
+
   async signIn(loginDto: AuthLoginDto) {
     const { email, password } = loginDto;
 
@@ -74,7 +74,8 @@ export class AuthService {
         throw new UnauthorizedException('Los datos ingresados no son correctos');
       }
 
-      const passwordValid = await bcrypt.compare(password, user.password)
+      const passwordValid = await bcrypt.compare(password, user.password);
+      console.log(passwordValid);
       if (!passwordValid) {
         throw new UnauthorizedException('Los datos ingresados no son correctos');
       }
@@ -82,10 +83,15 @@ export class AuthService {
       const payload = { sub: user.id, email: user.email, rol: user.rol };
       const token = this.jwtService.sign(payload);
 
+      console.log(payload);
+      console.log(token);
+
       await this.prisma.user.update({
         where: { id: user.id },
         data: { lastLogin: new Date().toISOString() }
       });
+
+      console.log("antesd el return");
 
       return {
         profile: {

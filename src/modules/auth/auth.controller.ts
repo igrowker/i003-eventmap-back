@@ -8,8 +8,12 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  create(@Res({ passthrough: true}) res: Response, @Body() createUserDto: CreateUserDto) {
-    return this.authService.signUp(createUserDto);
+  async create(@Res({ passthrough: true}) res: Response, @Body() createUserDto: CreateUserDto) {
+    try {
+      return await this.authService.signUp(createUserDto);
+    } catch (error) {
+      throw new HttpException('Error al intentar registrarse', HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Post('login')

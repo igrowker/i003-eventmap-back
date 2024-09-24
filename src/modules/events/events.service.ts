@@ -2,33 +2,39 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { Event } from './entities/events.entity';
+import { filterEventsRadius, filterEventsUserRequest } from 'src/utils/utils';
+import { QueryEvents } from 'src/utils/types';
 
 @Injectable()
 export class EventsService {
 
   constructor(private prisma: PrismaService) { }
 
-  // Implementar filtro por QueryParams en el Controller recibiendo los siguientes parametros para el filtrado de los eventos:
-  // type, startDate, endDate
-  // Implementar el service que reciba estos query-params para realizar el filtrado de los eventos a retornar todos los eventos segun los datos del filtro.
-  //     Los datos a retornar de cada evento son los siguientes:
-  // id, name, type, description, date, time, amount, location
-  getEvents() {
 
-    //con los datos de fecha fijate si los eventos estan dentro del rango
+  // http://localhost:3000/events?type=Deportivo&startDate=2024-12-12&endDate=2024-12-15&radius="-35.658"&lat="-25.546"&lon="-22.316"
+  async getEvents(query : QueryEvents) {
+    try {
+      const events = await this.prisma.event.findMany();
+      
+      //primer filtrado por solicitud usuario
+      const arrayEventsRequested = filterEventsUserRequest(events,query);
+      console.log(arrayEventsRequested);
+      
+      const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.radius, query.lat, query.lon);
 
-    //falta aplicar la formula matematica del doc
-    //hacer el filtrado segun
-
-    return this.prisma.event.findMany();
+      return arrayEventsRequested;
+      // return arrayEventsRadius;
+      // return await this.prisma.event.findMany();
+    } catch (error) {
+      throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async getEvent(id: number) {
     try {
       return await this.prisma.event.findFirst({ where: { id } });
     } catch (error) {
-    
+
       throw new HttpException('Error al obtener el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -41,26 +47,39 @@ export class EventsService {
     }
   }
 
-  updateEvent(id: number, event: UpdateEventDto) {
-    return this.prisma.event.update({
-      where: { id: id },
-      data: event,
-    });
+  async updateEvent(id: number, event: UpdateEventDto) {
+    try {
+      return await this.prisma.event.update({
+        where: { id: id },
+        data: event,
+      });
+    } catch (error) {
+      throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
 
   // actualizacion de los eventos
-  updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
-    return this.prisma.event.update({
-      where: { id },
-      data: updateData,
-    });
+  async updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
+    try {
+      return await this.prisma.event.update({
+        where: { id },
+        data: updateData,
+      });
+      
+    } catch (error) {
+      throw new HttpException('Error al actualizar el status del evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   // eliminar evento
-  deleteEvent(id: number) {
-    return this.prisma.event.delete({
-      where: { id },
-    });
+  async deleteEvent(id: number) {
+    try {
+      return await this.prisma.event.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new HttpException('Error al intentar eliminar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

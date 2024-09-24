@@ -1,6 +1,6 @@
-import { TypeEvent } from '@prisma/client';
-import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, ArrayNotEmpty, IsNotEmptyObject, Validate} from 'class-validator';
+import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate} from 'class-validator';
 import { IsValisLocation } from 'src/decorators/IsValidLocation';
+import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
 export class CreateEventDto{
@@ -16,7 +16,7 @@ export class CreateEventDto{
     @IsString()
     @IsNotEmpty()
     @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, {message : "El evento debe de ser una de estas opciones: Deportivo, Artistico, Gastronomico"})
-    type : TypeEvent
+    type : TypeEvents
 
     @IsDateString()
     @IsNotEmpty()
