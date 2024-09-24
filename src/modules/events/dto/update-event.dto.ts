@@ -1,5 +1,5 @@
-import { TypeEvent } from '@prisma/client';
 import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateString } from 'class-validator';
+import { TypeEvents } from 'src/utils/enum';
 
 export class UpdateEventDto {
   @IsOptional()
@@ -9,7 +9,7 @@ export class UpdateEventDto {
   @IsOptional()
   @IsString()
   @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, { message: 'El tipo de evento debe ser uno de los siguientes: Deportivo, Artistico, Gastronomico' })
-  type?: TypeEvent;
+  type?: TypeEvents;
 
   @IsOptional()
   @IsDateString()
@@ -20,7 +20,7 @@ export class UpdateEventDto {
   time?: string;
 
   @IsOptional()
-  location?: { lat: string; log: string }[];
+  location?: { lat: string; log: string };
 
   @IsOptional()
   @IsArray()
