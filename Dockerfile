@@ -2,11 +2,8 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copiar los archivos de Prisma
+# Copiar archivos necesarios para instalar dependencias de desarrollo y producción
 COPY package.json package-lock.json ./
-COPY ./prisma ./prisma
-
-# Instalar dependencias
 RUN npm ci --frozen-lockfile
 
 # Copiar el resto de la aplicación
@@ -26,11 +23,16 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 
-COPY deploy.sh ./
+# Instalar solo las dependencias de producción y limpiar la caché
+RUN npm ci --omit=dev && npm cache clean --force
+
+# Copiar el script de despliegue
+COPY --from=builder /app/deploy.sh ./deploy.sh
+
+# Asegurarse de que el script sea ejecutable
+RUN chmod 755 deploy.sh
 
 # Ejecutar Prisma generate en el contenedor de producción
 RUN npx prisma generate --schema ./prisma/schema.prisma
-
-RUN chmod 755 deploy.sh
 
 CMD ["./deploy.sh"]
