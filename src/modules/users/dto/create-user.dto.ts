@@ -37,6 +37,7 @@ export class CreateUserDto {
     @Matches(/^\d{2}-\d{8}-\d{1}$/, { message: 'La CUIT deberá seguir el formato XX-XXXXXXXXX-X' })
     cuit: string;
   
+    @IsOptional()
     @IsNotEmpty()
     @IsEnum(Role, { message: "El rol debe ser 'company' o 'admin'" })
     rol: Role;

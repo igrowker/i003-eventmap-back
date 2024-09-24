@@ -1,3 +1,4 @@
+import { TypeEvent } from '@prisma/client';
 import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateString } from 'class-validator';
 
 export class UpdateEventDto {
@@ -8,7 +9,7 @@ export class UpdateEventDto {
   @IsOptional()
   @IsString()
   @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, { message: 'El tipo de evento debe ser uno de los siguientes: Deportivo, Artistico, Gastronomico' })
-  type?: string;
+  type?: TypeEvent;
 
   @IsOptional()
   @IsDateString()

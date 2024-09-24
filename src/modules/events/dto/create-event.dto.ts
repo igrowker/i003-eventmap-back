@@ -1,6 +1,7 @@
-import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, ArrayNotEmpty} from 'class-validator';
+import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, ArrayNotEmpty, IsNotEmptyObject, Validate} from 'class-validator';
+import { IsValisLocation } from 'src/decorators/IsValidLocation';
+import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
-
 
 export class CreateEventDto{
     
@@ -15,7 +16,7 @@ export class CreateEventDto{
     @IsString()
     @IsNotEmpty()
     @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, {message : "El evento debe de ser una de estas opciones: Deportivo, Artistico, Gastronomico"})
-    type : string
+    type : TypeEvents
 
     @IsDateString()
     @IsNotEmpty()
@@ -24,22 +25,13 @@ export class CreateEventDto{
     @IsNotEmpty()
     @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
     time : TimeStringFormat
-    
-    // @IsNotEmpty()
-    // location : [
-    //     {
-    //         lat : string, //y
-    //         log : string, //x
-    //     }
-    // ]
 
-    @ArrayNotEmpty()
-    location : [{ lat: number; lon: number }] //fijate aca de capaz cambiar estos valores por number
-    //hablar con el pibe de front si ellos hacen la convercion o prefiere q le llegue como number
+    @Validate(IsValisLocation)
+    location : { lat: number, lon: number }
 
     @IsArray()
     @IsString({ each: true })
-    photos : string[] //queda a definir si es un array de strings y el uso de cloudinary
+    photos : string[]
     
     @IsNotEmpty()
     @IsString()
