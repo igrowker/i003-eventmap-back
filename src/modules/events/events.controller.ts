@@ -3,14 +3,15 @@ import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { ValidationDateRangePipe } from './pipes/validation-date-range/validation-date-range.pipe';
+import { QueryEvents } from 'src/utils/types';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
     @Get('/')
-    getAllEvents(@Query(ValidationDateRangePipe) query: { type: string, startDate: string, endDate: string }) {
-        return this.eventsService.getEvents();
+    getAllEvents(@Query(ValidationDateRangePipe) query: QueryEvents) {
+        return this.eventsService.getEvents(query);
     }
 
     @Get('/event/:id')
