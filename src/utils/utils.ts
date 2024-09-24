@@ -1,11 +1,58 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { ValidatorConstraintInterface } from "class-validator";
+import { QueryEvents } from "./types";
 
 export class TimeValidator implements ValidatorConstraintInterface {
     validate(value: any) {
         const timeRegex = /^([0-1][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
         return timeRegex.test(value as string);
     }
+}
+
+export function filterEventsUserRequest(events: any, query: QueryEvents) {
+    //hacer validacion de q array es un array de objetos
+
+    const arrayEventsRequested = [];
+    const startDate = new Date(query.startDate);
+    const endDate = new Date(query.endDate);
+
+    for (let index = 0; index < events.length; index++) {
+        const event = events[index];
+        const dateEvent = new Date(event.date);
+
+        if (event.type === query.type && dateEvent >= startDate && dateEvent <= endDate) {
+            arrayEventsRequested.push(event);
+        }
+    }
+
+    return arrayEventsRequested;
+}
+
+export function filterEventsRadius(events: any, radius: string, userLat: string, userLon: string) {
+    const arrayFilterEventsRadius = [];
+    
+    const radiusParse = parseFloat(radius.toString());
+    const latUserParse = parseFloat(userLat.toString());
+    const lonUserParse = parseFloat(userLon.toString());
+
+    for (let index = 0; index < events.length; index++) {
+        const event = events[index];
+        const lat = event.location.lat;
+        const lon = event.location.lon;
+
+        const firstEquation = Math.pow((lat - (latUserParse)), 2); //(x-xc)2 --- xc y yc posicion usuario -- x y y coordenas evento
+        const secondEquation = Math.pow((lon - (lonUserParse)), 2); //(y-yc)2
+        const thirdEquation = firstEquation + secondEquation;
+        const fourthEquation = Math.sqrt(thirdEquation);
+
+        console.log(fourthEquation);
+
+        if (fourthEquation <= radiusParse) {
+            arrayFilterEventsRadius.push(event);
+        }
+    }
+
+    return arrayFilterEventsRadius;
 }
 
 export function isString(type: any) {
