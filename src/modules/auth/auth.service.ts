@@ -1,9 +1,9 @@
 import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthLoginDto } from './dto/auth.dto';
+import { AuthLoginDto } from './dto/auth.login.dto';
 import { PrismaService } from '../../prisma.service';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserDto } from './dto/auth.register.dto';
 
 
 @Injectable()
@@ -42,7 +42,6 @@ export class AuthService {
           email: createUserDto.email,
           password: passwordHash,
           cuit: createUserDto.cuit,
-          // rol: createUserDto.rol || "",
           lastLogin: "",
           state: createUserDto.state || true,
         },
@@ -58,7 +57,7 @@ export class AuthService {
       throw new InternalServerErrorException('Error al crear el usuario');
     }
   }
-  async login(loginDto: AuthLoginDto) {
+  async signIn(loginDto: AuthLoginDto) {
     const { email, password } = loginDto;
 
     try {
