@@ -22,8 +22,9 @@ export class EventsService {
       
       const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.radius, query.lat, query.lon);
 
+      return arrayEventsRequested;
       // return arrayEventsRadius;
-      return await this.prisma.event.findMany();
+      // return await this.prisma.event.findMany();
     } catch (error) {
       throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }

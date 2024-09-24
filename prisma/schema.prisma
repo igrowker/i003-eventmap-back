@@ -24,7 +24,7 @@ model Event {
   type        String
   date        String
   time        String
-  location    Json[] //esto cambialo por Json y el dto tambien, preguntale a los chicos q seria mejor xq hay q borrar las migraciones
+  location    Json
   photos      String[]
   description String
   amount      Float    @default(0.0)

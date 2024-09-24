@@ -5,6 +5,6 @@ export enum TypeEvents {
 }
 
 export enum Role {
-    admin = "admin",
-    company = "company",
+    Admin = "Admin",
+    Company = "Company",
 }
