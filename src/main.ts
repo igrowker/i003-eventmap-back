@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import dotenvOptions, {dotenvFun}  from './config/dotenvConfig';
 
-// dotenv.config();
+dotenv.config();
 
 //1- probar si la db funciona sin la necesidad de dotenvFun(); o dotenv.config();
 //2- si 1- falla probar solo con dotenvFun();
