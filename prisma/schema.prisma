@@ -21,7 +21,7 @@ enum Role {
 model Event {
   id          Int      @id @default(autoincrement())
   name        String
-  type        String
+  type        Type
   date        String
   time        String
   location    Json
