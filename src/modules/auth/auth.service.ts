@@ -1,9 +1,9 @@
 import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthLoginDto } from './dto/auth.dto';
+import { AuthLoginDto } from './dto/auth.login.dto';
 import { PrismaService } from '../../prisma.service';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { CreateUserDto } from './dto/auth.register.dto';
 
 @Injectable()
 export class AuthService {
@@ -26,8 +26,7 @@ export class AuthService {
       if (existingUserCuit) {
         errors.push('CUIT already in use');
       }
-  
-      // busca exepciones si hay errores
+
       if (errors.length > 0) {
         throw new ConflictException(errors);
       }
@@ -41,7 +40,6 @@ export class AuthService {
           email: createUserDto.email,
           password: passwordHash,
           cuit: createUserDto.cuit,
-          // rol: createUserDto.rol || "",
           lastLogin: "",
           state: createUserDto.state || true,
         },
@@ -58,7 +56,7 @@ export class AuthService {
     }
   }
 
-  async login(loginDto: AuthLoginDto) {
+  async signIn(loginDto: AuthLoginDto) {
     const { email, password } = loginDto;
 
     try {
@@ -69,14 +67,11 @@ export class AuthService {
         }
       });
 
-
-      //reemplazar los mensajes por algo generico para no dar pistas en q se equivoco
       if (!user) {
         throw new UnauthorizedException('Los datos ingresados no son correctos');
       }
 
       const passwordValid = await bcrypt.compare(password, user.password);
-      console.log(passwordValid);
       if (!passwordValid) {
         throw new UnauthorizedException('Los datos ingresados no son correctos');
       }
@@ -84,15 +79,10 @@ export class AuthService {
       const payload = { sub: user.id, email: user.email, rol: user.rol };
       const token = this.jwtService.sign(payload);
 
-      console.log(payload);
-      console.log(token);
-
       await this.prisma.user.update({
         where: { id: user.id },
         data: { lastLogin: new Date().toISOString() }
       });
-
-      console.log("antesd el return");
 
       return {
         profile: {
