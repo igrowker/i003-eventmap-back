@@ -10,8 +10,7 @@ import {
   IsEnum
 } from 'class-validator';
 
-import { Role } from '@prisma/client'
-
+import { Role } from 'src/utils/enum';
 
 export class CreateUserDto {
     @IsString()
@@ -39,7 +38,7 @@ export class CreateUserDto {
   
     @IsOptional()
     @IsNotEmpty()
-    @IsEnum(Role, { message: "El rol debe ser 'company' o 'admin'" })
+    @IsEnum(Role, { message: "El rol debe ser 'Company' o 'Admin'" })
     rol: Role;
   
     @IsOptional()
