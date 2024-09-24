@@ -47,26 +47,39 @@ export class EventsService {
     }
   }
 
-  updateEvent(id: number, event: UpdateEventDto) {
-    return this.prisma.event.update({
-      where: { id: id },
-      data: event,
-    });
+  async updateEvent(id: number, event: UpdateEventDto) {
+    try {
+      return await this.prisma.event.update({
+        where: { id: id },
+        data: event,
+      });
+    } catch (error) {
+      throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
 
   // actualizacion de los eventos
-  updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
-    return this.prisma.event.update({
-      where: { id },
-      data: updateData,
-    });
+  async updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
+    try {
+      return await this.prisma.event.update({
+        where: { id },
+        data: updateData,
+      });
+      
+    } catch (error) {
+      throw new HttpException('Error al actualizar el status del evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   // eliminar evento
-  deleteEvent(id: number) {
-    return this.prisma.event.delete({
-      where: { id },
-    });
+  async deleteEvent(id: number) {
+    try {
+      return await this.prisma.event.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new HttpException('Error al intentar eliminar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
