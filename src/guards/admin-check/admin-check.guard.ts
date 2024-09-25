@@ -2,22 +2,17 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
-import { Role } from 'src/utils/enum';
+
 
 @Injectable()
-export class RoleGuard implements CanActivate {
+export class AdminCheckGuard implements CanActivate {
   constructor(private jwtService : JwtService, private reflector : Reflector) {}
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-
+    //fijate q esta parte salvo el el if del final es lo mismo para role.guard y auth.guard capaz hacer una funcion q haga las comprobaciones
     const request = context.switchToHttp().getRequest();
-
-    console.log(request.user);
-
-    // return true;
-
     const header = request.headers["authorization"];
 
     if (!header) {
@@ -37,9 +32,7 @@ export class RoleGuard implements CanActivate {
 
       request["user"] = decodedToken;
 
-      const roles : Role[] = Object.values(Role);
-
-      if (!roles.includes(decodedToken.rol as Role)) {
+      if (decodedToken.rol !== "Admin") {
         return false
       }
 
