@@ -1,31 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Res, Req } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, ParseIntPipe, Res, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
+import { JwtAuthGuard } from '../../guards/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  async findAll() {
-    return await this.usersService.findAll();
+  findAll() {
+    return this.usersService.findAllUsers();
   }
-  
+
+  // @UseGuards(JwtAuthGuard) // ruta protegida 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.usersService.findOne(id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOneUser(id);
   }
-
-
   
   @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    return await this.usersService.update(id, updateUserDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
-    return await this.usersService.remove(id, res);
+  remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+    return this.usersService.removeUser(id, res);
   }
 }
