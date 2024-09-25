@@ -20,7 +20,7 @@ export class EventsService {
       const arrayEventsRequested = filterEventsUserRequest(events,query);
       console.log(arrayEventsRequested);
       
-      const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.radius, query.lat, query.lon);
+      const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.lat, query.lon);
 
       return arrayEventsRequested;
       // return arrayEventsRadius;

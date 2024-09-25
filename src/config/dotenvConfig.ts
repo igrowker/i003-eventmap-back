@@ -6,12 +6,16 @@ export const dotenvFun = ()=>{
 
 const PRUEBA = process.env.PRUEBA;
 const DATABASE_URL_LOCAL = process.env.DATABASE_URL;
+const PORT = process.env.PORT;
+const RADIUS = process.env.RADIUS;
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_TOKEN_EXPIRED = process.env.JWT_TOKEN_EXPIRED;
 
 const dotenvOptions = {
     PRUEBA,
     DATABASE_URL_LOCAL,
+    PORT,
+    RADIUS,
     JWT_SECRET,
     JWT_TOKEN_EXPIRED
 }
