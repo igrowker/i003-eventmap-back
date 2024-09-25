@@ -14,32 +14,17 @@ export class RoleGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
 
-    console.log(request.user);
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>('roles', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
 
-    // return true;
-
-    const header = request.headers["authorization"];
-
-    if (!header) {
-      throw new UnauthorizedException("No se proporciono ningun token");
+    if (!request.user) {
+      throw new UnauthorizedException('No existe el token.');
     }
-
-    const headersBearer = header.split(" ");
-
-    if (headersBearer.length !== 2 && headersBearer[0] !== "Bearer") {
-      throw new UnauthorizedException("El formato del header no es el correcto");
-    }
-
-    const token = headersBearer[1];
 
     try {
-      const decodedToken = this.jwtService.verify(token) as {id : number, email : string, rol : string};
-
-      request["user"] = decodedToken;
-
-      const roles : Role[] = Object.values(Role);
-
-      if (!roles.includes(decodedToken.rol as Role)) {
+      if (!requiredRoles.includes(request.user.rol as Role)) {
         return false
       }
 

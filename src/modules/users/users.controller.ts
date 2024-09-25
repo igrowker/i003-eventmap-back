@@ -10,11 +10,11 @@ import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get()
   @Roles(Role.Admin, Role.Company)
-  @UseGuards(JwtAuthGuard,RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   async findAll() { //solo admin
     return await this.usersService.findAllUsers();
   }
@@ -24,7 +24,7 @@ export class UsersController {
   async findOne(@Param('id', ParseIntPipe) id: number) { //admin y company --> q el id dentro del token cooicide con el id de la peticion
     return await this.usersService.findOneUser(id);
   }
-  
+
   @Patch(':id') //idem q get id
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.updateUser(id, updateUserDto);
