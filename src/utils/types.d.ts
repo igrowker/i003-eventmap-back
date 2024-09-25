@@ -7,8 +7,7 @@ export type TimeStringFormat = `${string}:${string}`;
 export type QueryEvents = { 
     type: string, 
     startDate: string, 
-    endDate: string, 
-    radius : string, 
+    endDate: string,
     lat: string, 
     lon : string 
 };

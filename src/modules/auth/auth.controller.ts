@@ -21,7 +21,6 @@ export class AuthController {
   async login(@Body() loginDto: AuthLoginDto) {
     try {
       return await this.authService.signIn(loginDto);
-      
     } catch (error) {
       throw new HttpException('Error al intentar iniciar sesion', HttpStatus.BAD_REQUEST)
     }
