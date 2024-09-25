@@ -19,12 +19,12 @@ export class EventsController {
         return await this.eventsService.getEvent(id);
     }
 
-    @Post('/')
+    @Post('/') //sin guard
     async createEvent(@Body() event: CreateEventDto) {
         return await this.eventsService.createEvent(event);
     }
 
-    @Put('/:id')
+    @Put('/:id') //admin y company y  user id cooincida con el id del token con el id del solicitado
     async updateEvent(
         @Param('id', ParseIntPipe) id: number,
         @Body() event: UpdateEventDto
@@ -32,7 +32,7 @@ export class EventsController {
         return await this.eventsService.updateEvent(id, event);
     }
 
-    @Patch('/:id')
+    @Patch('/:id') //admin y company
     async updateEventStatus(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateData: Partial<UpdateEventDto>,
@@ -40,7 +40,7 @@ export class EventsController {
         return await this.eventsService.updateEventStatus(id, updateData);
     }
 
-    @Delete('/:id')
+    @Delete('/:id') // admin
     async deleteEvent(@Param('id', ParseIntPipe) id: number) {
         return await this.eventsService.deleteEvent(id);
     }
