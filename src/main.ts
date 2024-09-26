@@ -5,7 +5,6 @@ import { LoggerMiddleware } from './middlewares/logger/logger.middleware';
 import dotenvOptions, {dotenvFun}  from './config/dotenvConfig';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
-import { MetricsController } from './metrics/metrics.controller';
 
 dotenv.config();
 
@@ -14,10 +13,6 @@ dotenvFun();
 async function bootstrap() {
   console.log(dotenvOptions.PRUEBA);
   const app = await NestFactory.create(AppModule);
-  
-  // Habilitar middleware de métricas
-  const metricsController = app.get(MetricsController);
-  app.use(metricsController.use.bind(metricsController));
 
   app.enableCors();
   app.use(cookieParser());
