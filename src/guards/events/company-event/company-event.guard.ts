@@ -9,14 +9,14 @@ export class CompanyEventGuard implements CanActivate {
     private reflector: Reflector,
     private eventsService: EventsService,
     private jwtService: JwtService,  // Inyección de JwtService
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    
+
     // Obtenemos el token del header
     const token = request.headers.authorization?.split(' ')[1];
-    
+
     if (!token) {
       throw new ForbiddenException('No token provided');
     }
@@ -30,14 +30,14 @@ export class CompanyEventGuard implements CanActivate {
     }
 
     // Obtenemos el ID del usuario desde el token
-    const userId = decoded.sub;
-    
+    const userId = decoded.sub; //1
+
     // Obtenemos el evento que se está intentando actualizar
 
-    const eventId = request.params.id;
-  
+    const eventId = request.params.id; //4
+
     const event = await this.eventsService.getEvent(parseInt(eventId));
-   
+
     if (!event) {
       throw new ForbiddenException('Event not found');
     }

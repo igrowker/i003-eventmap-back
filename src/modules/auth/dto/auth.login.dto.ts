@@ -6,7 +6,7 @@ export class AuthLoginDto {
   email: string;
 
   @IsNotEmpty({ message: 'Contraseña es obligatoria' })
-  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/, { 
+  @Matches(/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/, {  //cambiar la regx para q acepte caracteres especiales en el medio passar
     message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número' 
   })
   password: string;
