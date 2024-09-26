@@ -13,13 +13,12 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  @Roles(Role.Admin, Role.Company)
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin, Role.Company)
   async findAll() { //solo admin
     return await this.usersService.findAllUsers();
   }
 
-  // @UseGuards(JwtAuthGuard) // ruta protegida 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) { //admin y company --> q el id dentro del token cooicide con el id de la peticion
     return await this.usersService.findOneUser(id);
