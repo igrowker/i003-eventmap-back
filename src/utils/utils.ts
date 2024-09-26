@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { ValidatorConstraintInterface } from "class-validator";
-import { QueryEvents } from "./types";
+// import { QueryEvents, UserInfo } from "./types";
 import dotenvOptions from '../config/dotenvConfig';
 
 export class TimeValidator implements ValidatorConstraintInterface {
@@ -10,24 +10,24 @@ export class TimeValidator implements ValidatorConstraintInterface {
     }
 }
 
-export function filterEventsUserRequest(events: any, query: QueryEvents) {
-    //hacer validacion de q array es un array de objetos
+// export function filterEventsUserRequest(events: any, query: QueryEvents) {
+//     //hacer validacion de q array es un array de objetos
 
-    const arrayEventsRequested = [];
-    const startDate = new Date(query.startDate);
-    const endDate = new Date(query.endDate);
+//     const arrayEventsRequested = [];
+//     const startDate = new Date(query.startDate);
+//     const endDate = new Date(query.endDate);
 
-    for (let index = 0; index < events.length; index++) {
-        const event = events[index];
-        const dateEvent = new Date(event.date);
+//     for (let index = 0; index < events.length; index++) {
+//         const event = events[index];
+//         const dateEvent = new Date(event.date);
 
-        if (event.type === query.type && dateEvent >= startDate && dateEvent <= endDate) {
-            arrayEventsRequested.push(event);
-        }
-    }
+//         if (event.type === query.type && dateEvent >= startDate && dateEvent <= endDate) {
+//             arrayEventsRequested.push(event);
+//         }
+//     }
 
-    return arrayEventsRequested;
-}
+//     return arrayEventsRequested;
+// }
 
 export function filterEventsRadius(events: any, userLat: string, userLon: string) {
     const arrayFilterEventsRadius = [];
@@ -41,14 +41,13 @@ export function filterEventsRadius(events: any, userLat: string, userLon: string
         const lat = event.location.lat;
         const lon = event.location.lon;
 
-        const firstEquation = Math.pow((lat - (latUserParse)), 2); //(x-xc)2 --- xc y yc posicion usuario -- x y y coordenas evento
-        const secondEquation = Math.pow((lon - (lonUserParse)), 2); //(y-yc)2
+        const firstEquation = Math.pow((lat - (latUserParse)), 2);
+        const secondEquation = Math.pow((lon - (lonUserParse)), 2);
         const thirdEquation = firstEquation + secondEquation;
         const fourthEquation = Math.sqrt(thirdEquation);
 
-        console.log(fourthEquation);
-
         if (fourthEquation <= radiusParse) {
+            console.log("dentro del if");
             arrayFilterEventsRadius.push(event);
         }
     }
@@ -85,7 +84,7 @@ export function checkTypeQuery(type: string) {
 
 export function checkDateFormatQuery(date: string) {
     if (!isValidDate(date)) {
-        throw new HttpException('La fehca ingresada no es correcta', HttpStatus.BAD_REQUEST);
+        throw new HttpException('La fecha ingresada no es correcta', HttpStatus.BAD_REQUEST);
     }
 
     return true;
