@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import { RoleGuard } from 'src/guards/role/role.guard';
+import { AdminCheckGuard } from 'src/guards/admin-check/admin-check.guard';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
