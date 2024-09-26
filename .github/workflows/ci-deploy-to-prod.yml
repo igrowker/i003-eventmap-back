@@ -10,6 +10,7 @@ on:
       - main
       - develop
       - devops-workflow
+      - testing
       
 jobs:
   build-and-test:
