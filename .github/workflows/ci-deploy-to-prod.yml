@@ -7,9 +7,9 @@ concurrency:
 on:
   push:
     branches:
-      - main
-      - develop
-      - devops-workflow
+      # - main
+      # - develop
+      # - devops-workflow
       - testing
       
 jobs:
