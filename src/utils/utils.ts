@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { ValidatorConstraintInterface } from "class-validator";
 import { QueryEvents } from "./types";
+import dotenvOptions from '../config/dotenvConfig';
 
 export class TimeValidator implements ValidatorConstraintInterface {
     validate(value: any) {
@@ -28,10 +29,10 @@ export function filterEventsUserRequest(events: any, query: QueryEvents) {
     return arrayEventsRequested;
 }
 
-export function filterEventsRadius(events: any, radius: string, userLat: string, userLon: string) {
+export function filterEventsRadius(events: any, userLat: string, userLon: string) {
     const arrayFilterEventsRadius = [];
     
-    const radiusParse = parseFloat(radius.toString());
+    const radiusParse = parseFloat(dotenvOptions.RADIUS.toString());
     const latUserParse = parseFloat(userLat.toString());
     const lonUserParse = parseFloat(userLon.toString());
 

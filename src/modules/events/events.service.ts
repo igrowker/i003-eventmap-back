@@ -20,7 +20,7 @@ export class EventsService {
       const arrayEventsRequested = filterEventsUserRequest(events,query);
       console.log(arrayEventsRequested);
       
-      const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.radius, query.lat, query.lon);
+      const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.lat, query.lon);
 
       return arrayEventsRequested;
       // return arrayEventsRadius;
@@ -58,8 +58,6 @@ export class EventsService {
     }
   }
 
-
-  // actualizacion de los eventos
   async updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
     try {
       return await this.prisma.event.update({
@@ -72,7 +70,6 @@ export class EventsService {
     }
   }
 
-  // eliminar evento
   async deleteEvent(id: number) {
     try {
       return await this.prisma.event.delete({
