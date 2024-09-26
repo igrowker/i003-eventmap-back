@@ -13,6 +13,7 @@ dotenvFun();
 async function bootstrap() {
   console.log(dotenvOptions.PRUEBA);
   const app = await NestFactory.create(AppModule);
+
   app.enableCors();
   app.use(cookieParser());
   app.use(new LoggerMiddleware().use);
