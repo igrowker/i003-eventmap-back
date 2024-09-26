@@ -84,7 +84,7 @@ export function checkTypeQuery(type: string) {
 
 export function checkDateFormatQuery(date: string) {
     if (!isValidDate(date)) {
-        throw new HttpException('La fehca ingresada no es correcta', HttpStatus.BAD_REQUEST);
+        throw new HttpException('La fecha ingresada no es correcta', HttpStatus.BAD_REQUEST);
     }
 
     return true;

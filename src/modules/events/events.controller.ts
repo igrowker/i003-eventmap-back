@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { ValidationDateRangePipe } from './pipes/validation-date-range/validation-date-range.pipe';
 import { QueryEvents } from 'src/utils/types';
+import { CompanyEventGuard } from 'src/guards/events/company-event/company-event.guard';
 
 @Controller('/events')
 export class EventsController {
@@ -26,6 +27,7 @@ export class EventsController {
     }
 
     @Put('/:id') //admin y company y  user id cooincida con el id del token con el id del solicitado
+    @UseGuards(CompanyEventGuard)
     async updateEvent(
         @Param('id', ParseIntPipe) id: number,
         @Body() event: UpdateEventDto
