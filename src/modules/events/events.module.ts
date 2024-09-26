@@ -11,10 +11,8 @@ import { AuthModule } from '../auth/auth.module';
     providers: [EventsService, PrismaService],
 })
 export class EventsModule implements NestModule{
-    
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(LoggerMiddleware).forRoutes('events') //ahora todos los events controller se les va a aplicar este middleware
-        // .apply(AuthMiddleware).forRoutes('events')
+        consumer.apply(LoggerMiddleware).forRoutes('events')
     }
 }
 

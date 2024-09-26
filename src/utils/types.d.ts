@@ -5,9 +5,6 @@ export type DateStringFormat = `${string}-${string}-${string}`;
 export type TimeStringFormat = `${string}:${string}`;
 
 export type QueryEvents = {
-    // type: string, 
-    // startDate: string, 
-    // endDate: string,
     lat: string,
     lon: string
 };
