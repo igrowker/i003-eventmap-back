@@ -18,9 +18,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(new LoggerMiddleware().use);
   app.useGlobalPipes(new ValidationPipe({
-
-    whitelist : true, 
-    // transform : true
+    whitelist : true,
   }))
   await app.listen(dotenvOptions.PORT);
 }

@@ -12,24 +12,29 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  @Roles(Role.Admin, Role.Company)
+  @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  async findAll() { //solo admin
+  async findAll() {
     return await this.usersService.findAllUsers();
   }
 
-  // @UseGuards(JwtAuthGuard) // ruta protegida 
+  @Roles(Role.Admin, Role.Company)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) { //admin y company --> q el id dentro del token cooicide con el id de la peticion
+  async findOne(@Param('id', ParseIntPipe) id: number) { //q el id dentro del token cooicide con el id de la peticion
     return await this.usersService.findOneUser(id);
   }
 
-  @Patch(':id') //idem q get id
+  @Roles(Role.Admin, Role.Company)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Patch(':id') //cooinciden id
   async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.updateUser(id, updateUserDto);
   }
 
-  @Delete(':id') //admin
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     return await this.usersService.removeUser(id, res);
   }
