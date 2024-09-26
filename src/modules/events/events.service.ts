@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { filterEventsRadius, filterEventsUserRequest } from 'src/utils/utils';
+import { filterEventsRadius } from 'src/utils/utils';
 import { QueryEvents } from 'src/utils/types';
 
 @Injectable()
@@ -10,21 +10,15 @@ export class EventsService {
 
   constructor(private prisma: PrismaService) { }
 
-
-  // http://localhost:3000/events?type=Deportivo&startDate=2024-12-12&endDate=2024-12-15&radius="-35.658"&lat="-25.546"&lon="-22.316"
   async getEvents(query : QueryEvents) {
     try {
       const events = await this.prisma.event.findMany();
+      // const arrayEventsRequested = filterEventsUserRequest(events,query);
       
-      //primer filtrado por solicitud usuario
-      const arrayEventsRequested = filterEventsUserRequest(events,query);
-      console.log(arrayEventsRequested);
-      
-      const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.lat, query.lon);
+      // const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.lat, query.lon);
+      const arrayEventsRadius = filterEventsRadius(events, query.lat, query.lon);
 
-      return arrayEventsRequested;
-      // return arrayEventsRadius;
-      // return await this.prisma.event.findMany();
+      return arrayEventsRadius;
     } catch (error) {
       throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
