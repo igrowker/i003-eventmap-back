@@ -3,8 +3,10 @@ import {EventsController} from './events.controller';
 import { EventsService } from './events.service';
 import { LoggerMiddleware } from 'src/middlewares/logger/logger.middleware';
 import { PrismaService } from 'src/prisma.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+    imports: [AuthModule],
     controllers : [EventsController],
     providers: [EventsService, PrismaService],
 })

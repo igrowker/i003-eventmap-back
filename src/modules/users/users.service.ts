@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
+import { UserInfo, UserWithoutPass } from 'src/utils/types';
 
 @Injectable()
 export class UsersService {
@@ -9,9 +10,28 @@ export class UsersService {
 
   async findAllUsers() {
     try {
-      const users = await this.prisma.user.findMany();
+      const users = await this.prisma.user.findMany({
+        include: {
+          events: true,
+        },
+      });
+
+      if (!users) throw new NotFoundException('No se logro obtener los usuarios en la DB');
+
       if (users.length === 0) throw new NotFoundException('No existen usuarios en la DB');
-      return users;
+
+      const usersFilterPass = [];
+
+      for (let index = 0; index < users.length; index++) {
+        const user = users[index];
+        const {password, ...objectAux} = user;
+
+        const userFilterPass : UserWithoutPass = objectAux;
+
+        usersFilterPass.push(userFilterPass);
+      }
+      
+      return usersFilterPass;
     } catch (error) {
       throw new NotFoundException('Error al recuperar usuarios');
     }
@@ -19,15 +39,21 @@ export class UsersService {
 
   async findOneUser(id: number) {
     try {
-      const userFound = await this.prisma.user.findUnique({
+      
+      const userFound : UserInfo = await this.prisma.user.findUnique({
         where: { id },
         include: {
           events: true,
         },
       });
-
+      
       if (!userFound) throw new NotFoundException('Usuario no encontrado');
-      return userFound;
+
+      const {password, ...objectAux} = userFound;
+
+      const userFilterPass : UserWithoutPass = objectAux;
+
+      return userFilterPass;
     } catch (error) {
       throw new NotFoundException('Error al recuperar el usuario');
     }
