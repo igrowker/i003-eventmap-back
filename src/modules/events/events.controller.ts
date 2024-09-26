@@ -10,7 +10,8 @@ export class EventsController {
     constructor(private eventsService: EventsService) { }
 
     @Get('/')
-    async getAllEvents(@Query(ValidationDateRangePipe) query: QueryEvents) {
+    // async getAllEvents(@Query(ValidationDateRangePipe) query: QueryEvents) {
+        async getAllEvents(@Query() query: QueryEvents) {
         return await this.eventsService.getEvents(query);
     }
 

@@ -9,20 +9,12 @@ export class AuthController {
 
   @Post('register')
   async create(@Res({ passthrough: true}) res: Response, @Body() createUserDto: CreateUserDto) {
-    try {
-      return await this.authService.signUp(createUserDto);
-    } catch (error) {
-      throw new HttpException('Error al intentar registrarse', HttpStatus.BAD_REQUEST)
-    }
+    return await this.authService.signUp(createUserDto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: AuthLoginDto) {
-    try {
-      return await this.authService.signIn(loginDto);
-    } catch (error) {
-      throw new HttpException('Error al intentar iniciar sesion', HttpStatus.BAD_REQUEST)
-    }
+    return await this.authService.signIn(loginDto);
   }
 }
