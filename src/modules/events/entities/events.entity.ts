@@ -1,7 +1,4 @@
-
-import { IsString, IsNumber, IsOptional, IsDate } from 'class-validator';
 import { User } from 'src/modules/users/entities/user.entity';
-//OJO aca puede q en ves de User de entity sea el de prisma (o capaz sean lo mismo)
 
 export class Event {
     id: number;
@@ -14,7 +11,7 @@ export class Event {
     description: string;
     amount: number;
     createdAt: Date;
-    user: User; // Assuming you have a User entity defined
+    user: User;
     userId: number;
 }
 
