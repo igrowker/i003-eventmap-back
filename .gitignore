@@ -58,4 +58,4 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Ignorar el archivo .dockerignore
 .dockerignore
 
-metrics/
+.metrics/
