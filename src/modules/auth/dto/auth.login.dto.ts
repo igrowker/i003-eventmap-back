@@ -1,13 +1,19 @@
-import { IsEmail, Matches, IsNotEmpty } from 'class-validator';
+import { IsEmail, Matches, IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
 
 export class AuthLoginDto {
-  @IsEmail({}, { message: 'Formato de correo electrónico no válido' })
+  @IsString()
   @IsNotEmpty({ message: 'Correo electrónico es obligatorio' })
+  @IsEmail({}, { message: 'El correo electrónico debe ser una dirección de correo válida y tener un dominio permitido.' })
+  @MaxLength(70, { message: 'El número máximo de caracteres ha sido excedido.' })
+  @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: 'El correo debe tener un formato válido (sin espacios y con un dominio correcto).' })
   email: string;
 
+  @IsString()
   @IsNotEmpty({ message: 'Contraseña es obligatoria' })
-  @Matches(/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/, {  //cambiar la regx para q acepte caracteres especiales en el medio passar
-    message: 'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número' 
-  })
+  @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
+  @MaxLength(25, { message: 'El número máximo de dígitos ha sido excedido.' })
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,16}$/, {
+    message: 'La contraseña debe tener entre 8 y 16 caracteres, incluir al menos una mayúscula, una minúscula y un carácter especial.',
+  })  
   password: string;
 }
