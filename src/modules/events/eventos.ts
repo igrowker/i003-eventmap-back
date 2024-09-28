@@ -1,5 +1,5 @@
 import { TypeEvents } from "src/utils/enum";
-
+//boorar despues
 export const events = [
     {
         userId: 1,
