@@ -4,11 +4,25 @@ import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { filterEventsRadius } from 'src/utils/utils';
 import { QueryEvents } from 'src/utils/types';
+import { events } from './eventos';
+
+
+
 
 @Injectable()
 export class EventsService {
 
   constructor(private prisma: PrismaService) { }
+
+  async crear20Eventos(){
+
+    for (let index = 0; index < events.length; index++) {
+      const element = events[index];
+      
+      await this.prisma.event.create({ data: element });
+    }
+    return true
+  }
 
   async getEvents(query : QueryEvents) {
     try {

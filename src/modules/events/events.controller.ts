@@ -13,6 +13,11 @@ import { RoleGuard } from 'src/guards/role/role.guard';
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
+    @Post("/crearEvents")
+    async crearEventos(){
+        return await this.eventsService.crear20Eventos();
+    }
+
     @Get('/')
     async getAllEvents(@Query() query: QueryEvents) {
         return await this.eventsService.getEvents(query);
@@ -34,7 +39,7 @@ export class EventsController {
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Put('/:id') //user id cooincida con el id del token con el id del solicitado
-    @UseGuards(CompanyEventGuard)
+    // @UseGuards(CompanyEventGuard)
     async updateEvent(
         @Param('id', ParseIntPipe) id: number,
         @Body() event: UpdateEventDto
