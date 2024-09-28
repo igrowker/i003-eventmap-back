@@ -15,7 +15,14 @@ export class EventsController {
 
     @Post("/crearEvents")
     async crearEventos(){
-        return await this.eventsService.crear20Eventos();
+        return await this.eventsService.crearEventos();
+    }
+
+    @Roles(Role.Admin)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @Get('/all')
+    async getAllEventsWithoutFilter() {
+        return await this.eventsService.getEventsWhitoutFilter();
     }
 
     @Get('/')

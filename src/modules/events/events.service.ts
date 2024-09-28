@@ -4,7 +4,7 @@ import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { filterEventsRadius } from 'src/utils/utils';
 import { QueryEvents } from 'src/utils/types';
-import { events } from './eventos';
+import { events, generateRandomCoordinates } from './events';
 
 
 
@@ -14,14 +14,33 @@ export class EventsService {
 
   constructor(private prisma: PrismaService) { }
 
-  async crear20Eventos(){
+  async crearEventos(){
 
     for (let index = 0; index < events.length; index++) {
       const element = events[index];
       
-      await this.prisma.event.create({ data: element });
+      await this.prisma.event.create({ data: {
+        userId : element.userId,
+        name: element.name,
+        type: element.type,
+        date: element.date,
+        time: element.time,
+        location: generateRandomCoordinates((-34.605500), (-58.384500), 5),
+        photos: element.photos,
+        description: element.description,
+        amount: element.amount,
+        createdAt: element.createdAt
+      } });
     }
     return true
+  }
+
+  async getEventsWhitoutFilter() {
+    try {
+      return await this.prisma.event.findMany();
+    } catch (error) {
+      throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async getEvents(query : QueryEvents) {
