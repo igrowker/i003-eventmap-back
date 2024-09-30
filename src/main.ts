@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { LoggerMiddleware } from './middlewares/logger/logger.middleware';
 import dotenvOptions, {dotenvFun}  from './config/dotenvConfig';
+import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 
@@ -13,13 +14,20 @@ dotenvFun();
 async function bootstrap() {
   console.log(dotenvOptions.PRUEBA);
   const app = await NestFactory.create(AppModule);
+
   app.enableCors();
   app.use(cookieParser());
+  app.use(bodyParser.json());
   app.use(new LoggerMiddleware().use);
   app.useGlobalPipes(new ValidationPipe({
-    whitelist : true, 
-    // transform : true
-  }))
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+    transformOptions: {
+      enableImplicitConversion: true,
+    }
+  }));
+
   await app.listen(dotenvOptions.PORT);
 }
 bootstrap();

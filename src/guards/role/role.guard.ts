@@ -18,6 +18,7 @@ export class RoleGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
+    console.log(requiredRoles)
 
     if (!request.user) {
       throw new UnauthorizedException('No existe el token.');
@@ -27,6 +28,7 @@ export class RoleGuard implements CanActivate {
       if (!requiredRoles.includes(request.user.rol as Role)) {
         return false
       }
+      console.log(!requiredRoles.includes(request.user.rol as Role))
 
       return true;
 

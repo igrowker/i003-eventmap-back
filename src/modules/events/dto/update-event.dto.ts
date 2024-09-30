@@ -2,6 +2,8 @@ import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateStr
 import { TypeEvents } from 'src/utils/enum';
 
 export class UpdateEventDto {
+  //id del evento q se pasa por body
+
   @IsOptional()
   @IsString()
   name?: string;

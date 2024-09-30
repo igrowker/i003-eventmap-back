@@ -2,32 +2,51 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Q
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { ValidationDateRangePipe } from './pipes/validation-date-range/validation-date-range.pipe';
 import { QueryEvents } from 'src/utils/types';
 import { CompanyEventGuard } from 'src/guards/events/company-event/company-event.guard';
+import { Roles } from 'src/decorators/Roles.decorator';
+import { Role } from 'src/utils/enum';
+import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
+import { RoleGuard } from 'src/guards/role/role.guard';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
+    @Post("/crearEvents")
+    async crearEventos(){
+        return await this.eventsService.crearEventos();
+    }
+
+    @Roles(Role.Admin)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @Get('/all')
+    async getAllEventsWithoutFilter() {
+        return await this.eventsService.getEventsWhitoutFilter();
+    }
+
     @Get('/')
-    // async getAllEvents(@Query(ValidationDateRangePipe) query: QueryEvents) {
-        async getAllEvents(@Query() query: QueryEvents) {
+    async getAllEvents(@Query() query: QueryEvents) {
         return await this.eventsService.getEvents(query);
     }
 
     @Get('/event/:id')
+    @UseGuards(CompanyEventGuard)
     async getEventById(@Param('id', ParseIntPipe) id: number) {
         return await this.eventsService.getEvent(id);
     }
 
-    @Post('/') //sin guard
+    @Roles(Role.Admin, Role.Company)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @Post('/')
     async createEvent(@Body() event: CreateEventDto) {
         return await this.eventsService.createEvent(event);
     }
 
-    @Put('/:id') //admin y company y  user id cooincida con el id del token con el id del solicitado
-    @UseGuards(CompanyEventGuard)
+    @Roles(Role.Admin, Role.Company)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @Put('/:id') //user id cooincida con el id del token con el id del solicitado
+    // @UseGuards(CompanyEventGuard)
     async updateEvent(
         @Param('id', ParseIntPipe) id: number,
         @Body() event: UpdateEventDto
@@ -35,7 +54,9 @@ export class EventsController {
         return await this.eventsService.updateEvent(id, event);
     }
 
-    @Patch('/:id') //admin y company
+    @Roles(Role.Admin, Role.Company)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @Patch('/:id')
     async updateEventStatus(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateData: Partial<UpdateEventDto>,
@@ -43,6 +64,8 @@ export class EventsController {
         return await this.eventsService.updateEventStatus(id, updateData);
     }
 
+    @Roles(Role.Admin)
+    @UseGuards(JwtAuthGuard, RoleGuard)
     @Delete('/:id') // admin
     async deleteEvent(@Param('id', ParseIntPipe) id: number) {
         return await this.eventsService.deleteEvent(id);
