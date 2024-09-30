@@ -13,7 +13,7 @@ export class UsersController {
 
   @Get()
   // @UseGuards(JwtAuthGuard, RoleGuard)
-  // @Roles(Role.Admin, Role.Company)
+  // @Roles(Role.Admin)
   async findAllUsers() { //solo admin
     return await this.usersService.findAllUsers();
   }

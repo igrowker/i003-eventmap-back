@@ -2,6 +2,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 import { ValidatorConstraintInterface } from "class-validator";
 // import { QueryEvents, UserInfo } from "./types";
 import dotenvOptions from '../config/dotenvConfig';
+import cloudinary from "src/config/cloudinary.config";
 
 export class TimeValidator implements ValidatorConstraintInterface {
     validate(value: any) {
@@ -31,7 +32,7 @@ export class TimeValidator implements ValidatorConstraintInterface {
 
 export function filterEventsRadius(events: any, userLat: string, userLon: string) {
     const arrayFilterEventsRadius = [];
-    
+
     const radiusParse = parseFloat(dotenvOptions.RADIUS.toString());
     const latUserParse = parseFloat(userLat.toString());
     const lonUserParse = parseFloat(userLon.toString());
@@ -88,4 +89,18 @@ export function checkDateFormatQuery(date: string) {
     }
 
     return true;
+}
+
+export const uploadFilesToCloudinary = async (files: Express.Multer.File[]): Promise<string[]> => {
+    const photoUrls: string[] = [];
+
+    for (const file of files) {
+        const uploadResult = await cloudinary.uploader.upload(file.path, {
+            folder: 'events', // Opcional: Especifica una carpeta para organizar
+        });
+
+        photoUrls.push(uploadResult.secure_url);
+    }
+
+    return photoUrls;
 }

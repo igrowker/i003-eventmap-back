@@ -10,6 +10,10 @@ const PORT = process.env.PORT;
 const RADIUS = process.env.RADIUS;
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_TOKEN_EXPIRED = process.env.JWT_TOKEN_EXPIRED;
+const CLOUDINARY_URL = process.env.CLOUDINARY_URL;
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+const CLOUDINARY_API_KEY_SECRET = process.env.CLOUDINARY_API_KEY_SECRET;
+const CLOUDINARY_API_KEY_NAME = process.env.CLOUDINARY_API_KEY_NAME;
 
 const dotenvOptions = {
     PRUEBA,
@@ -17,7 +21,11 @@ const dotenvOptions = {
     PORT,
     RADIUS,
     JWT_SECRET,
-    JWT_TOKEN_EXPIRED
+    JWT_TOKEN_EXPIRED,
+    CLOUDINARY_URL,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_KEY_SECRET,
+    CLOUDINARY_API_KEY_NAME,
 }
 
 export default dotenvOptions;

@@ -3,6 +3,9 @@ import { TypeEvents } from 'src/utils/enum';
 
 export class UpdateEventDto {
   //id del evento q se pasa por body
+  @IsNumber()
+  @IsNotEmpty()
+  id : number
 
   @IsOptional()
   @IsString()

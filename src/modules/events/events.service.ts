@@ -5,9 +5,7 @@ import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { filterEventsRadius } from 'src/utils/utils';
 import { QueryEvents } from 'src/utils/types';
 import { events, generateRandomCoordinates } from './events';
-
-
-
+import cloudinary from 'src/config/cloudinary.config';
 
 @Injectable()
 export class EventsService {
@@ -15,7 +13,6 @@ export class EventsService {
   constructor(private prisma: PrismaService) { }
 
   async crearEventos(){
-
     for (let index = 0; index < events.length; index++) {
       const element = events[index];
       
@@ -66,20 +63,46 @@ export class EventsService {
     }
   }
 
+  // async uploadFilesToCloudinary(files: Express.Multer.File[]): Promise<string[]> {
+  //   const photoUrls: string[] = [];
+  
+  //   for (const file of files) {
+  //     const uploadResult = await cloudinary.uploader.upload(file.path, {
+  //       folder: 'events', // Opcional: Especifica una carpeta para organizar
+  //     });
+  
+  //     photoUrls.push(uploadResult.secure_url);
+  //   }
+  
+  //   return photoUrls;
+  // }
+
+  // async createEvent(event: CreateEventDto, files: Express.Multer.File[]) {
+  //   const photoUrls = await this.uploadImagesToCloudinary(files);
   async createEvent(event: CreateEventDto) {
     try {
+
       return await this.prisma.event.create({ data: event });
     } catch (error) {
       throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async updateEvent(id: number, event: UpdateEventDto) {
+  async updateEvent(idUserQLLegaPorParamtro: number, event: UpdateEventDto) {
     try {
-      return await this.prisma.event.update({
-        where: { id: id },
+      const updateEvent = await this.prisma.event.update({
+        where: { 
+          id: event.id ,
+          userId : idUserQLLegaPorParamtro
+        },
         data: event,
       });
+
+      if (updateEvent === null) {
+        throw new HttpException('No tienes los permisos para modificar este evento', HttpStatus.BAD_REQUEST);
+      }
+
+      return updateEvent;
     } catch (error) {
       throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }

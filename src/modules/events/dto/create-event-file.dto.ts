@@ -1,9 +1,9 @@
-import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, IsDate} from 'class-validator';
+import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, IsDate, ValidateIf} from 'class-validator';
 import { IsValisLocation } from 'src/decorators/IsValidLocation';
 import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
-export class CreateEventDto{
+export class CreateEventFileDto{
     @IsNotEmpty()
     @IsNumber()
     userId : number
@@ -25,12 +25,16 @@ export class CreateEventDto{
     @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
     time : TimeStringFormat
 
-    @Validate(IsValisLocation)
-    location : { lat: number, lon: number }
+    @IsNumber()
+    @IsNotEmpty()
+    lat : number
 
-    @IsArray()
-    // @IsString({ each: true })
-    photos : any
+    @IsNumber()
+    @IsNotEmpty()
+    lon : number
+
+    @ValidateIf((object, value) => value !== undefined, { message: 'El archivo es obligatorio.' })
+    files : Express.Multer.File
     
     @IsNotEmpty()
     @IsString()
