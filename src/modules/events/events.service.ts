@@ -41,18 +41,22 @@ export class EventsService {
     }
   }
 
-  async updateEvent(id: number, event: UpdateEventDto) {
+  async updateEvent(userId: number,  event: UpdateEventDto) {
     try {
+      // Actualizar el evento usando el eventId
       return await this.prisma.event.update({
-        where: { id: id },
-        data: event,
+        where: { id: event.id, userId: userId },
+        data: {
+          ...event,
+        },
       });
     } catch (error) {
       throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  
 
-  async updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) {
+  async updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) { // modificar la logica
     try {
       return await this.prisma.event.update({
         where: { id },
@@ -64,7 +68,7 @@ export class EventsService {
     }
   }
 
-  async deleteEvent(id: number) {
+  async deleteEvent(id: number) { // modificar la logica
     try {
       return await this.prisma.event.delete({
         where: { id },

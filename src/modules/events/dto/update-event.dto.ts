@@ -2,11 +2,12 @@ import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateStr
 import { TypeEvents } from 'src/utils/enum';
 
 export class UpdateEventDto {
-  @IsOptional()
+  @IsNumber()
+  id: number;
+
   @IsString()
   name?: string;
 
-  @IsOptional()
   @IsString()
   @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, { message: 'El tipo de evento debe ser uno de los siguientes: Deportivo, Artistico, Gastronomico' })
   type?: TypeEvents;

@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
-import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
+import { JwtAuthGuard } from 'src/guards/auth/jwtAuthGuard';
 
 @Controller('users')
 export class UsersController {

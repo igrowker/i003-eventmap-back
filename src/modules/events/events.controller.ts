@@ -6,8 +6,9 @@ import { QueryEvents } from 'src/utils/types';
 import { CompanyEventGuard } from 'src/guards/events/company-event/company-event.guard';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
-import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
+import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
+import { userSelfGuard } from 'src/guards/auth/userSelf.guard';
 
 @Controller('/events')
 export class EventsController {
@@ -32,9 +33,8 @@ export class EventsController {
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @Put('/:id') //user id cooincida con el id del token con el id del solicitado
-    @UseGuards(CompanyEventGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelfGuard)
+    @Put('/:id')
     async updateEvent(
         @Param('id', ParseIntPipe) id: number,
         @Body() event: UpdateEventDto
