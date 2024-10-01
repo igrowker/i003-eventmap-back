@@ -41,11 +41,22 @@ export class EventsService {
     }
   }
 
-  async updateEvent(userId: number,  event: UpdateEventDto) {
+  async updateEvent(eventId: number, userId: number, event: UpdateEventDto) {
     try {
-      // Actualizar el evento usando el eventId
+      // Verificar si el evento existe
+      const existingEvent = await this.prisma.event.findUnique({ where: { id: eventId } });
+      if (!existingEvent) {
+        throw new HttpException('Evento no encontrado', HttpStatus.NOT_FOUND);
+      }
+  
+      // Verificar si el evento pertenece al usuario
+      if (existingEvent.userId !== userId) {
+        throw new HttpException('No tienes permiso para modificar este evento', HttpStatus.FORBIDDEN);
+      }
+  
+      // Actualizar el evento
       return await this.prisma.event.update({
-        where: { id: event.id, userId: userId },
+        where: { id: eventId },
         data: {
           ...event,
         },
@@ -54,6 +65,7 @@ export class EventsService {
       throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  
   
 
   async updateEventStatus(id: number, updateData: Partial<UpdateEventDto>) { // modificar la logica
@@ -68,11 +80,23 @@ export class EventsService {
     }
   }
 
-  async deleteEvent(id: number) { // modificar la logica
+  async deleteEvent(id: number, userId: number) {
     try {
-      return await this.prisma.event.delete({
-        where: { id },
-      });
+      // Buscar el evento
+      const existingEvent = await this.prisma.event.findUnique({ where: { id } });
+  
+      // Validar si el evento existe
+      if (!existingEvent) {
+        throw new HttpException('Evento no encontrado', HttpStatus.NOT_FOUND);
+      }
+  
+      // Validar si el userId del token coincide con el del evento
+      if (existingEvent.userId !== userId) {
+        throw new HttpException('No tienes permiso para eliminar este evento', HttpStatus.FORBIDDEN);
+      }
+  
+      // Eliminar el evento si la validación pasa
+      return await this.prisma.event.delete({ where: { id } });
     } catch (error) {
       throw new HttpException('Error al intentar eliminar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }

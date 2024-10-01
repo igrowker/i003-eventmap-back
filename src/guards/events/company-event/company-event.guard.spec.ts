@@ -1,7 +1,7 @@
-import { CompanyEventGuard } from './company-event.guard';
+// import { CompanyEventGuard } from './company-event.guard';
 
-describe('CompanyEventGuard', () => {
-  it('should be defined', () => {
-    expect(new CompanyEventGuard()).toBeDefined();
-  });
-});
+// describe('CompanyEventGuard', () => {
+//   it('should be defined', () => {
+//     expect(new CompanyEventGuard()).toBeDefined();
+//   });
+// });

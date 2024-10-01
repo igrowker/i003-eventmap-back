@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
@@ -8,7 +8,7 @@ import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
-import { userSelfGuard } from 'src/guards/auth/userSelf.guard';
+import { UserOwnershipGuard } from 'src/guards/auth/userSelf.guard';
 
 @Controller('/events')
 export class EventsController {
@@ -33,14 +33,18 @@ export class EventsController {
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard, userSelfGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, UserOwnershipGuard)
     @Put('/:id')
     async updateEvent(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() event: UpdateEventDto
+      @Param('id', ParseIntPipe) id: number,
+      @Body() event: UpdateEventDto,
+      @Req() req  // Para obtener el usuario autenticado desde el JWT
     ) {
-        return await this.eventsService.updateEvent(id, event);
+        console.log('User in request:', req.user); // Verifica si existe el user aquí
+        const userId = req.user?.id; // Obtener el userId del token JWT
+        return await this.eventsService.updateEvent(id, userId, event);
     }
+    
 
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard)
@@ -55,7 +59,8 @@ export class EventsController {
     @Roles(Role.Admin)
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Delete('/:id') // admin
-    async deleteEvent(@Param('id', ParseIntPipe) id: number) {
-        return await this.eventsService.deleteEvent(id);
+    async deleteEvent(@Param('id', ParseIntPipe) id: number, @Req() req) {
+        const userId = req.user.id; // Extraer el userId del token JWT
+        return await this.eventsService.deleteEvent(id, userId);
     }
 }

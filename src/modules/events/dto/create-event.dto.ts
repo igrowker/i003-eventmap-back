@@ -1,4 +1,4 @@
-import {IsString, IsDate, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, IsNotEmpty} from 'class-validator';
+    import { IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, isDate} from 'class-validator';
 import { IsValisLocation } from 'src/decorators/IsValidLocation';
 import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
@@ -43,6 +43,5 @@ export class CreateEventDto{
     amount : number
 
     @IsNotEmpty()
-    @IsDate()
     createdAt : Date
 }

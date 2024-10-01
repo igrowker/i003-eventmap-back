@@ -2,9 +2,7 @@ import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateStr
 import { TypeEvents } from 'src/utils/enum';
 
 export class UpdateEventDto {
-  @IsNumber()
-  id: number;
-
+  @IsOptional()
   @IsString()
   name?: string;
 

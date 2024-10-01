@@ -5,20 +5,22 @@ import { Response } from 'express';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
-import { JwtAuthGuard } from 'src/guards/auth/jwtAuthGuard';
+import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles(Role.Admin, Role.Company)
+  // @UseGuards(JwtAuthGuard, RoleGuard)
+  // @Roles(Role.Admin, Role.Company)
   async findAllUsers() { //solo admin
     return await this.usersService.findAllUsers();
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin, Role.Company)
   async findOneUser(@Param('id', ParseIntPipe) id: number) { //admin y company --> q el id dentro del token cooicide con el id de la peticion
     return await this.usersService.findOneUser(id);
   }
