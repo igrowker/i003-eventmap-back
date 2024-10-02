@@ -1,9 +1,6 @@
 import { IsString, IsNotEmpty, MinLength, MaxLength, Matches } from 'class-validator';
 
 export class ResetPasswordDto {
-  @IsString()
-  @IsNotEmpty({ message: 'El token es obligatorio' })
-  token: string; // Token enviado por correo para verificar la autenticidad de la solicitud
   
   @IsString()
   @IsNotEmpty({ message: 'La nueva contraseña es obligatoria' })

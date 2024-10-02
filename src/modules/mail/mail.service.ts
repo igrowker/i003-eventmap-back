@@ -7,19 +7,19 @@ export class MailService {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      service: 'Gmail', // Puedes cambiar el servicio de correo aquí
+      service: 'Gmail', 
       auth: {
-        user: process.env.EMAIL_USER, // Tu email
-        pass: process.env.EMAIL_PASSWORD, // Contraseña de la cuenta de correo
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
   }
 
   async sendResetPasswordEmail(to: string, token: string) {
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-
+    const resetLink = `${process.env.FRONTEND_URL}/auth/reset-password?token=${token}`;
+    console.log(resetLink)
     const mailOptions = {
-      from: process.env.EMAIL_USER, // Desde qué email se enviará
+      from: process.env.EMAIL_USER, 
       to,
       subject: 'Recuperación de contraseña',
       text: `Haz clic en el siguiente enlace para recuperar tu contraseña: ${resetLink}`,
