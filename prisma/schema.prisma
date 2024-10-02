@@ -19,7 +19,7 @@ enum Role {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
+  id          Int      @id @default(autoincrement()) //cambiar esto a string y q ulid y uuid
   name        String
   type        Type
   date        String
@@ -31,7 +31,7 @@ model Event {
   createdAt   DateTime @default(now())
   user        User     @relation(name: "EventToUser", fields: [userId], references: [id])
   userId      Int
-  //capacity --> string ejem:entre 2000 y 5000
+  //capacity --> string ejem:entre 2000 y 5000 //agrega valores por defecto xq capaz neon se queja
   //addres --> string
 }
 

@@ -8,7 +8,6 @@ import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
-import { uploadFilesToCloudinary } from 'src/utils/utils';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('/events')
@@ -38,23 +37,20 @@ export class EventsController {
         return await this.eventsService.getEvent(id);
     }
 
-    @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @Post('/')
+    // @Roles(Role.Admin, Role.Company)
+    // @UseGuards(JwtAuthGuard, RoleGuard)
+    @Post('/') //200 y 300kb de tamañanp de imagen
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
         @Body() event: CreateEventDto,
         @UploadedFiles() files: Array<Express.Multer.File>
     ) {
+        console.log(event);
         console.log('Archivos recibidos:', files);
 
-        const photoUrls = await uploadFilesToCloudinary(files);
+        //validar tamañno y formato imagen        
 
-        event.photos = photoUrls;
-        console.log(event.photos);
-        console.log(event);
-
-        return await this.eventsService.createEvent(event);
+        return await this.eventsService.createEvent(event,files);
     }
 
     @Roles(Role.Admin, Role.Company)

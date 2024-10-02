@@ -13,6 +13,7 @@ export function generateRandomCoordinates(lat:number, lon:number, radius:number)
     return { lat: lat2, lon: lon2 };
 }
 
+// https://www.protocoloimep.com/app/uploads/2016/11/evento-sostenible.png
 
 export const events = [
     {
