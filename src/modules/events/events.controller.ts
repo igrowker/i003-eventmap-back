@@ -38,11 +38,11 @@ export class EventsController {
     async updateEvent(
       @Param('id', ParseIntPipe) id: number,
       @Body() event: UpdateEventDto,
-      @Req() req  // Para obtener el usuario autenticado desde el JWT
     ) {
-        console.log('User in request:', req.user); // Verifica si existe el user aquí
-        const userId = req.user?.id; // Obtener el userId del token JWT
-        return await this.eventsService.updateEvent(id, userId, event);
+        console.log('llego 1')
+        // console.log('User in request:', req.user); // Verifica si existe el user aquí
+        // const userId = req.user?.id; // Obtener el userId del token JWT
+        return await this.eventsService.updateEvent(id, event);
     }
     
 

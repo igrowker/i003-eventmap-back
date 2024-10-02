@@ -4,6 +4,7 @@ import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { filterEventsRadius } from 'src/utils/utils';
 import { QueryEvents } from 'src/utils/types';
+import { error } from 'console';
 
 @Injectable()
 export class EventsService {
@@ -41,22 +42,39 @@ export class EventsService {
     }
   }
 
-  async updateEvent(eventId: number, userId: number, event: UpdateEventDto) {
+  async updateEvent( userId: number, event: UpdateEventDto) {
+    console.log(event.id, typeof event.id)
     try {
-      // Verificar si el evento existe
-      const existingEvent = await this.prisma.event.findUnique({ where: { id: eventId } });
-      if (!existingEvent) {
-        throw new HttpException('Evento no encontrado', HttpStatus.NOT_FOUND);
-      }
-  
-      // Verificar si el evento pertenece al usuario
-      if (existingEvent.userId !== userId) {
-        throw new HttpException('No tienes permiso para modificar este evento', HttpStatus.FORBIDDEN);
-      }
-  
       // Actualizar el evento
+      const eventoEncontrado = await this.prisma.event.findUnique({
+        where: { id: event.id }
+      })
+
+      console.log(eventoEncontrado)
+      const aut = await this.prisma.event.update({
+        where: { id: event.id, userId: userId },
+        data: {
+          id: event.id,
+          name: event.name,
+          type: event.type,
+          date: event.date,
+          time: event.time,
+          location: event.location ? { lat: event.location.lat, log: event.location.log } : undefined,
+          createdAt: event.createdAt,
+          photos: event.photos,
+          description: event.description,
+          amount: event.amount,
+        },
+      });
+
+      if(aut == null) {
+        throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+
+      console.log(aut)
+
       return await this.prisma.event.update({
-        where: { id: eventId },
+        where: { id: event.id },
         data: {
           ...event,
         },
