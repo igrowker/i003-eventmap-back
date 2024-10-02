@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
@@ -8,18 +8,20 @@ import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
+import { uploadFilesToCloudinary } from 'src/utils/utils';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
     @Post("/crearEvents")
-    async crearEventos(){
+    async crearEventos() {
         return await this.eventsService.crearEventos();
     }
 
-    @Roles(Role.Admin)
-    @UseGuards(JwtAuthGuard, RoleGuard)
+    // @Roles(Role.Admin)
+    // @UseGuards(JwtAuthGuard, RoleGuard)
     @Get('/all')
     async getAllEventsWithoutFilter() {
         return await this.eventsService.getEventsWhitoutFilter();
@@ -39,7 +41,19 @@ export class EventsController {
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Post('/')
-    async createEvent(@Body() event: CreateEventDto) {
+    @UseInterceptors(FilesInterceptor('files'))
+    async createEvent(
+        @Body() event: CreateEventDto,
+        @UploadedFiles() files: Array<Express.Multer.File>
+    ) {
+        console.log('Archivos recibidos:', files);
+
+        const photoUrls = await uploadFilesToCloudinary(files);
+
+        event.photos = photoUrls;
+        console.log(event.photos);
+        console.log(event);
+
         return await this.eventsService.createEvent(event);
     }
 

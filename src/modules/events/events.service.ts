@@ -5,9 +5,7 @@ import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { filterEventsRadius } from 'src/utils/utils';
 import { QueryEvents } from 'src/utils/types';
 import { events, generateRandomCoordinates } from './events';
-
-
-
+import cloudinary from 'src/config/cloudinary.config';
 
 @Injectable()
 export class EventsService {
@@ -15,7 +13,6 @@ export class EventsService {
   constructor(private prisma: PrismaService) { }
 
   async crearEventos(){
-
     for (let index = 0; index < events.length; index++) {
       const element = events[index];
       
@@ -68,18 +65,37 @@ export class EventsService {
 
   async createEvent(event: CreateEventDto) {
     try {
-      return await this.prisma.event.create({ data: event });
+      const {lat,lon, ...eventInfo} = event; //esto xq en la db lat y lon por separado no existen y para q quede mas proligo el create
+      
+      const aux = await this.prisma.event.create({ data: {
+        ...eventInfo,
+        location : {
+          lat,
+          lon,
+        },
+      } });
+
+      return aux
     } catch (error) {
       throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async updateEvent(id: number, event: UpdateEventDto) {
+  async updateEvent(idUserQLLegaPorParamtro: number, event: UpdateEventDto) {
     try {
-      return await this.prisma.event.update({
-        where: { id: id },
+      const updateEvent = await this.prisma.event.update({
+        where: { 
+          id: event.id ,
+          userId : idUserQLLegaPorParamtro
+        },
         data: event,
       });
+
+      if (updateEvent === null) {
+        throw new HttpException('No tienes los permisos para modificar este evento', HttpStatus.BAD_REQUEST);
+      }
+
+      return updateEvent;
     } catch (error) {
       throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
