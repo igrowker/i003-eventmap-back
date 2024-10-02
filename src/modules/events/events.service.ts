@@ -63,26 +63,29 @@ export class EventsService {
     }
   }
 
-  // async uploadFilesToCloudinary(files: Express.Multer.File[]): Promise<string[]> {
-  //   const photoUrls: string[] = [];
-  
-  //   for (const file of files) {
-  //     const uploadResult = await cloudinary.uploader.upload(file.path, {
-  //       folder: 'events', // Opcional: Especifica una carpeta para organizar
-  //     });
-  
-  //     photoUrls.push(uploadResult.secure_url);
-  //   }
-  
-  //   return photoUrls;
-  // }
-
-  // async createEvent(event: CreateEventDto, files: Express.Multer.File[]) {
-  //   const photoUrls = await this.uploadImagesToCloudinary(files);
   async createEvent(event: CreateEventDto) {
     try {
+      console.log("llego 1");
+      const aux = await this.prisma.event.create({ data: {
+        userId : event.userId,
+        name : event.name,
+        type : event.type,
+        date : event.date,
+        time : event.time,
+        location : {
+          lat : event.lat,
+          lon : event.lon,
+        },
+        photos : event.photos,
+        description : event.description,
+        amount : event.amount,
+        createdAt : event.createdAt
+      } });
 
-      return await this.prisma.event.create({ data: event });
+      console.log("LLEGO 2");
+      console.log(aux);
+
+      return aux
     } catch (error) {
       throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }

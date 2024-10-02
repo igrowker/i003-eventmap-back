@@ -10,14 +10,13 @@ import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { uploadFilesToCloudinary } from 'src/utils/utils';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateEventFileDto } from './dto/create-event-file.dto';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
     @Post("/crearEvents")
-    async crearEventos(){
+    async crearEventos() {
         return await this.eventsService.crearEventos();
     }
 
@@ -44,17 +43,24 @@ export class EventsController {
     @Post('/')
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
-        // @Body() event: CreateEventDto,
-        @Body() event : CreateEventFileDto, //nuevo dto, capaz no es la mejor opcione, lat y lon se reciven por serparado y photos ahora es files y es un Express.Multer.File (capaz File[])
+        @Body() event: CreateEventDto,
+        // @Body() event: CreateEventFileDto, //nuevo dto, capaz no es la mejor opcione, lat y lon se reciven por serparado y photos ahora es files y es un Express.Multer.File (capaz File[])
         @UploadedFiles() files: Array<Express.Multer.File> //aca seria File[] para q se envien varias
     ) {
-        console.log(event);
-        console.log(files);
-        // const photoUrls = await uploadFilesToCloudinary(files);
-        // event.photos = photoUrls;
+        console.log('Archivos recibidos:', files); // Imprime los archivos para verificar
+        // console.log(event);
+        // if (files.length === 0) {
+        //     return { message: 'No se ha subido ningún archivo.' };
+        // }
 
-        // return await this.eventsService.createEvent(event);
-        return {message : "respuesta back"};
+        const photoUrls = await uploadFilesToCloudinary(files);
+
+        event.photos = photoUrls;
+        console.log(event.photos);
+        console.log(event);
+
+        return await this.eventsService.createEvent(event);
+        return { message: "respuesta back" };
     }
 
     @Roles(Role.Admin, Role.Company)
