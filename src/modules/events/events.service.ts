@@ -65,25 +65,15 @@ export class EventsService {
 
   async createEvent(event: CreateEventDto) {
     try {
-      console.log("llego 1");
+      const {lat,lon, ...eventInfo} = event; //esto xq en la db lat y lon por separado no existen y para q quede mas proligo el create
+      
       const aux = await this.prisma.event.create({ data: {
-        userId : event.userId,
-        name : event.name,
-        type : event.type,
-        date : event.date,
-        time : event.time,
+        ...eventInfo,
         location : {
-          lat : event.lat,
-          lon : event.lon,
+          lat,
+          lon,
         },
-        photos : event.photos,
-        description : event.description,
-        amount : event.amount,
-        createdAt : event.createdAt
       } });
-
-      console.log("LLEGO 2");
-      console.log(aux);
 
       return aux
     } catch (error) {

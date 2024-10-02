@@ -14,6 +14,9 @@ const CLOUDINARY_URL = process.env.CLOUDINARY_URL;
 const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
 const CLOUDINARY_API_KEY_SECRET = process.env.CLOUDINARY_API_KEY_SECRET;
 const CLOUDINARY_API_KEY_NAME = process.env.CLOUDINARY_API_KEY_NAME;
+const FRONTEND_URL = process.env.FRONTEND_URL;
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 
 const dotenvOptions = {
     PRUEBA,
@@ -22,6 +25,9 @@ const dotenvOptions = {
     RADIUS,
     JWT_SECRET,
     JWT_TOKEN_EXPIRED,
+    FRONTEND_URL,
+    EMAIL_PASSWORD,
+    EMAIL_USER,
     CLOUDINARY_URL,
     CLOUDINARY_API_KEY,
     CLOUDINARY_API_KEY_SECRET,

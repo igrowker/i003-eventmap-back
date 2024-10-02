@@ -38,20 +38,15 @@ export class EventsController {
         return await this.eventsService.getEvent(id);
     }
 
-    // @Roles(Role.Admin, Role.Company)
-    // @UseGuards(JwtAuthGuard, RoleGuard)
+    @Roles(Role.Admin, Role.Company)
+    @UseGuards(JwtAuthGuard, RoleGuard)
     @Post('/')
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
         @Body() event: CreateEventDto,
-        // @Body() event: CreateEventFileDto, //nuevo dto, capaz no es la mejor opcione, lat y lon se reciven por serparado y photos ahora es files y es un Express.Multer.File (capaz File[])
-        @UploadedFiles() files: Array<Express.Multer.File> //aca seria File[] para q se envien varias
+        @UploadedFiles() files: Array<Express.Multer.File>
     ) {
-        console.log('Archivos recibidos:', files); // Imprime los archivos para verificar
-        // console.log(event);
-        // if (files.length === 0) {
-        //     return { message: 'No se ha subido ningún archivo.' };
-        // }
+        console.log('Archivos recibidos:', files);
 
         const photoUrls = await uploadFilesToCloudinary(files);
 
@@ -60,7 +55,6 @@ export class EventsController {
         console.log(event);
 
         return await this.eventsService.createEvent(event);
-        return { message: "respuesta back" };
     }
 
     @Roles(Role.Admin, Role.Company)
