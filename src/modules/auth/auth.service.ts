@@ -1,15 +1,20 @@
-import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthLoginDto } from './dto/auth.login.dto';
 import { PrismaService } from '../../prisma.service';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/auth.register.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { MailService } from '../mail/mail.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private mailService: MailService
   ) { }
 
 
@@ -35,6 +40,7 @@ export class AuthService {
 
       const newUser = await this.prisma.user.create({
         data: {
+          id: uuidv4(),
           name: createUserDto.name,
           lastName: createUserDto.lastName,
           email: createUserDto.email,
@@ -98,6 +104,45 @@ export class AuthService {
       }
     } catch (error) {
       throw error
+    }
+  }
+
+  async requestPasswordReset(forgotPasswordDto: ForgotPasswordDto) {
+    const { email } = forgotPasswordDto;
+
+    const user = await this.prisma.user.findUnique({ where: { email }});
+    if(!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+
+    const token = this.jwtService.sign({ userId: user.id }, { expiresIn: '1h' }); // menos tiempo de expiracion
+    await this.mailService.sendResetPasswordEmail(user.email, token);
+
+    return { message: 'Correo de recuperacion enviado' };
+
+  }
+
+  async resetPassword(token: string, resetPassword: ResetPasswordDto) {
+
+    try {
+      const decoded = this.jwtService.verify(token); // agregar mensaje 
+   
+      const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
+      if(!user) {
+        throw new NotFoundException('Usuario no encontrado');
+      }
+
+      const hashedPassword = await bcrypt.hash(resetPassword.newPassword, 10);
+      //validacion si el hasheo es correcto
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { ...user, password: hashedPassword },
+
+      });
+
+      return { message: 'Contraseña actualizada correctamente' };
+    } catch (error) {
+       throw new UnauthorizedException('Token invalido o expirado');
     }
   }
 }

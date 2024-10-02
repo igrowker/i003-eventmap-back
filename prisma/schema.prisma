@@ -19,7 +19,7 @@ enum Role {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
+  id          String   @id
   name        String
   type        Type
   date        String
@@ -30,11 +30,13 @@ model Event {
   amount      Float    @default(0.0)
   createdAt   DateTime @default(now())
   user        User     @relation(name: "EventToUser", fields: [userId], references: [id])
-  userId      Int
+  userId      String
+  capacity    String   @default("Sin definir")
+  addres      String
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id
   name      String
   lastName  String
   email     String   @unique

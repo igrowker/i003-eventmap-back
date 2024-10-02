@@ -5,8 +5,8 @@ import { TypeEvents } from 'src/utils/enum';
 // export class UpdateEventDto extends PartialType (UpdateEventDto) {} forma de replicar el createEventDto. quedaria todo opcional.
 
 export class UpdateEventDto {
-  @IsNumber()
-  id?: number;
+  @IsString()
+  id?: string;
 
   @IsString()
   name?: string;
