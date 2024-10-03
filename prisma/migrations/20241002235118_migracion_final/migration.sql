@@ -4,9 +4,11 @@ CREATE TYPE "Type" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('Company', 'Admin');
 
+ALTER TABLE "Event" ALTER COLUMN "userId" TYPE UUID USING "userId"::uuid;
+
 -- CreateTable
 CREATE TABLE "Event" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "type" "Type" NOT NULL,
     "date" TEXT NOT NULL,
@@ -16,14 +18,16 @@ CREATE TABLE "Event" (
     "description" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL DEFAULT 0.0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "userId" INTEGER NOT NULL,
+    "userId" UUID NOT NULL,
+    "capacity" TEXT NOT NULL DEFAULT 'Sin definir',
+    "addres" TEXT NOT NULL,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "email" TEXT NOT NULL,
