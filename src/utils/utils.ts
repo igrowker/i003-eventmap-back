@@ -4,6 +4,7 @@ import { ValidatorConstraintInterface } from "class-validator";
 import dotenvOptions from '../config/dotenvConfig';
 import cloudinary from "src/config/cloudinary.config";
 import { resolve } from "path";
+import { ImgExtension } from "./enum";
 
 export class TimeValidator implements ValidatorConstraintInterface {
     validate(value: any) {
@@ -92,6 +93,36 @@ export function checkDateFormatQuery(date: string) {
     return true;
 }
 
+export function checkSizeImages(files : Express.Multer.File[]){
+    const MAX_SIZE = dotenvOptions.MAX_SIZE_IMAGE;
+
+    for (const file of files) {
+        const size = file.size / 1024
+        console.log(size > parseInt(MAX_SIZE));
+        if (size > parseInt(MAX_SIZE)) {
+            return false;
+        }
+    }
+
+    return true
+}
+
+export function checkFormatImages(files : Express.Multer.File[]){
+    const arrayImgExtension = Object.values(ImgExtension);
+
+    console.log(arrayImgExtension);
+
+    for (const file of files) {
+        const extension = file.originalname.split(".").pop() as ImgExtension;
+        
+        if (!arrayImgExtension.includes(extension)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 async function uploadFile(files: Express.Multer.File[]) {
     const photoUrls: string[] = [];
 
@@ -101,7 +132,11 @@ async function uploadFile(files: Express.Multer.File[]) {
                 if (error) {
                     reject(error);
                 } else {
-                    photoUrls.push(result.secure_url)
+                    console.log(result);
+                    console.log(result.format);
+                    console.log(result.height);
+                    console.log(result.public_id);
+                    photoUrls.push(result.secure_url) //si da error al intentar acceder desde render proba url en ves de secure_url
                     resolve(result.secure_url);
                 }
             }).end(file.buffer);
