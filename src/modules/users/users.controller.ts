@@ -5,7 +5,8 @@ import { Response } from 'express';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
-import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
+import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
+import { UserSelf } from 'src/guards/auth/userSelf.guard';
 
 @Controller('users')
 export class UsersController {
@@ -14,24 +15,24 @@ export class UsersController {
   @Get()
   // @UseGuards(JwtAuthGuard, RoleGuard)
   // @Roles(Role.Admin)
-  async findAllUsers() { //solo admin
+  async findAllUsers() {
     return await this.usersService.findAllUsers();
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard, RoleGuard)
+  @UseGuards(JwtAuthGuard, RoleGuard, UserSelf)
   @Roles(Role.Admin, Role.Company)
-  async findOneUser(@Param('id', ParseIntPipe) id: number) { //admin y company --> q el id dentro del token cooicide con el id de la peticion
+  async findOneUser(@Param('id') id: string) {
     return await this.usersService.findOneUser(id);
   }
 
   @Patch(':id') //idem q get id
-  async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id') //admin
-  async removeUser(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+  async removeUser(@Param('id') id: string, @Res() res: Response) {
     return await this.usersService.removeUser(id, res);
   }
 }

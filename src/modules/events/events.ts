@@ -1,4 +1,6 @@
 import { TypeEvents } from "src/utils/enum";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const obeliskLat = -34.605500;
 const obeliskLon = -58.384500;
@@ -17,7 +19,7 @@ export function generateRandomCoordinates(lat:number, lon:number, radius:number)
 
 export const events = [
     {
-        userId: 1,
+        userId: uuidv4(),
         name: "Torneo de KOF",
         type: TypeEvents.Deportivo,
         date: "2024-10-05",
@@ -29,7 +31,7 @@ export const events = [
         createdAt: new Date("2024-09-27T12:00:00")
     },
     {
-        userId: 2,
+        userId: uuidv4(),
         name: "Torneo de LOL",
         type: TypeEvents.Deportivo,
         date: "2024-10-10",
@@ -41,7 +43,7 @@ export const events = [
         createdAt: new Date("2024-09-26T12:00:00")
     },
     {
-        userId: 3,
+        userId: uuidv4(),
         name: "Feria Gastronómica en el Parque Tres de Febrero",
         type: TypeEvents.Gastronomico,
         date: "2024-10-15",
@@ -53,7 +55,7 @@ export const events = [
         createdAt: new Date("2024-09-25T12:00:00")
     },
     {
-        userId: 4,
+        userId: uuidv4(),
         name: "Anime-Con",
         type: TypeEvents.Artistico,
         date: "2024-10-20",
@@ -65,7 +67,7 @@ export const events = [
         createdAt: new Date("2024-09-20T12:00:00")
     },
     {
-        userId: 5,
+        userId: uuidv4(),
         name: "Exposición de Arte en el Museo de Bellas Artes",
         type: TypeEvents.Artistico,
         date: "2024-10-25",
@@ -77,7 +79,7 @@ export const events = [
         createdAt: new Date("2024-09-18T12:00:00")
     },
     {
-        userId: 6,
+        userId: uuidv4(),
         name: "River vs Boca Estadio Monumental",
         type: TypeEvents.Deportivo,
         date: "2024-10-30",
@@ -89,7 +91,7 @@ export const events = [
         createdAt: new Date("2024-09-15T12:00:00")
     },
     {
-        userId: 1,
+        userId: uuidv4(),
         name: "Cine al Aire Libre en Parque Centenario",
         type: TypeEvents.Artistico,
         date: "2024-11-01",
@@ -101,7 +103,7 @@ export const events = [
         createdAt: new Date("2024-09-05T12:00:00")
     },
     {
-        userId: 2,
+        userId: uuidv4(),
         name: "Campeonato de Ajedrez en el Centro Cultural",
         type: TypeEvents.Deportivo,
         date: "2024-11-05",
@@ -113,7 +115,7 @@ export const events = [
         createdAt: new Date("2024-09-10T12:00:00")
     },
     {
-        userId: 3,
+        userId: uuidv4(),
         name: "Concierto de Música Clásica en el Teatro Colón",
         type: TypeEvents.Artistico,
         date: "2024-11-10",
@@ -125,7 +127,7 @@ export const events = [
         createdAt: new Date("2024-09-12T12:00:00")
     },
     {
-        userId: 4,
+        userId: uuidv4(),
         name: "Torneo de Fútbol Infantil en el Club de Barrio",
         type: TypeEvents.Deportivo,
         date: "2024-11-15",
@@ -137,7 +139,7 @@ export const events = [
         createdAt: new Date("2024-09-01T12:00:00")
     },
     {
-        userId: 5,
+        userId: uuidv4(),
         name: "Festival de Comida Callejera en Palermo",
         type: TypeEvents.Gastronomico,
         date: "2024-11-20",
@@ -149,7 +151,7 @@ export const events = [
         createdAt: new Date("2024-08-30T12:00:00")
     },
     {
-        userId: 6,
+        userId: uuidv4(),
         name: "Maratón de la Ciudad de Buenos Aires",
         type: TypeEvents.Deportivo,
         date: "2024-11-25",
@@ -161,7 +163,7 @@ export const events = [
         createdAt: new Date("2024-09-02T12:00:00")
     },
     {
-        userId: 1,
+        userId: uuidv4(),
         name: "Clases de Zumba en el Parque",
         type: TypeEvents.Deportivo,
         date: "2024-12-01",
@@ -173,7 +175,7 @@ export const events = [
         createdAt: new Date("2024-09-03T12:00:00")
     },
     {
-        userId: 2,
+        userId: uuidv4(),
         name: "Exposición de Fotografía en el Centro Cultural",
         type: TypeEvents.Artistico,
         date: "2024-12-05",
@@ -185,7 +187,7 @@ export const events = [
         createdAt: new Date("2024-09-04T12:00:00")
     },
     {
-        userId: 3,
+        userId: uuidv4(),
         name: "Feria del Libro en el Centro",
         type: TypeEvents.Gastronomico,
         date: "2024-12-10",
@@ -197,7 +199,7 @@ export const events = [
         createdAt: new Date("2024-09-05T12:00:00")
     },
     {
-        userId: 4,
+        userId: uuidv4(),
         name: "Noche de Jazz en el Café Tortoni",
         type: TypeEvents.Artistico,
         date: "2024-12-15",
@@ -209,7 +211,7 @@ export const events = [
         createdAt: new Date("2024-09-06T12:00:00")
     },
     {
-        userId: 5,
+        userId: uuidv4(),
         name: "Concierto de Música Folklórica en el Centro",
         type: TypeEvents.Artistico,
         date: "2024-12-20",
@@ -221,7 +223,7 @@ export const events = [
         createdAt: new Date("2024-09-07T12:00:00")
     },
     {
-        userId: 6,
+        userId: uuidv4(),
         name: "Torneo de Tenis en el Club",
         type: TypeEvents.Deportivo,
         date: "2024-12-25",
@@ -233,7 +235,7 @@ export const events = [
         createdAt: new Date("2024-09-08T12:00:00")
     },
     {
-        userId: 1,
+        userId: uuidv4(),
         name: "Clases de Pintura en el Parque",
         type: TypeEvents.Artistico,
         date: "2024-12-30",
@@ -245,7 +247,7 @@ export const events = [
         createdAt: new Date("2024-09-09T12:00:00")
     },
     {
-        userId: 3,
+        userId: uuidv4(),
         name: "Festival de Cortometrajes en el Cine Gaumont",
         type: TypeEvents.Artistico,
         date: "2025-01-05",
@@ -257,7 +259,7 @@ export const events = [
         createdAt: new Date("2024-09-11T12:00:00")
     },
     {
-        userId: 4,
+        userId: uuidv4(),
         name: "Día del Patrimonio en el Centro Histórico",
         type: TypeEvents.Gastronomico,
         date: "2025-01-10",
@@ -269,7 +271,7 @@ export const events = [
         createdAt: new Date("2024-09-12T12:00:00")
     },
     {
-        userId: 5,
+        userId: uuidv4(),
         name: "Noche de Salsa en el Club de Baile",
         type: TypeEvents.Artistico,
         date: "2025-01-15",

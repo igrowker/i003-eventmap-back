@@ -1,12 +1,12 @@
-import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, IsDate, ArrayNotEmpty} from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, isDate, IsDate, ArrayNotEmpty} from 'class-validator';
 import { IsValisLocation } from 'src/decorators/IsValidLocation';
 import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
 export class CreateEventDto{
     @IsNotEmpty()
-    @IsNumber()
-    userId : number
+    @IsString()
+    userId : string
 
     @IsString()
     @IsNotEmpty()
@@ -57,4 +57,12 @@ export class CreateEventDto{
     @IsNotEmpty()
     @IsDate()
     createdAt : Date
+
+    @IsString()
+    @IsNotEmpty()
+    capacity : string
+
+    @IsString()
+    @IsNotEmpty()
+    addres : string
 }

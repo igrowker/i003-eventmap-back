@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import {EventsController} from './events.controller';
+import { EventsController } from './events.controller';
 import { EventsService } from './events.service';
 import { LoggerMiddleware } from 'src/middlewares/logger/logger.middleware';
 import { PrismaService } from 'src/prisma.service';
