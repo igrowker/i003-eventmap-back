@@ -36,7 +36,7 @@ export class CompanyEventGuard implements CanActivate {
 
     const eventId = request.params.id; //4
 
-    const event = await this.eventsService.getEvent(parseInt(eventId));
+    const event = await this.eventsService.getEvent((eventId));
 
     if (!event) {
       throw new ForbiddenException('Event not found');
