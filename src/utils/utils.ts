@@ -183,10 +183,13 @@ export const deleteImgCloudinary = async (photos: string[]) => {
         });
 
         const publicId = secureImageUrl.split('/').pop().split('.')[0];
+        let response = {};
 
-        const response = await cloudinary.uploader.destroy(publicId, (error, result) => {
-            console.log(result, error);
-        });
+        if (secureImageUrl !== dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY) {
+            response = await cloudinary.uploader.destroy(publicId, (error, result) => {
+                console.log(result, error);
+            });
+        }
 
         console.log(response);
     }

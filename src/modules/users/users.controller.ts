@@ -23,16 +23,19 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
   @Roles(Role.Admin, Role.Company)
   async findOneUser(@Param('id') id: string) {
-    console.log(id);
     return await this.usersService.findOneUser(id);
   }
 
-  @Patch(':id') //idem q get id
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
+  @Roles(Role.Admin, Role.Company)
   async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.updateUser(id, updateUserDto);
   }
 
-  @Delete(':id') //admin
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin)
   async removeUser(@Param('id') id: string, @Res() res: Response) {
     return await this.usersService.removeUser(id, res);
   }

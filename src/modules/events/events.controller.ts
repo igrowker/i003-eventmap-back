@@ -9,6 +9,7 @@ import { RoleGuard } from 'src/guards/role/role.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 // import { UserSelf } from 'src/guards/auth/userSelf.guard';
 import { QueryEventsDto } from './dto/query-event.dto';
+import { userSelf } from 'src/guards/auth/userSelf.guard';
 
 @Controller('/events')
 export class EventsController {
@@ -46,7 +47,7 @@ export class EventsController {
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @UseInterceptors(FilesInterceptor('files'))
     @Put('/:id')
     async updateEvent(
@@ -59,7 +60,7 @@ export class EventsController {
 
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @Patch('/:id')
     async updateEventStatus(
         @Param('id') id: string,
@@ -69,10 +70,10 @@ export class EventsController {
     }
 
     @Roles(Role.Admin)
-    @UseGuards(JwtAuthGuard, RoleGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @Delete('/:id/:idEvent')
-    async deleteEvent(@Param('id') id: string, @Param('idEvent') idEvent: string) {
+    async deleteEvent(@Param('idEvent') idEvent: string) {
         
-        return await this.eventsService.deleteEvent(id, idEvent);
+        return await this.eventsService.deleteEvent(idEvent);
     }
 }

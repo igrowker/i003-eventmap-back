@@ -115,7 +115,7 @@ export class EventsService {
         }
       )
 
-      const response = await deleteImgCloudinary(findEvent.photos); //aca faltan los condicionales para q no se borre la img por defecto para los eventos
+      const response = await deleteImgCloudinary(findEvent.photos);
 
       if (!response) {
         return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -167,13 +167,13 @@ export class EventsService {
     }
   }
 
-  async deleteEvent(id: string, eventId: string) {
+  async deleteEvent(eventId: string) {
     try {
       const findEvent = await this.prisma.event.findUnique(
         { where: { id: eventId } }
       )
 
-      const response = await deleteImgCloudinary(findEvent.photos); //aca faltan los condicionales para q no se borre la img por defecto para los eventos
+      const response = await deleteImgCloudinary(findEvent.photos);
 
       if (!response) {
         return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
