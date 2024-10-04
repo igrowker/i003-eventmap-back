@@ -86,9 +86,16 @@ export class EventsService {
             lat,
             lon,
           },
-          photos : event.photos,
+          // photos : photoUrls,
+          // description : event.description,
+          // amount : event.amount,
+          // createdAt : event.createdAt,
+          // capacity : event.capacity,
+          // addres : event.addres
         }
       });
+
+      console.log(aux)
 
       return aux
     } catch (error) {

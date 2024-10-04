@@ -7,7 +7,7 @@ import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { UserSelf } from 'src/guards/auth/userSelf.guard';
+// import { UserSelf } from 'src/guards/auth/userSelf.guard';
 import cloudinary from 'src/config/cloudinary.config';
 import { QueryEventsDto } from './dto/query-event.dto';
 
@@ -95,7 +95,7 @@ export class EventsController {
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard, UserSelf)
+    @UseGuards(JwtAuthGuard, RoleGuard)
     @Put('/:id')
     async updateEvent(
         @Param('id') id: string,

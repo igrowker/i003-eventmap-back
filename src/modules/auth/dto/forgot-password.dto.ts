@@ -7,5 +7,4 @@ export class ForgotPasswordDto {
   @MaxLength(70, { message: 'El número máximo de caracteres ha sido excedido.' })
   @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: 'El correo debe tener un formato válido (sin espacios y con un dominio correcto).' })
   email: string;
-  
 }
