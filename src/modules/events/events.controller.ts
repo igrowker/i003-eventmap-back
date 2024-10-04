@@ -122,7 +122,7 @@ export class EventsController {
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Delete('/:id') // admin
     async deleteEvent(@Param('id') id: string, @Req() req) {
-        const userId = req.user.id; // Extraer el userId del token JWT
+        const userId = req.user.id;
         return await this.eventsService.deleteEvent(id, userId);
     }
 }
