@@ -13,7 +13,7 @@ export class userSelf implements CanActivate {
 
     const userId = request.params.id;
     console.log('Event ID from Params:', userId);
-
+    
     if( userId !== userIdFromToken ) {
       throw new HttpException('error', HttpStatus.FORBIDDEN)
     }
