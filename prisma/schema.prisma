@@ -19,22 +19,24 @@ enum Role {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(uuid()) @db.Uuid
   name        String
   type        Type
   date        String
   time        String
   location    Json
-  photos      String[]
+  photos      String[] //poner por defecto la imagen q hagan las chicas de ux (o algo q generalice los eventos)
   description String
   amount      Float    @default(0.0)
   createdAt   DateTime @default(now())
   user        User     @relation(name: "EventToUser", fields: [userId], references: [id])
-  userId      Int
+  userId      String   @db.Uuid
+  capacity    String   @default("Sin definir")
+  addres      String
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid()) @db.Uuid
   name      String
   lastName  String
   email     String   @unique

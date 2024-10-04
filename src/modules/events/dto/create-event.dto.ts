@@ -1,13 +1,12 @@
-import {IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate} from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, isDate, IsDate, ArrayNotEmpty} from 'class-validator';
 import { IsValisLocation } from 'src/decorators/IsValidLocation';
 import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
 export class CreateEventDto{
-    
     @IsNotEmpty()
-    @IsNumber()
-    userId : number
+    @IsString()
+    userId : string
 
     @IsString()
     @IsNotEmpty()
@@ -26,12 +25,24 @@ export class CreateEventDto{
     @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)
     time : TimeStringFormat
 
-    @Validate(IsValisLocation)
-    location : { lat: number, lon: number }
+    // @Validate(IsValisLocation)
+    // location : { lat: number, lon: number }
+    // @IsArray()
+    // @ArrayNotEmpty()
+    // @IsString({each : true})
+    // location : string[]
 
-    @IsArray()
-    @IsString({ each: true })
-    photos : string[]
+    @IsNumber()
+    @IsNotEmpty()
+    lat : number
+
+    @IsNumber()
+    @IsNotEmpty()
+    lon : number
+
+    // @IsArray()
+    // @IsString({ each: true })
+    photos : any
     
     @IsNotEmpty()
     @IsString()
@@ -44,6 +55,14 @@ export class CreateEventDto{
     amount : number
 
     @IsNotEmpty()
-    @IsDateString()
+    @IsDate()
     createdAt : Date
+
+    @IsString()
+    @IsNotEmpty()
+    capacity : string
+
+    @IsString()
+    @IsNotEmpty()
+    addres : string
 }
