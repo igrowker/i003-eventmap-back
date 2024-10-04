@@ -9,7 +9,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-dotenvFun();
+// dotenvFun();
 
 async function bootstrap() {
   console.log(dotenvOptions.PRUEBA);

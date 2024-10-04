@@ -69,7 +69,7 @@ export class UsersService {
       const userFound = await this.prisma.user.update({
         where: { id },
         data: {
-          ...dataToUpdate,
+          ...dataToUpdate
         },
       });
       return userFound;

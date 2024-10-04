@@ -25,7 +25,7 @@ model Event {
   date        String
   time        String
   location    Json
-  photos      String[] //poner por defecto la imagen q hagan las chicas de ux (o algo q generalice los eventos)
+  photos      String[]
   description String
   amount      Float    @default(0.0)
   createdAt   DateTime @default(now())

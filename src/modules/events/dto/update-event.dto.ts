@@ -23,8 +23,16 @@ export class UpdateEventDto {
   @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, { message: 'El formato de hora debe ser HH:MM (24 horas)' })
   time?: string;
 
-  @IsOptional()
-  location?: { lat: string; log: string };
+  // @IsOptional()
+  // location?: { lat: string; log: string };
+
+  @IsNumber()
+  @IsNotEmpty()
+  lat: number
+
+  @IsNumber()
+  @IsNotEmpty()
+  lon: number
 
   @IsOptional()
   @IsArray()
@@ -46,4 +54,12 @@ export class UpdateEventDto {
   @IsNotEmpty()
   @IsDate()
   createdAt?: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  capacity: string
+
+  @IsString()
+  @IsNotEmpty()
+  addres: string
 }

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, isDate, IsDate, ArrayNotEmpty} from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, isDate, IsDate, ArrayNotEmpty, IsOptional} from 'class-validator';
 import { IsValisLocation } from 'src/decorators/IsValidLocation';
 import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
@@ -54,9 +54,9 @@ export class CreateEventDto{
     @Max(1, { message: 'El valor debe ser menor o igual a 1' })
     amount : number
 
-    @IsNotEmpty()
+    @IsOptional()
     @IsDate()
-    createdAt : Date
+    createdAt ?: Date
 
     @IsString()
     @IsNotEmpty()
