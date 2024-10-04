@@ -1,12 +1,16 @@
-import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateString } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
+import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateString, IsDate } from 'class-validator';
 import { TypeEvents } from 'src/utils/enum';
 
+// export class UpdateEventDto extends PartialType (UpdateEventDto) {} forma de replicar el createEventDto. quedaria todo opcional.
+
 export class UpdateEventDto {
-  @IsOptional()
+  @IsString()
+  id?: string;
+
   @IsString()
   name?: string;
 
-  @IsOptional()
   @IsString()
   @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, { message: 'El tipo de evento debe ser uno de los siguientes: Deportivo, Artistico, Gastronomico' })
   type?: TypeEvents;
@@ -19,8 +23,16 @@ export class UpdateEventDto {
   @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, { message: 'El formato de hora debe ser HH:MM (24 horas)' })
   time?: string;
 
-  @IsOptional()
-  location?: { lat: string; log: string };
+  // @IsOptional()
+  // location?: { lat: string; log: string };
+
+  @IsNumber()
+  @IsNotEmpty()
+  lat: number
+
+  @IsNumber()
+  @IsNotEmpty()
+  lon: number
 
   @IsOptional()
   @IsArray()
@@ -35,7 +47,19 @@ export class UpdateEventDto {
   @IsNumber()
   amount?: number;
 
-  @IsOptional()
+  // @IsOptional()
+  // @IsString()
+  // comment?: string;
+
+  @IsNotEmpty()
+  @IsDate()
+  createdAt?: Date;
+
   @IsString()
-  comment?: string;
+  @IsNotEmpty()
+  capacity: string
+
+  @IsString()
+  @IsNotEmpty()
+  addres: string
 }

@@ -1,0 +1,59 @@
+services:
+  sonarqube:
+    image: sonarqube
+    restart: unless-stopped
+    ports:
+      - '9000:9000'
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+    networks:
+      - eventmap
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-logs:/opt/sonarqube/logs
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sonar
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+    networks:
+      - eventmap
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    ports:
+      - '9090:9090'
+    networks:
+      - eventmap
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    ports:
+      - '3002:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - eventmap
+
+networks:
+  eventmap:
+    driver: bridge
+
+volumes:
+  sonarqube-data:
+  sonarqube-logs:
+  postgres-data:
+  prometheus-data:
+  grafana-data:

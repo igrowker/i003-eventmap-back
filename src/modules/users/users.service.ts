@@ -26,7 +26,8 @@ export class UsersService {
         const user = users[index];
         const {password, ...objectAux} = user;
 
-        const userFilterPass : UserWithoutPass = objectAux;
+        // const userFilterPass : UserWithoutPass = objectAux;
+        const userFilterPass = objectAux;
 
         usersFilterPass.push(userFilterPass);
       }
@@ -37,10 +38,10 @@ export class UsersService {
     }
   }
 
-  async findOneUser(id: number) {
+  async findOneUser(id: string) {
     try {
-      
-      const userFound : UserInfo = await this.prisma.user.findUnique({
+      // const userFound : UserInfo = await this.prisma.user.findUnique({
+        const userFound  = await this.prisma.user.findUnique({
         where: { id },
         include: {
           events: true,
@@ -51,22 +52,23 @@ export class UsersService {
 
       const {password, ...objectAux} = userFound;
 
-      const userFilterPass : UserWithoutPass = objectAux;
-
+      // const userFilterPass : UserWithoutPass = objectAux;
+      const userFilterPass = objectAux;
+      
       return userFilterPass;
     } catch (error) {
       throw new NotFoundException('Error al recuperar el usuario');
     }
   }
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     try {
-      const { events, ...dataToUpdate } = updateUserDto;
+      const { ...dataToUpdate } = updateUserDto;
 
       const userFound = await this.prisma.user.update({
         where: { id },
         data: {
-          ...dataToUpdate,
+          ...dataToUpdate
         },
       });
       return userFound;
@@ -78,7 +80,7 @@ export class UsersService {
     }
   }
 
-  async removeUser(id: number, res: Response) {
+  async removeUser(id: string, res: Response) {
     try {
       await this.prisma.user.delete({ where: { id } });
       return res.status(200).json({ message: 'Usuario eliminado exitosamente' });

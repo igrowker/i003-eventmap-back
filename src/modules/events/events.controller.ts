@@ -1,61 +1,79 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { QueryEvents } from 'src/utils/types';
-import { CompanyEventGuard } from 'src/guards/events/company-event/company-event.guard';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
-import { JwtAuthGuard } from 'src/guards/auth/auth.guard';
+import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
+import { FilesInterceptor } from '@nestjs/platform-express';
+// import { UserSelf } from 'src/guards/auth/userSelf.guard';
+import { QueryEventsDto } from './dto/query-event.dto';
+import { userSelf } from 'src/guards/auth/userSelf.guard';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
+    // @Post("/crearEvents")
+    // async crearEventos() {
+    //     return await this.eventsService.crearEventos();
+    // }
+
+    @Get('/all')
+    async getAllEventsWithoutFilter() {
+        return await this.eventsService.getEventsWhitoutFilter();
+    }
+
     @Get('/')
-    async getAllEvents(@Query() query: QueryEvents) {
+    async getAllEvents(@Query() query: QueryEventsDto) {
         return await this.eventsService.getEvents(query);
     }
 
     @Get('/event/:id')
-    @UseGuards(CompanyEventGuard)
-    async getEventById(@Param('id', ParseIntPipe) id: number) {
+    async getEventById(@Param('id') id: string) {
         return await this.eventsService.getEvent(id);
     }
 
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Post('/')
-    async createEvent(@Body() event: CreateEventDto) {
-        return await this.eventsService.createEvent(event);
-    }
-
-    @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @Put('/:id') //user id cooincida con el id del token con el id del solicitado
-    @UseGuards(CompanyEventGuard)
-    async updateEvent(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() event: UpdateEventDto
+    @UseInterceptors(FilesInterceptor('files'))
+    async createEvent(
+        @Body() event: CreateEventDto,
+        @UploadedFiles() files: Array<Express.Multer.File>
     ) {
-        return await this.eventsService.updateEvent(id, event);
+        return await this.eventsService.createEvent(event, files);
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
+    @UseInterceptors(FilesInterceptor('files'))
+    @Put('/:id')
+    async updateEvent(
+        @Param('id') id: string,
+        @Body() event: UpdateEventDto,
+        @UploadedFiles() files: Array<Express.Multer.File>
+    ) {
+        return await this.eventsService.updateEvent(id, event, files);
+    }
+
+
+    @Roles(Role.Admin, Role.Company)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @Patch('/:id')
     async updateEventStatus(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id') id: string,
         @Body() updateData: Partial<UpdateEventDto>,
     ) {
         return await this.eventsService.updateEventStatus(id, updateData);
     }
 
     @Roles(Role.Admin)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @Delete('/:id') // admin
-    async deleteEvent(@Param('id', ParseIntPipe) id: number) {
-        return await this.eventsService.deleteEvent(id);
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
+    @Delete('/:id/:idEvent')
+    async deleteEvent(@Param('idEvent') idEvent: string) {
+        
+        return await this.eventsService.deleteEvent(idEvent);
     }
 }
