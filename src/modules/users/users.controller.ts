@@ -13,8 +13,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  // @UseGuards(JwtAuthGuard, RoleGuard)
-  // @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin)
   async findAllUsers() {
     return await this.usersService.findAllUsers();
   }
@@ -23,6 +23,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
   @Roles(Role.Admin, Role.Company)
   async findOneUser(@Param('id') id: string) {
+    console.log(id);
     return await this.usersService.findOneUser(id);
   }
 
