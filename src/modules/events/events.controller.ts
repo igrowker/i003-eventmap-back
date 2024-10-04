@@ -3,23 +3,21 @@ import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import { QueryEvents } from 'src/utils/types';
-import { CompanyEventGuard } from 'src/guards/events/company-event/company-event.guard';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
-import { uploadFilesToCloudinary } from 'src/utils/utils';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { UserOwnershipGuard } from 'src/guards/auth/userSelf.guard';
+import { UserSelf } from 'src/guards/auth/userSelf.guard';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
-    @Post("/crearEvents")
-    async crearEventos() {
-        return await this.eventsService.crearEventos();
-    }
+    // @Post("/crearEvents")
+    // async crearEventos() {
+    //     return await this.eventsService.crearEventos();
+    // }
 
     // @Roles(Role.Admin)
     // @UseGuards(JwtAuthGuard, RoleGuard)
@@ -34,49 +32,45 @@ export class EventsController {
     }
 
     @Get('/event/:id')
-    @UseGuards(CompanyEventGuard)
-    async getEventById(@Param('id', ParseIntPipe) id: number) {
+    async getEventById(@Param('id') id: string) {
         return await this.eventsService.getEvent(id);
     }
 
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard)
-    @Post('/')
+    @Post('/') //200 y 300kb de tamañanp de imagen y formato y imagen por defecto en la db
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
         @Body() event: CreateEventDto,
         @UploadedFiles() files: Array<Express.Multer.File>
     ) {
+        console.log(event);
         console.log('Archivos recibidos:', files);
 
-        const photoUrls = await uploadFilesToCloudinary(files);
+        //validar tamañno y formato imagen        
 
-        event.photos = photoUrls;
-        console.log(event.photos);
-        console.log(event);
-
-        return await this.eventsService.createEvent(event);
+        return await this.eventsService.createEvent(event, files);
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard, UserOwnershipGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, UserSelf)
     @Put('/:id')
     async updateEvent(
-      @Param('id', ParseIntPipe) id: number,
-      @Body() event: UpdateEventDto,
+        @Param('id') id: string,
+        @Body() event: UpdateEventDto,
     ) {
         console.log('llego 1')
         // console.log('User in request:', req.user); // Verifica si existe el user aquí
         // const userId = req.user?.id; // Obtener el userId del token JWT
         return await this.eventsService.updateEvent(id, event);
     }
-    
+
 
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Patch('/:id')
     async updateEventStatus(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id') id: string,
         @Body() updateData: Partial<UpdateEventDto>,
     ) {
         return await this.eventsService.updateEventStatus(id, updateData);
@@ -85,7 +79,7 @@ export class EventsController {
     @Roles(Role.Admin)
     @UseGuards(JwtAuthGuard, RoleGuard)
     @Delete('/:id') // admin
-    async deleteEvent(@Param('id', ParseIntPipe) id: number, @Req() req) {
+    async deleteEvent(@Param('id') id: string, @Req() req) {
         const userId = req.user.id; // Extraer el userId del token JWT
         return await this.eventsService.deleteEvent(id, userId);
     }

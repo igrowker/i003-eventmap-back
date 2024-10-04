@@ -26,7 +26,7 @@ export class AuthService {
       if (existingUserEmail) {
         errors.push('Email already in use');
       }
-  
+
       const existingUserCuit = await this.prisma.user.findUnique({ where: { cuit: createUserDto.cuit } });
       if (existingUserCuit) {
         errors.push('CUIT already in use');
@@ -35,7 +35,7 @@ export class AuthService {
       if (errors.length > 0) {
         throw new ConflictException(errors);
       }
-  
+
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
 
       const newUser = await this.prisma.user.create({
@@ -51,9 +51,9 @@ export class AuthService {
         },
       });
 
-  
-      return {message : `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!`};
-      
+
+      return { message: `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!` };
+
     } catch (error) {
       if (error instanceof ConflictException) {
         throw error;
@@ -110,27 +110,29 @@ export class AuthService {
   async requestPasswordReset(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
 
-    const user = await this.prisma.user.findUnique({ where: { email }});
-    if(!user) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    const token = this.jwtService.sign({ userId: user.id }, { expiresIn: '1h' }); // menos tiempo de expiracion
+    const token = this.jwtService.sign({ userId: user.id }, { expiresIn: '1h' }); // menos tiempo de expiracion y capaz agregar mas info como el email
     await this.mailService.sendResetPasswordEmail(user.email, token);
 
     return { message: 'Correo de recuperacion enviado' };
 
   }
 
-  async resetPassword(token: string, resetPassword: ResetPasswordDto) {
+  async resetPassword(token: string, resetPassword: ResetPasswordDto) { //agregar repetir contraseña pára comparar q las 2 contraseñas ingresadas coincidan
 
     try {
       const decoded = this.jwtService.verify(token); // agregar mensaje 
-   
+
       const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
-      if(!user) {
+      if (!user) {
         throw new NotFoundException('Usuario no encontrado');
       }
+
+      //comprobar misma contraseañas input
 
       const hashedPassword = await bcrypt.hash(resetPassword.newPassword, 10);
       //validacion si el hasheo es correcto
@@ -140,9 +142,11 @@ export class AuthService {
 
       });
 
+      //falta redirigirte al login
+
       return { message: 'Contraseña actualizada correctamente' };
     } catch (error) {
-       throw new UnauthorizedException('Token invalido o expirado');
+      throw new UnauthorizedException('Token invalido o expirado');
     }
   }
 }

@@ -10,4 +10,5 @@ export class ResetPasswordDto {
     message: 'La contraseña debe incluir al menos una mayúscula, una minúscula y un carácter especial.',
   })
   newPassword: string;
+  //agregar repetir contraseña y validaciones
 }
