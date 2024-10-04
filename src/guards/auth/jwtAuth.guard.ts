@@ -11,7 +11,7 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const authHeader = request.headers['authorization'];
 
-    console.log('Authorization Header:', authHeader); // Verifica si el header de autorización está presente
+    // console.log('Authorization Header:', authHeader); // Verifica si el header de autorización está presente
 
     if (!authHeader) {
       throw new UnauthorizedException('Token de autorización no proporcionado.');
@@ -19,7 +19,7 @@ export class JwtAuthGuard implements CanActivate {
 
     const tokenBearer = authHeader.split(' ');
 
-    console.log('Token Bearer Parts:', tokenBearer); // Verifica el formato del token
+    // console.log('Token Bearer Parts:', tokenBearer); // Verifica el formato del token
 
     if (tokenBearer.length !== 2 || tokenBearer[0] !== 'Bearer') {
       throw new UnauthorizedException('Formato de token incorrecto.');
@@ -29,13 +29,13 @@ export class JwtAuthGuard implements CanActivate {
     const secret = process.env.JWT_SECRET;
 
     try {
-      console.log('Verifying Token...'); // Verificación del token
+      // console.log('Verifying Token...'); // Verificación del token
       const decodedToken = jwt.verify(token, secret) as { id: number; email: string; rol: string };
 
-      console.log('Decoded Token:', decodedToken); // Verificar si el token se decodifica correctamente
+      // console.log('Decoded Token:', decodedToken); // Verificar si el token se decodifica correctamente
 
       request['user'] = decodedToken;
-      console.log('Request User:', request['user']); // Verifica que el usuario haya sido asignado correctamente al request
+      // console.log('Request User:', request['user']); // Verifica que el usuario haya sido asignado correctamente al request
 
       return true;
     } catch (error) {

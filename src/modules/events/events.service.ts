@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { checkFormatImages, checkSizeImages, deleteImgCloudinary, filterEventsRadius, uploadFilesToCloudinary } from 'src/utils/utils';
+import { deleteImgCloudinary, filterEventsRadius, uploadFilesToCloudinary } from 'src/utils/utils';
 import { events, generateRandomCoordinates } from './events';
 import { QueryEventsDto } from './dto/query-event.dto';
-import { v4 as uuidv4 } from 'uuid';
+import { error } from 'console';
 
 
 @Injectable()
@@ -37,7 +37,10 @@ export class EventsService {
 
   async getEventsWhitoutFilter() {
     try {
-      return await this.prisma.event.findMany();
+      return await this.prisma.event.findMany().catch((error) => {
+        return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
+      });
+
     } catch (error) {
       throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -45,8 +48,10 @@ export class EventsService {
 
   async getEvents(query: QueryEventsDto) {
     try {
-      const events = await this.prisma.event.findMany();
-      
+      const events = await this.prisma.event.findMany().catch((error) => {
+        return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
+      });
+
       const arrayEventsRadius = filterEventsRadius(events, query.lat, query.lon);
 
       return arrayEventsRadius;
@@ -57,24 +62,20 @@ export class EventsService {
 
   async getEvent(id: string) {
     try {
-      return await this.prisma.event.findFirst({ where: { id } });
-    } catch (error) {
+      return await this.prisma.event.findFirst(
+        { where: { id } }
+      ).catch((error) => {
+        return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
+      });
 
+    } catch (error) {
       throw new HttpException('Error al obtener el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async createEvent(event: CreateEventDto, files: Array<Express.Multer.File>) {
     try {
-      if (!checkSizeImages(files)) {
-        return new HttpException('El tamaño de las imagenes para el evento no puede superar el tamañno de 300kb', HttpStatus.BAD_REQUEST);
-      }
-      
-      if (!checkFormatImages(files)) {
-        return  new HttpException('El formato de las imagenes tiene que ser una de estas opciones: .jpg | .png | .jpeg | .web', HttpStatus.BAD_REQUEST);
-      }
-
-      const photoUrls = await uploadFilesToCloudinary(files);
+      const photoUrls = await uploadFilesToCloudinary(files); //dentro de esto hace un condicional q si el array de files llega vacio asignas por defecto al array de imgs la imagen de eventos por defecto
 
       event.photos = photoUrls;
 
@@ -83,14 +84,19 @@ export class EventsService {
       const aux = await this.prisma.event.create({
         data: {
           ...eventInfo,
-          // id: uuidv4(),
           location: {
             lat,
             lon,
-          },
-          photos : event.photos,
+          }
         }
+      }).catch((error) => {
+        return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
       });
+
+      if (aux === null || aux === undefined) {
+        console.log("entro");
+        return new HttpException('Alguno de los datos ingresados no es correcto', HttpStatus.BAD_REQUEST);
+      }
 
       return aux
     } catch (error) {
@@ -98,46 +104,54 @@ export class EventsService {
     }
   }
 
-  async updateEvent( userId: string, event: UpdateEventDto) {
+  async updateEvent(userId: string, event: UpdateEventDto, files: Express.Multer.File[]) {
     try {
+      const findEvent = await this.prisma.event.findUnique(
+        {
+          where: {
+            id: event.id
+          }
+        }
+      )
 
-      //hace falta q sea bloqueante ?
-      await deleteImgCloudinary(event.id);
+      const response = await deleteImgCloudinary(findEvent.photos); //aca faltan los condicionales para q no se borre la img por defecto para los eventos
 
-      const aut = await this.prisma.event.update({
-        where: { id: event.id, userId: userId },
-        data: {
-          id: event.id,
-          name: event.name,
-          type: event.type,
-          date: event.date,
-          time: event.time,
-          location: event.location ? { lat: event.location.lat, log: event.location.log } : undefined,
-          createdAt: event.createdAt,
-          photos: event.photos,
-          description: event.description,
-          amount: event.amount,
-        },
-      });
-
-      if(aut == null) {
-        throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+      if (!response) {
+        return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
-      console.log(aut)
+      event.photos = await uploadFilesToCloudinary(files);
 
-      return await this.prisma.event.update({
-        where: { id: event.id },
+      const { lat, lon, ...eventInfo } = event;
+
+      const eventUpdated = await this.prisma.event.update({
+        where: { id: event.id, userId: userId },
         data: {
-          ...event,
+          ...eventInfo,
+          // id: event.id,
+          // name: event.name,
+          // type: event.type,
+          // date: event.date,
+          // time: event.time,
+          location: {
+            lat: event.lat,
+            lon: event.lon
+          },
+          // location: event.location ? { lat: event.location.lat, log: event.location.log } : undefined,
+          // createdAt: event.createdAt,
+          // photos: event.photos,
+          // description: event.description,
+          // amount: event.amount,
         },
+      }).catch((error) => {
+        return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
       });
+
+      return eventUpdated;
     } catch (error) {
       throw new HttpException('Error al modificar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
-  
 
   async updateEventStatus(id: string, updateData: Partial<UpdateEventDto>) { // modificar la logica
     try {
@@ -151,23 +165,26 @@ export class EventsService {
     }
   }
 
-  async deleteEvent(id: string, userId: string) {
+  async deleteEvent(id: string, eventId: string) {
     try {
-      // Buscar el evento
-      const existingEvent = await this.prisma.event.findUnique({ where: { id } });
-  
-      // Validar si el evento existe
-      if (!existingEvent) {
-        throw new HttpException('Evento no encontrado', HttpStatus.NOT_FOUND);
+      const findEvent = await this.prisma.event.findUnique(
+        { where: { id: eventId } }
+      )
+
+      const response = await deleteImgCloudinary(findEvent.photos); //aca faltan los condicionales para q no se borre la img por defecto para los eventos
+
+      if (!response) {
+        return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
       }
-  
-      // Validar si el userId del token coincide con el del evento
-      if (existingEvent.userId !== userId) {
-        throw new HttpException('No tienes permiso para eliminar este evento', HttpStatus.FORBIDDEN);
-      }
-  
-      // Eliminar el evento si la validación pasa
-      return await this.prisma.event.delete({ where: { id } });
+
+      const deletedEvent = await this.prisma.event.delete(
+        { where: { id: eventId} }
+      ).catch((error) => {
+        return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
+      });
+      
+      return deletedEvent;
+
     } catch (error) {
       throw new HttpException('Error al intentar eliminar el evento', HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -39,8 +39,8 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'Contraseña es obligatorio' })
     @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })
     @MaxLength(25, { message: 'La contraseña no puede tener más de 25 caracteres.' })
-    @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,16}$/, {
-      message: 'La contraseña debe tener entre 8 y 16 caracteres, incluir al menos una mayúscula, una minúscula y un carácter especial.',
+    @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,30}$/, {
+      message: 'La contraseña debe tener entre 8 y 30 caracteres, incluir al menos una mayúscula, una minúscula, un número y un carácter especial.',
     })
     password: string;
   
