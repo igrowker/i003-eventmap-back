@@ -87,7 +87,8 @@ export class EventsService {
           location: {
             lat,
             lon,
-          }
+          },
+          createdAt : event.createdAt || new Date()
         }
       }).catch((error) => {
         return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
@@ -137,6 +138,7 @@ export class EventsService {
             lat: event.lat,
             lon: event.lon
           },
+          createdAt : event.createdAt || new Date()
           // location: event.location ? { lat: event.location.lat, log: event.location.log } : undefined,
           // createdAt: event.createdAt,
           // photos: event.photos,
