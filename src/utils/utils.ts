@@ -159,3 +159,20 @@ export const uploadFilesToCloudinary = async (files: Express.Multer.File[]): Pro
 
     return photoUrls;
 }
+
+export const deleteImgCloudinary = async (idEvent : string)=>{
+
+    const secureImageUrl = cloudinary.url('https://res.cloudinary.com/dtbbcg1k2/image/upload/v1727916362/zvlpyntwlqxzq6cwu8cp.png', {
+        secure: true
+    });
+    console.log(secureImageUrl);
+
+//divido por "/" --> con pop me quedo con el ultimo elemento q es el public_id + extencion de la imagen -_> divido por "." --> me quedo con el primer elemento q es public_id
+const publicId = secureImageUrl.split('/').pop().split('.')[0];
+
+    cloudinary.uploader.destroy(publicId, function(error, result) {
+        console.log(result, error);
+      });
+
+    return true
+}

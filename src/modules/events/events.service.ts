@@ -2,9 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { checkFormatImages, checkSizeImages, filterEventsRadius, uploadFilesToCloudinary } from 'src/utils/utils';
+import { checkFormatImages, checkSizeImages, deleteImgCloudinary, filterEventsRadius, uploadFilesToCloudinary } from 'src/utils/utils';
 import { events, generateRandomCoordinates } from './events';
 import { QueryEventsDto } from './dto/query-event.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Injectable()
@@ -82,6 +83,7 @@ export class EventsService {
       const aux = await this.prisma.event.create({
         data: {
           ...eventInfo,
+          // id: uuidv4(),
           location: {
             lat,
             lon,
@@ -98,6 +100,10 @@ export class EventsService {
 
   async updateEvent( userId: string, event: UpdateEventDto) {
     try {
+
+      //hace falta q sea bloqueante ?
+      await deleteImgCloudinary(event.id);
+
       const aut = await this.prisma.event.update({
         where: { id: event.id, userId: userId },
         data: {

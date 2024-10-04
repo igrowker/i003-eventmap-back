@@ -20,27 +20,38 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto) {
     try {
+      console.log("llego 1");
       const errors = [];
 
       const existingUserEmail = await this.prisma.user.findUnique({ where: { email: createUserDto.email } });
+      console.log(existingUserEmail);
+
+      if (existingUserEmail === null || existingUserEmail === undefined) {
+        console.log("dshfjkhds");
+      }
+
       if (existingUserEmail) {
         errors.push('Email already in use');
       }
-
+      console.log("llego 2");
+      
       const existingUserCuit = await this.prisma.user.findUnique({ where: { cuit: createUserDto.cuit } });
+      console.log(existingUserCuit);
       if (existingUserCuit) {
         errors.push('CUIT already in use');
       }
+
+      console.log("llego 3");
 
       if (errors.length > 0) {
         throw new ConflictException(errors);
       }
 
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
-
+      console.log("llego 4");
       const newUser = await this.prisma.user.create({
         data: {
-          id: uuidv4(),
+          // id: uuidv4(),
           name: createUserDto.name,
           lastName: createUserDto.lastName,
           email: createUserDto.email,
@@ -51,7 +62,7 @@ export class AuthService {
         },
       });
 
-
+      console.log("llego 5");
       return { message: `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!` };
 
     } catch (error) {
