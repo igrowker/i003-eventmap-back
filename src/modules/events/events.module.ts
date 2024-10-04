@@ -9,6 +9,7 @@ import { AuthModule } from '../auth/auth.module';
     imports: [AuthModule],
     controllers : [EventsController],
     providers: [EventsService, PrismaService],
+    exports: [EventsService]
 })
 export class EventsModule implements NestModule{
     configure(consumer: MiddlewareConsumer) {

@@ -17,6 +17,7 @@ const CLOUDINARY_API_KEY_NAME = process.env.CLOUDINARY_API_KEY_NAME;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
+const MAX_SIZE_IMAGE = process.env.MAX_SIZE_IMAGE;
 
 const dotenvOptions = {
     PRUEBA,
@@ -32,6 +33,7 @@ const dotenvOptions = {
     CLOUDINARY_API_KEY,
     CLOUDINARY_API_KEY_SECRET,
     CLOUDINARY_API_KEY_NAME,
+    MAX_SIZE_IMAGE,
 }
 
 export default dotenvOptions;

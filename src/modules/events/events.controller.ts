@@ -1,25 +1,70 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put, Query, Req, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { QueryEvents } from 'src/utils/types';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { UserSelf } from 'src/guards/auth/userSelf.guard';
+// import { UserSelf } from 'src/guards/auth/userSelf.guard';
+import cloudinary from 'src/config/cloudinary.config';
+import { QueryEventsDto } from './dto/query-event.dto';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
+
+    @Get("/cloudinaryImgs")
+    async getImages() {
+            const secureImageUrl = cloudinary.url('https://res.cloudinary.com/dtbbcg1k2/image/upload/v1727916362/zvlpyntwlqxzq6cwu8cp.png', {
+                secure: true
+            });
+            console.log(secureImageUrl);
+
+        //divido por "/" --> con pop me quedo con el ultimo elemento q es el public_id + extencion de la imagen -_> divido por "." --> me quedo con el primer elemento q es public_id
+        const publicId = secureImageUrl.split('/').pop().split('.')[0];
+        console.log(publicId);
+
+        const imageById = await cloudinary.api.resource(
+            "zvlpyntwlqxzq6cwu8cp",
+            {
+                type: 'upload',
+                resource_type: 'image'
+            },
+            (error, result) => {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.log(result.resources); // Array de objetos que representan cada imagen
+                }
+            }
+        )
+
+        // const images = await cloudinary.api.resource(
+        //     "",
+        //     {
+        //         type: 'upload',
+        //         resource_type: 'image'
+        //     },
+        //     (error, result) => {
+        //         if (error) {
+        //             console.error(error);
+        //         } else {
+        //             console.log(result.resources); // Array de objetos que representan cada imagen
+        //         }
+        //     }
+        // )
+
+        return true;
+    }
 
     // @Post("/crearEvents")
     // async crearEventos() {
     //     return await this.eventsService.crearEventos();
     // }
 
-    // @Roles(Role.Admin)
+    // @Roles(Role.Admin, Role.Company)
     // @UseGuards(JwtAuthGuard, RoleGuard)
     @Get('/all')
     async getAllEventsWithoutFilter() {
@@ -27,7 +72,8 @@ export class EventsController {
     }
 
     @Get('/')
-    async getAllEvents(@Query() query: QueryEvents) {
+    async getAllEvents(@Query() query: QueryEventsDto) { //agregar un mensaje de q los valores de la query son requeridos
+        console.log("hafdsh");
         return await this.eventsService.getEvents(query);
     }
 
@@ -36,24 +82,20 @@ export class EventsController {
         return await this.eventsService.getEvent(id);
     }
 
-    @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @Post('/') //200 y 300kb de tamañanp de imagen y formato y imagen por defecto en la db
+    // @Roles(Role.Admin, Role.Company)
+    // @UseGuards(JwtAuthGuard, RoleGuard)
+    @Post('/') //300kb maximo de tamañanp de imagen
+    //jpg png jpeg web --> formatos validos
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
         @Body() event: CreateEventDto,
         @UploadedFiles() files: Array<Express.Multer.File>
     ) {
-        console.log(event);
-        console.log('Archivos recibidos:', files);
-
-        //validar tamañno y formato imagen        
-
         return await this.eventsService.createEvent(event, files);
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard, UserSelf)
+    @UseGuards(JwtAuthGuard, RoleGuard)
     @Put('/:id')
     async updateEvent(
         @Param('id') id: string,

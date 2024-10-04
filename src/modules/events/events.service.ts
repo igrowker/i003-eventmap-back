@@ -2,11 +2,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { filterEventsRadius, uploadFilesToCloudinary } from 'src/utils/utils';
-import { QueryEvents } from 'src/utils/types';
+import { checkFormatImages, checkSizeImages, filterEventsRadius, uploadFilesToCloudinary } from 'src/utils/utils';
 import { events, generateRandomCoordinates } from './events';
-import cloudinary from 'src/config/cloudinary.config';
-import { v4 as uuidv4 } from 'uuid';
+import { QueryEventsDto } from './dto/query-event.dto';
 
 
 @Injectable()
@@ -44,17 +42,15 @@ export class EventsService {
     }
   }
 
-  async getEvents(query: QueryEvents) {
+  async getEvents(query: QueryEventsDto) {
     try {
       const events = await this.prisma.event.findMany();
-      // const arrayEventsRequested = filterEventsUserRequest(events,query);
-
-      // const arrayEventsRadius = filterEventsRadius(arrayEventsRequested, query.lat, query.lon);
+      
       const arrayEventsRadius = filterEventsRadius(events, query.lat, query.lon);
 
       return arrayEventsRadius;
     } catch (error) {
-      throw new HttpException('Error al crear el evento', HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException('No se logro obtener los eventos', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -69,21 +65,33 @@ export class EventsService {
 
   async createEvent(event: CreateEventDto, files: Array<Express.Multer.File>) {
     try {
+      if (!checkSizeImages(files)) {
+        return new HttpException('El tamaño de las imagenes para el evento no puede superar el tamañno de 300kb', HttpStatus.BAD_REQUEST);
+      }
+      
+      if (!checkFormatImages(files)) {
+        return  new HttpException('El formato de las imagenes tiene que ser una de estas opciones: .jpg | .png | .jpeg | .web', HttpStatus.BAD_REQUEST);
+      }
+
       const photoUrls = await uploadFilesToCloudinary(files);
 
       event.photos = photoUrls;
 
-      const { lat, lon, ...eventInfo } = event; //esto xq en la db lat y lon por separado no existen y para q quede mas proligo el create
+      const { lat, lon, ...eventInfo } = event;
 
       const aux = await this.prisma.event.create({
         data: {
           ...eventInfo,
-
           location: {
             lat,
             lon,
           },
-          photos : photoUrls,
+          // photos : photoUrls,
+          // description : event.description,
+          // amount : event.amount,
+          // createdAt : event.createdAt,
+          // capacity : event.capacity,
+          // addres : event.addres
         }
       });
 
