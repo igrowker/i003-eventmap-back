@@ -40,7 +40,7 @@ export class UsersService {
 
   async findOneUser(id: string) {
     try {
-      
+      console.log("llego 1");
       // const userFound : UserInfo = await this.prisma.user.findUnique({
         const userFound  = await this.prisma.user.findUnique({
         where: { id },
@@ -48,14 +48,14 @@ export class UsersService {
           events: true,
         },
       });
-      
+      console.log("llego 2");
       if (!userFound) throw new NotFoundException('Usuario no encontrado');
 
       const {password, ...objectAux} = userFound;
 
       // const userFilterPass : UserWithoutPass = objectAux;
       const userFilterPass = objectAux;
-
+      console.log("llego 3");
       return userFilterPass;
     } catch (error) {
       throw new NotFoundException('Error al recuperar el usuario');
