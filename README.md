@@ -86,7 +86,7 @@ DATABASE_URL="postgresql://postgres:1234@localhost:5432/eventmap?schema=SCHEMA"
 ##  Variables para Nodemailer
 10. EMAIL_USER
 11. EMAIL_PASSWORD
-12. FRONTEND_UR
+12. FRONTEND_URL
 
 ```
 
@@ -136,7 +136,7 @@ $ npm run test:cov
     <img src="https://img.shields.io/badge/Ulises Rodriguez%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
   </a>
   <a href="http://linkedin.com/in/santiagobalbarrey" target="_blank" style="margin: 10px;">
-    <img src="https://img.shields.io/badge/Ulises Rodriguez%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
+    <img src="https://img.shields.io/badge/Santiago Balbarrey%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
   </a>
   <a href="https://github.com/octa-quintero" target="_blank" style="margin: 10px;">
     <img src="https://img.shields.io/badge/Octavio%20Quintero-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Octavio Quintero Badge">
