@@ -40,9 +40,14 @@
 
 ## Configuración del Proyecto (Local)
 
-### Paso 1: Instalar PostgreSQL
+### Paso 1: Instalar PostgreSQL y Node.JS
 - Descarga e instala PostgreSQL en tu máquina local desde el siguiente enlace:  
   [PostgreSQL Download](https://www.postgresql.org/download/)
+
+- Descarga e instala Node en tu máquina local desde el siguiente enlace:
+  [NodeJS Download](https://nodejs.org/en) --version 20.3.1
+
+
 
 ### Paso 2: Instalar Dependencias
 
@@ -67,30 +72,31 @@ Crea un archivo .env en la raíz del proyecto para almacenar las credenciales de
 ```bash
 
 # Varibales Postgres
-1.  USER 
-2.  PASSWORD 
-3.  HOST
-4.  PORT
-5.  DATABASE_URL
+1.  DATABASE_URL
+2.  PORT
 
 Example:
-DATABASE_URL="postgresql://postgres:1234@localhost:5432/eventmap?schema=SCHEMA"
+DATABASE_URL="postgresql://<USERNAME>:<PASSWORD>@<HOST>:<PORT>/<DATABASE_NAME>?schema=<SCHEMA>"
 
 # Radio para búsqueda de eventos
-5.  RADIUS
+1.  RADIUS
 
-## Variables de Cloudinary
-6.  CLOUDINARY_UR
-7.  CLOUDINARY_API_KEY
-8.  CLOUDINARY_API_KEY_SECRET
-9.  CLOUDINARY_API_KEY_NAME
-
+# Correo electrónico del administrador principal
+1. ADMIN_EMAIL=
+2. ADMIN_PASSWORD=
 
 ##  Variables para Nodemailer
-10. EMAIL_USER
-11. EMAIL_PASSWORD
-12. FRONTEND_URL
+1. EMAIL_USER
+2. EMAIL_PASSWORD
 
+# URL del frontend
+1. FRONTEND_URL=
+
+## Variables de Cloudinary
+1.  CLOUDINARY_UR
+2.  CLOUDINARY_API_KEY
+3.  CLOUDINARY_API_KEY_SECRET
+4.  CLOUDINARY_API_KEY_NAME
 ```
 
 ### Paso 5: Migrar y Sincronizar la Base de Datos
@@ -117,7 +123,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Estructura del Proyecto 📁
+## Estructura del Proyecto
 ```plaintext
 i003-eventmap-back/
 ├── .github/                    # Configuración y flujos de trabajo de GitHub
@@ -166,13 +172,13 @@ i003-eventmap-back/
 
 <div style="text-align: center; padding: 20px;">
   <a href="https://www.linkedin.com/in/ulises-rodriguez-desarrolloweb-fullstack/" target="_blank" style="margin: 10px;">
-    <img src="https://img.shields.io/badge/Ulises Rodriguez%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
+    <img src="https://img.shields.io/badge/Ulises Rodriguez%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Ulises Rodriguez Badge">
   </a>
   <a href="http://linkedin.com/in/santiagobalbarrey" target="_blank" style="margin: 10px;">
-    <img src="https://img.shields.io/badge/Santiago%Balbarrey%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
+    <img src="https://img.shields.io/badge/Santiago Balbarrey%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
   </a>
   <a href="https://github.com/octa-quintero" target="_blank" style="margin: 10px;">
-    <img src="https://img.shields.io/badge/Octavio%20Quintero-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Octavio Quintero Badge">
+    <img src="https://img.shields.io/badge/Octavio Quintero-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Octavio Quintero Badge">
   </a>
 </div>
 

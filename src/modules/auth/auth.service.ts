@@ -21,35 +21,24 @@ export class AuthService {
 
   async signUp(createUserDto: CreateUserDto) {
     try {
-      console.log("llego 1");
       const errors = [];
 
       const existingUserEmail = await this.prisma.user.findUnique({ where: { email: createUserDto.email } });
-      console.log(existingUserEmail);
-
-      if (existingUserEmail === null || existingUserEmail === undefined) {
-        console.log("dshfjkhds");
-      }
-
       if (existingUserEmail) {
         errors.push('Email already in use');
       }
-      console.log("llego 2");
-      
+
       const existingUserCuit = await this.prisma.user.findUnique({ where: { cuit: createUserDto.cuit } });
-      console.log(existingUserCuit);
       if (existingUserCuit) {
         errors.push('CUIT already in use');
       }
-
-      console.log("llego 3");
 
       if (errors.length > 0) {
         throw new ConflictException(errors);
       }
 
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
-      console.log("llego 4");
+
       const newUser = await this.prisma.user.create({
         data: {
           // id: uuidv4(),
@@ -62,8 +51,6 @@ export class AuthService {
           state: createUserDto.state || true,
         },
       });
-
-      console.log("llego 5");
       return { message: `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!` };
 
     } catch (error) {
@@ -133,66 +120,47 @@ export class AuthService {
   
       return { message: 'Correo de recuperación enviado' };
     } catch (error) {
-      console.error('Error en el proceso de solicitud de restablecimiento de contraseña:', error);
       throw new InternalServerErrorException('Ocurrió un error al procesar tu solicitud.');
     }
   }
 
   async verifyToken(token: string): Promise<User> {
     try {
-      console.log('Verificando token:', token); // Log del token recibido
-      const decoded = this.jwtService.verify(token);
-      console.log('Token verificado:', decoded); // Log del contenido del token decodificado
-  
-      const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
-      if (!user) {
-        throw new NotFoundException('Usuario no encontrado');
-      }
-  
-      console.log('Usuario encontrado:', user); // Log del usuario encontrado
-      return user; // Retornar el usuario si se verifica correctamente
+        const decoded = this.jwtService.verify(token);
+        const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
+        if (!user) {
+            throw new NotFoundException('Usuario no encontrado');
+        }
+        return user;
     } catch (error) {
-      console.error('Error al verificar el token:', error); // Log del error
-      throw new UnauthorizedException('Token inválido o expirado.');
+        throw new UnauthorizedException('Token inválido o expirado.');
     }
-  }
-  
-  
+}
 
   async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
-    try {
-        console.log('Token recibido en resetPassword:', token); // Log para verificar el toke
-        // Verifica el token y obtiene el usuario
-        const decoded = this.jwtService.verify(token);
-        console.log('Token verificado'); // Log de verificación exitosa
-        console.log('Datos decodificados:', decoded); // Log de datos decodificados
+  try {
+    const decodedUser = await this.verifyToken(token);
+    
+    const user = await this.prisma.user.findUnique({ where: { id: decodedUser.id } });
 
-        const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
-        
-        if (!user) {
-            throw new NotFoundException('Usuario no encontrado.');
-        }
-
-        // Comprobar que las contraseñas coincidan
-        if (resetPasswordDto.newPassword !== resetPasswordDto.repeatPassword) {
-            throw new BadRequestException('Las contraseñas no coinciden.');
-        }
-
-        // Hashear la nueva contraseña
-        const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
-
-        // Actualizar la contraseña en la base de datos
-        await this.prisma.user.update({
-            where: { id: user.id },
-            data: { password: hashedPassword },
-        });
-
-        return { message: 'Contraseña actualizada correctamente.' };
-
-    } catch (error) {
-        console.error('Error al restablecer la contraseña:', error); // Log de error
-        throw new InternalServerErrorException('Ocurrió un error al procesar la solicitud de restablecimiento de contraseña.');
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado.');
     }
-}
-}
 
+    if (resetPasswordDto.newPassword !== resetPasswordDto.repeatPassword) {
+      throw new BadRequestException('Las contraseñas no coinciden.');
+    }
+
+    const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword },
+    });
+
+    return { message: 'Contraseña actualizada correctamente.' };
+  } catch (error) {
+    throw new InternalServerErrorException('Ocurrió un error al procesar la solicitud de restablecimiento de contraseña.');
+  }
+}
+}
