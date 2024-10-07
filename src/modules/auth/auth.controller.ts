@@ -1,12 +1,9 @@
-import { Controller, Post, Body, Get, HttpCode, HttpStatus, HttpException, Res, Query } from '@nestjs/common';
+import { Controller, Post, Body, Get, HttpCode, HttpStatus, Res, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthLoginDto } from './dto/auth.login.dto';
 import { CreateUserDto } from './dto/auth.register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { JwtAuthGuard } from '../../guards/auth/jwtAuth.guard'
-import { userSelf } from '../../guards/auth/userSelf.guard'
-import { User } from '@prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -24,19 +21,13 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-    async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-        return await this.authService.requestPasswordReset(forgotPasswordDto);
-    }
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return await this.authService.requestPasswordReset(forgotPasswordDto);
+  }
 
-    @Get('verify-token')
-    async verifyToken(@Query('token') token: string): Promise<{ message: string; user: User }> {
-        const user = await this.authService.verifyToken(token);
-        return { message: 'Token verificado correctamente', user };
-    }
-
-    @Post('reset-password')
-    async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto) {
-        return await this.authService.resetPassword(token, resetPasswordDto);
-    }
+  @Post('reset-password')
+  async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto) {
+    return await this.authService.resetPassword(token, resetPasswordDto);
+  }
 }
 

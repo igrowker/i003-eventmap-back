@@ -185,17 +185,14 @@ export const deleteImgCloudinary = async (photos: string[]) => {
 
         if (secureImageUrl !== dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY) {
             response = await cloudinary.uploader.destroy(publicId, (error, result) => {
-                console.log(result, error);
             });
         }
-        console.log(response);
     }
 
     return true;
 }
 
 export const getImgByIdCloudinary = async (id: string) => {
-    console.log(id);
     const imageById = await cloudinary.api.resource(
         `${id}`,
         {
@@ -225,7 +222,6 @@ export const getAllImagesCloudinary = async () => {
             if (error) {
                 console.error(error);
             } else {
-                console.log(result.resources); // Array de objetos que representan cada imagen
             }
         }
     )
