@@ -73,7 +73,7 @@ export class EventsService {
 
   async createEvent(event: CreateEventDto, files: Array<Express.Multer.File>) {
     try {
-      const photoUrls = await uploadFilesToCloudinary(files); //dentro de esto hace un condicional q si el array de files llega vacio asignas por defecto al array de imgs la imagen de eventos por defecto
+      const photoUrls = await uploadFilesToCloudinary(files);
 
       event.photos = photoUrls;
 
@@ -93,7 +93,6 @@ export class EventsService {
       });
 
       if (aux === null || aux === undefined) {
-        console.log("entro");
         return new HttpException('Alguno de los datos ingresados no es correcto', HttpStatus.BAD_REQUEST);
       }
 
@@ -153,7 +152,7 @@ export class EventsService {
     }
   }
 
-  async updateEventStatus(id: string, updateData: Partial<UpdateEventDto>) { // modificar la logica
+  async updateEventStatus(id: string, updateData: Partial<UpdateEventDto>) {
     try {
       return await this.prisma.event.update({
         where: { id },

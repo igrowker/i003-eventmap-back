@@ -1,16 +1,10 @@
-import { TypeEvents } from "src/utils/enum";
-import { v4 as uuidv4 } from 'uuid';
-
-
 const obeliskLat = -34.605500;
 const obeliskLon = -58.384500;
 
-// Radius in kilometers
 const radius = 5;
 
-// Function to generate random coordinates within a given radius
 export function generateRandomCoordinates(lat: number, lon: number, radius: number) {
-    const lat2 = lat + (Math.random() * 2 - 1) * radius / 111.32; // 111.32 km is approximately the distance between one degree of latitude
+    const lat2 = lat + (Math.random() * 2 - 1) * radius / 111.32;
     const lon2 = lon + (Math.random() * 2 - 1) * radius / (111.32 * Math.cos(lat * Math.PI / 180));
     return { lat: lat2, lon: lon2 };
 }
@@ -121,5 +115,4 @@ const eventos = [
         capacity: "Entre 156 y 731 personas",
         addres: "Ubicación cercana al Obelisco, Buenos Aires"
     },
-    // ... y así hasta completar los 50 eventos
 ];

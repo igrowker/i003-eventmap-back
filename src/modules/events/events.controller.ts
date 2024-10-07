@@ -7,7 +7,6 @@ import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-// import { UserSelf } from 'src/guards/auth/userSelf.guard';
 import { QueryEventsDto } from './dto/query-event.dto';
 import { userSelf } from 'src/guards/auth/userSelf.guard';
 import { getImgByIdCloudinary } from 'src/utils/utils';
@@ -24,8 +23,6 @@ export class EventsController {
     @Get("cloudinaryUrl")
     async getUrl(){
         const url = await getImgByIdCloudinary("gilf9c7fotvs2io03lc9");
-        console.log(url);
-
         return true;
     }
 
