@@ -18,6 +18,15 @@ export class MetricsService {
     private readonly httpErrorCounter: Counter<string>
   ) {}
 
+  // Método para obtener métricas personalizadas
+  getMetrics() {
+    return {
+      http_requests_total: this.httpRequestCounter.get(),
+      http_request_duration_seconds: this.httpRequestDurationHistogram.get(),
+      http_errors_total: this.httpErrorCounter.get(),
+    };
+  }
+
   // Método para incrementar el contador de solicitudes HTTP
   incrementHttpRequests(method: string, path: string, status: string) {
     // Validar el método HTTP
@@ -57,11 +66,11 @@ export class MetricsService {
 
   // Validar el método HTTP
   private validateHttpMethod(method: string): string | null {
-    const upperMethod = method.toUpperCase(); // Asegurarse de que el método esté en mayúsculas
+    const upperMethod = method.toUpperCase();
     if (this.validHttpMethods.includes(upperMethod)) {
       return upperMethod;
     }
-    this.logger.warn(`Invalid HTTP method: ${method}`); // Usar el logger en lugar de console.warn
+    this.logger.warn(`Invalid HTTP method: ${method}`);
     return null;
   }
 
