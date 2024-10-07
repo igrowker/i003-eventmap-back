@@ -188,7 +188,6 @@ export const deleteImgCloudinary = async (photos: string[]) => {
                 console.log(result, error);
             });
         }
-
         console.log(response);
     }
 
