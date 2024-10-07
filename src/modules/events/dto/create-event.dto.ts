@@ -42,7 +42,7 @@ export class CreateEventDto{
 
     // @IsArray()
     // @IsString({ each: true })
-    photos : any
+    photos : string[]
     
     @IsNotEmpty()
     @IsString()

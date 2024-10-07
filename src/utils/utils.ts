@@ -50,7 +50,6 @@ export function filterEventsRadius(events: any, userLat: string, userLon: string
         const fourthEquation = Math.sqrt(thirdEquation);
 
         if (fourthEquation <= radiusParse) {
-            console.log("dentro del if");
             arrayFilterEventsRadius.push(event);
         }
     }
@@ -138,7 +137,7 @@ async function uploadFile(files: Express.Multer.File[]) {
     const photoUrls: string[] = [];
 
     if (files.length === 0) {
-        photoUrls.push("url para eventos por defecto") //se almacena una sola ves en la db, hacelo con un .env
+        photoUrls.push(dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY);
 
         return photoUrls;
     }
@@ -174,7 +173,6 @@ export const uploadFilesToCloudinary = async (files: Express.Multer.File[]): Pro
 }
 
 export const deleteImgCloudinary = async (photos: string[]) => {
-    //aca falta evitar q la img de eventos por defecto no se borre nunca de cloudinary
     for (let i = 0; i < photos.length; i++) {
         const photoUrl = photos[i];
 
@@ -190,7 +188,6 @@ export const deleteImgCloudinary = async (photos: string[]) => {
                 console.log(result, error);
             });
         }
-
         console.log(response);
     }
 
@@ -198,7 +195,7 @@ export const deleteImgCloudinary = async (photos: string[]) => {
 }
 
 export const getImgByIdCloudinary = async (id: string) => {
-
+    console.log(id);
     const imageById = await cloudinary.api.resource(
         `${id}`,
         {

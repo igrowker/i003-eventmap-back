@@ -10,6 +10,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 // import { UserSelf } from 'src/guards/auth/userSelf.guard';
 import { QueryEventsDto } from './dto/query-event.dto';
 import { userSelf } from 'src/guards/auth/userSelf.guard';
+import { getImgByIdCloudinary } from 'src/utils/utils';
 
 @Controller('/events')
 export class EventsController {
@@ -19,6 +20,14 @@ export class EventsController {
     // async crearEventos() {
     //     return await this.eventsService.crearEventos();
     // }
+
+    @Get("cloudinaryUrl")
+    async getUrl(){
+        const url = await getImgByIdCloudinary("gilf9c7fotvs2io03lc9");
+        console.log(url);
+
+        return true;
+    }
 
     @Get('/all')
     async getAllEventsWithoutFilter() {
