@@ -9,15 +9,13 @@ export class userSelf implements CanActivate {
     const request = context.switchToHttp().getRequest();
     
     const userIdFromToken = request.user?.sub;
-    console.log('User ID from Token:', userIdFromToken);
 
     const userId = request.params.id;
-    console.log('Event ID from Params:', userId);
     
     if( userId !== userIdFromToken ) {
       throw new HttpException('error', HttpStatus.FORBIDDEN)
     }
-    console.log('IDs coinciden. Acceso permitido.');
+    console.log('Acceso permitido.');
     return true;
   }
 }

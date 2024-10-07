@@ -23,8 +23,6 @@ export class EventsController {
     @Get("cloudinaryUrl")
     async getUrl(){
         const url = await getImgByIdCloudinary("gilf9c7fotvs2io03lc9");
-        console.log(url);
-
         return true;
     }
 

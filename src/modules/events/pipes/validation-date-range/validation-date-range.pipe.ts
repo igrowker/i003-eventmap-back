@@ -1,5 +1,4 @@
 import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform } from '@nestjs/common';
-import { IsString } from 'class-validator';
 import { EventQuerys } from 'src/utils/types';
 import { checkDateFormatQuery, checkTypeQuery } from 'src/utils/utils';
 
