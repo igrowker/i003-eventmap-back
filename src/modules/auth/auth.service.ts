@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException,  BadRequestException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthLoginDto } from './dto/auth.login.dto';
 import { PrismaService } from '../../prisma.service';
@@ -6,7 +6,6 @@ import { CreateUserDto } from './dto/auth.register.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { MailService } from '../mail/mail.service';
 import { ResetPasswordDto } from './dto/reset-password.dto';
-import { v4 as uuidv4 } from 'uuid';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
@@ -17,7 +16,6 @@ export class AuthService {
     private jwtService: JwtService,
     private mailService: MailService
   ) { }
-
 
   async signUp(createUserDto: CreateUserDto) {
     try {
@@ -108,16 +106,16 @@ export class AuthService {
 
   async requestPasswordReset(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
-  
+
     try {
       const user = await this.prisma.user.findUnique({ where: { email } });
       if (!user) {
         throw new NotFoundException('Usuario no encontrado');
       }
-  
+
       const token = this.jwtService.sign({ userId: user.id }, { expiresIn: '2h' });
       await this.mailService.sendResetPasswordEmail(user.email, token);
-  
+
       return { message: 'Correo de recuperación enviado' };
     } catch (error) {
       throw new InternalServerErrorException('Ocurrió un error al procesar tu solicitud.');
@@ -126,41 +124,41 @@ export class AuthService {
 
   async verifyToken(token: string): Promise<User> {
     try {
-        const decoded = this.jwtService.verify(token);
-        const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
-        if (!user) {
-            throw new NotFoundException('Usuario no encontrado');
-        }
-        return user;
+      const decoded = this.jwtService.verify(token);
+      const user = await this.prisma.user.findUnique({ where: { id: decoded.userId } });
+      if (!user) {
+        throw new NotFoundException('Usuario no encontrado');
+      }
+      return user;
     } catch (error) {
-        throw new UnauthorizedException('Token inválido o expirado.');
+      throw new UnauthorizedException('Token inválido o expirado.');
     }
-}
+  }
 
   async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
-  try {
-    const decodedUser = await this.verifyToken(token);
-    
-    const user = await this.prisma.user.findUnique({ where: { id: decodedUser.id } });
+    try {
+      const decodedUser = await this.verifyToken(token);
 
-    if (!user) {
-      throw new NotFoundException('Usuario no encontrado.');
+      const user = await this.prisma.user.findUnique({ where: { id: decodedUser.id } });
+
+      if (!user) {
+        throw new NotFoundException('Usuario no encontrado.');
+      }
+
+      if (resetPasswordDto.newPassword !== resetPasswordDto.repeatPassword) {
+        throw new BadRequestException('Las contraseñas no coinciden.');
+      }
+
+      const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { password: hashedPassword },
+      });
+
+      return { message: 'Contraseña actualizada correctamente.' };
+    } catch (error) {
+      throw new InternalServerErrorException('Ocurrió un error al procesar la solicitud de restablecimiento de contraseña.');
     }
-
-    if (resetPasswordDto.newPassword !== resetPasswordDto.repeatPassword) {
-      throw new BadRequestException('Las contraseñas no coinciden.');
-    }
-
-    const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
-
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: { password: hashedPassword },
-    });
-
-    return { message: 'Contraseña actualizada correctamente.' };
-  } catch (error) {
-    throw new InternalServerErrorException('Ocurrió un error al procesar la solicitud de restablecimiento de contraseña.');
   }
-}
 }

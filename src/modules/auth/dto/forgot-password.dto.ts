@@ -1,4 +1,4 @@
-import { IsEmail, Matches, IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { IsEmail, Matches, IsString, IsNotEmpty, MaxLength } from 'class-validator';
 
 export class ForgotPasswordDto {
   @IsString()
