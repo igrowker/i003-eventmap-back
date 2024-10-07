@@ -3,16 +3,16 @@ import { AuthService } from './auth.service';
 import { AuthLoginDto } from './dto/auth.login.dto';
 import { CreateUserDto } from './dto/auth.register.dto';
 
-@Controller('auth')
+@Controller('auth') //localhost:3000/auth
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post('register')  //localhost:3000/auth/register
   async create(@Res({ passthrough: true}) res: Response, @Body() createUserDto: CreateUserDto) {
     return await this.authService.signUp(createUserDto);
   }
 
-  @Post('login')
+  @Post('login')  //localhost:3000/auth/login
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: AuthLoginDto) {
     return await this.authService.signIn(loginDto);

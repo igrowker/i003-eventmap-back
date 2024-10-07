@@ -28,6 +28,6 @@ async function bootstrap() {
     }
   }));
 
-  await app.listen(dotenvOptions.PORT);
+  await app.listen(dotenvOptions.PORT, '0.0.0.0');
 }
 bootstrap();

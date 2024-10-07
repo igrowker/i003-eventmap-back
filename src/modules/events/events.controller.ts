@@ -13,7 +13,7 @@ import { RoleGuard } from 'src/guards/role/role.guard';
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
-    @Post("/crearEvents")
+    @Post("/crearEvents")  //localhost:3000/events/crearEvents
     async crearEventos(){
         return await this.eventsService.crearEventos();
     }

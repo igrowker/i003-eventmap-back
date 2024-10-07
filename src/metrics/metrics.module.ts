@@ -8,7 +8,7 @@
 		imports: [
 			PrometheusModule.register({
 				defaultMetrics: {
-					enabled: true,
+					enabled: false,
 				},
 			}),
 		],
@@ -21,9 +21,9 @@
 		],
 		exports: [
 			MetricsService,
-			httpRequestDurationHistogramProvider, // Asegúrate de que también se exporte
-    		httpRequestCounterProvider, // Asegúrate de que también se exporte
-    		httpErrorCounterProvider, // Asegúrate de que también se exporte
+			httpRequestDurationHistogramProvider,
+    		httpRequestCounterProvider,
+    		httpErrorCounterProvider,
 		],
 	})
 	export class PrometheusCustomModule {}

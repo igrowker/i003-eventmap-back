@@ -1,11 +1,12 @@
-import { Controller, Get, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Get } from '@nestjs/common';
+import { MetricsService } from './metrics.service';
 
-@Controller()
+@Controller('metrics') // Cambiar el endpoint a '/metrics' para acceder a las métricas
 export class MetricsController {
+  constructor(private readonly metricsService: MetricsService) {}
+
   @Get()
-  getHello(@Res() res: Response): void {
-    // Enviar la respuesta
-    res.send('Hello, Prometheus!');
+  getMetrics() {
+    return this.metricsService.getMetrics(); // Método que devolverá tus métricas personalizadas
   }
 }

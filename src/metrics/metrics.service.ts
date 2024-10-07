@@ -67,7 +67,7 @@ export class MetricsService {
 
   // Normalizar la ruta eliminando posibles parámetros dinámicos
   private normalizePath(path: string): string {
-    return path.replace(/\/\d+/g, '/:id'); // Ejemplo: /user/123 -> /user/:id
+    return path.replace(/\/\d+/g, '/:id');
   }
 
   // Validar el estado HTTP
@@ -76,7 +76,7 @@ export class MetricsService {
     if (!isNaN(statusCode) && statusCode >= 100 && statusCode <= 599) {
       return status;
     }
-    this.logger.warn(`Invalid HTTP status: ${status}`); // Usar el logger en lugar de console.warn
+    this.logger.warn(`Invalid HTTP status: ${status}`);
     return null;
   }
 }
