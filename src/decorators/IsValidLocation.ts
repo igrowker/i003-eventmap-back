@@ -8,7 +8,6 @@ import {
 @Injectable()
 export class IsValisLocation implements ValidatorConstraintInterface {
     validate(value: any) {
-        console.log(value);
         if (!value || typeof value !== 'object' || Object.keys(value).length !== 2) {
             throw new BadRequestException('location debe tener exactamente dos propiedades: lat y lon');
         }
@@ -23,8 +22,6 @@ export class IsValisLocation implements ValidatorConstraintInterface {
         if (isNaN(lat) || isNaN(lon)) {
             throw new BadRequestException('Las coordenadas deben ser números de tipo float');
         }
-
-        console.log("ANTES DEW RETURN");
         return true;
     }
 
