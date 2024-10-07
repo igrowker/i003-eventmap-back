@@ -8,72 +8,25 @@ import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 // import { UserSelf } from 'src/guards/auth/userSelf.guard';
-import cloudinary from 'src/config/cloudinary.config';
 import { QueryEventsDto } from './dto/query-event.dto';
+import { userSelf } from 'src/guards/auth/userSelf.guard';
 
 @Controller('/events')
 export class EventsController {
     constructor(private eventsService: EventsService) { }
-
-    @Get("/cloudinaryImgs")
-    async getImages() {
-            const secureImageUrl = cloudinary.url('https://res.cloudinary.com/dtbbcg1k2/image/upload/v1727916362/zvlpyntwlqxzq6cwu8cp.png', {
-                secure: true
-            });
-            console.log(secureImageUrl);
-
-        //divido por "/" --> con pop me quedo con el ultimo elemento q es el public_id + extencion de la imagen -_> divido por "." --> me quedo con el primer elemento q es public_id
-        const publicId = secureImageUrl.split('/').pop().split('.')[0];
-        console.log(publicId);
-
-        const imageById = await cloudinary.api.resource(
-            "zvlpyntwlqxzq6cwu8cp",
-            {
-                type: 'upload',
-                resource_type: 'image'
-            },
-            (error, result) => {
-                if (error) {
-                    console.error(error);
-                } else {
-                    console.log(result.resources); // Array de objetos que representan cada imagen
-                }
-            }
-        )
-
-        // const images = await cloudinary.api.resource(
-        //     "",
-        //     {
-        //         type: 'upload',
-        //         resource_type: 'image'
-        //     },
-        //     (error, result) => {
-        //         if (error) {
-        //             console.error(error);
-        //         } else {
-        //             console.log(result.resources); // Array de objetos que representan cada imagen
-        //         }
-        //     }
-        // )
-
-        return true;
-    }
 
     // @Post("/crearEvents")
     // async crearEventos() {
     //     return await this.eventsService.crearEventos();
     // }
 
-    // @Roles(Role.Admin, Role.Company)
-    // @UseGuards(JwtAuthGuard, RoleGuard)
     @Get('/all')
     async getAllEventsWithoutFilter() {
         return await this.eventsService.getEventsWhitoutFilter();
     }
 
     @Get('/')
-    async getAllEvents(@Query() query: QueryEventsDto) { //agregar un mensaje de q los valores de la query son requeridos
-        console.log("hafdsh");
+    async getAllEvents(@Query() query: QueryEventsDto) {
         return await this.eventsService.getEvents(query);
     }
 
@@ -82,10 +35,9 @@ export class EventsController {
         return await this.eventsService.getEvent(id);
     }
 
-    // @Roles(Role.Admin, Role.Company)
-    // @UseGuards(JwtAuthGuard, RoleGuard)
-    @Post('/') //300kb maximo de tamañanp de imagen
-    //jpg png jpeg web --> formatos validos
+    @Roles(Role.Admin, Role.Company)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @Post('/')
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
         @Body() event: CreateEventDto,
@@ -95,21 +47,20 @@ export class EventsController {
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
+    @UseInterceptors(FilesInterceptor('files'))
     @Put('/:id')
     async updateEvent(
         @Param('id') id: string,
         @Body() event: UpdateEventDto,
+        @UploadedFiles() files: Array<Express.Multer.File>
     ) {
-        console.log('llego 1')
-        // console.log('User in request:', req.user); // Verifica si existe el user aquí
-        // const userId = req.user?.id; // Obtener el userId del token JWT
-        return await this.eventsService.updateEvent(id, event);
+        return await this.eventsService.updateEvent(id, event, files);
     }
 
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @Patch('/:id')
     async updateEventStatus(
         @Param('id') id: string,
@@ -119,10 +70,10 @@ export class EventsController {
     }
 
     @Roles(Role.Admin)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @Delete('/:id') // admin
-    async deleteEvent(@Param('id') id: string, @Req() req) {
-        const userId = req.user.id;
-        return await this.eventsService.deleteEvent(id, userId);
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
+    @Delete('/:id/:idEvent')
+    async deleteEvent(@Param('idEvent') idEvent: string) {
+        
+        return await this.eventsService.deleteEvent(idEvent);
     }
 }

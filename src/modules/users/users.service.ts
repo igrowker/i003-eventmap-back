@@ -40,7 +40,6 @@ export class UsersService {
 
   async findOneUser(id: string) {
     try {
-      
       // const userFound : UserInfo = await this.prisma.user.findUnique({
         const userFound  = await this.prisma.user.findUnique({
         where: { id },
@@ -55,7 +54,7 @@ export class UsersService {
 
       // const userFilterPass : UserWithoutPass = objectAux;
       const userFilterPass = objectAux;
-
+      
       return userFilterPass;
     } catch (error) {
       throw new NotFoundException('Error al recuperar el usuario');
@@ -69,7 +68,7 @@ export class UsersService {
       const userFound = await this.prisma.user.update({
         where: { id },
         data: {
-          ...dataToUpdate,
+          ...dataToUpdate
         },
       });
       return userFound;

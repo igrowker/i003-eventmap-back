@@ -13,8 +13,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Get()
-  // @UseGuards(JwtAuthGuard, RoleGuard)
-  // @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin)
   async findAllUsers() {
     return await this.usersService.findAllUsers();
   }
@@ -26,12 +26,16 @@ export class UsersController {
     return await this.usersService.findOneUser(id);
   }
 
-  @Patch(':id') //idem q get id
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
+  @Roles(Role.Admin, Role.Company)
   async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.updateUser(id, updateUserDto);
   }
 
-  @Delete(':id') //admin
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(Role.Admin)
   async removeUser(@Param('id') id: string, @Res() res: Response) {
     return await this.usersService.removeUser(id, res);
   }
