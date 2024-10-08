@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Req, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
@@ -7,7 +7,6 @@ import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { RoleGuard } from 'src/guards/role/role.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-// import { UserSelf } from 'src/guards/auth/userSelf.guard';
 import { QueryEventsDto } from './dto/query-event.dto';
 import { userSelf } from 'src/guards/auth/userSelf.guard';
 
@@ -58,7 +57,6 @@ export class EventsController {
         return await this.eventsService.updateEvent(id, event, files);
     }
 
-
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @Patch('/:id')
@@ -73,7 +71,6 @@ export class EventsController {
     @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @Delete('/:id/:idEvent')
     async deleteEvent(@Param('idEvent') idEvent: string) {
-        
         return await this.eventsService.deleteEvent(idEvent);
     }
 }

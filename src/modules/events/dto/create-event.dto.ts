@@ -1,5 +1,4 @@
-import { IsString, IsNotEmpty, IsDateString, Matches, IsNumber, IsArray, Min, Max, Validate, isDate, IsDate, ArrayNotEmpty, IsOptional} from 'class-validator';
-import { IsValisLocation } from 'src/decorators/IsValidLocation';
+import { IsString, IsNotEmpty, IsDateString, Matches, IsNumber, Min, Max, IsDate, IsOptional} from 'class-validator';
 import { TypeEvents } from 'src/utils/enum';
 import { DateStringFormat, TimeStringFormat } from 'src/utils/types';
 
@@ -42,7 +41,7 @@ export class CreateEventDto{
 
     // @IsArray()
     // @IsString({ each: true })
-    photos : any
+    photos : string[]
     
     @IsNotEmpty()
     @IsString()

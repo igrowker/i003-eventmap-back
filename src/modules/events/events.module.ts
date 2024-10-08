@@ -4,14 +4,15 @@ import { EventsService } from './events.service';
 import { LoggerMiddleware } from 'src/middlewares/logger/logger.middleware';
 import { PrismaService } from 'src/prisma.service';
 import { AuthModule } from '../auth/auth.module';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Module({
     imports: [AuthModule],
-    controllers : [EventsController],
-    providers: [EventsService, PrismaService],
+    controllers: [EventsController],
+    providers: [EventsService, CloudinaryService, PrismaService],
     exports: [EventsService]
 })
-export class EventsModule implements NestModule{
+export class EventsModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(LoggerMiddleware).forRoutes('events')
     }

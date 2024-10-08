@@ -4,7 +4,6 @@ export const dotenvFun = ()=>{
     dotenv.config();
 }
 
-const PRUEBA = process.env.PRUEBA;
 const DATABASE_URL_LOCAL = process.env.DATABASE_URL;
 const PORT = process.env.PORT;
 const RADIUS = process.env.RADIUS;
@@ -21,7 +20,6 @@ const MAX_SIZE_IMAGE = process.env.MAX_SIZE_IMAGE;
 const DEFAULT_IMG_EVENT_CLOUDINARY = process.env.DEFAULT_IMG_EVENT_CLOUDINARY;
 
 const dotenvOptions = {
-    PRUEBA,
     DATABASE_URL_LOCAL,
     PORT,
     RADIUS,
