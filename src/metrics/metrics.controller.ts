@@ -1,12 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
-import { MetricsService } from './metrics.service';
+import { Controller, Get, Res } from '@nestjs/common';
+import { Response } from 'express';
+import { register } from 'prom-client';
 
-@Controller('metrics') // Cambiar el endpoint a '/metrics' para acceder a las métricas
+@Controller('metrics')
 export class MetricsController {
-  constructor(private readonly metricsService: MetricsService) {}
-
   @Get()
-  getMetrics() {
-    return this.metricsService.getMetrics(); // Método que devolverá tus métricas personalizadas
+  async getMetrics(@Res() res: Response) {
+    res.setHeader('Content-Type', register.contentType);
+    res.end(await register.metrics());
   }
 }

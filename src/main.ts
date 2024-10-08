@@ -15,7 +15,7 @@ async function bootstrap() {
   console.log(dotenvOptions.PRUEBA);
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
+  app.enableCors({}); // conexiones
   app.use(cookieParser());
   app.use(bodyParser.json());
   app.use(new LoggerMiddleware().use);
@@ -28,6 +28,6 @@ async function bootstrap() {
     }
   }));
 
-  await app.listen(dotenvOptions.PORT, '0.0.0.0');
+  await app.listen(dotenvOptions.PORT);
 }
 bootstrap();

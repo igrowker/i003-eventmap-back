@@ -1,50 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectMetric } from '@willsoto/nestjs-prometheus';
 import { Counter, Histogram } from 'prom-client';
+import { InjectMetric } from '@willsoto/nestjs-prometheus';
 
 @Injectable()
 export class MetricsService {
-  private readonly logger = new Logger(MetricsService.name); // Crear una instancia de Logger
+  private readonly logger = new Logger(MetricsService.name);
   private readonly validHttpMethods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS', 'HEAD'];
 
   constructor(
-    @InjectMetric('http_requests_total')
-    private readonly httpRequestCounter: Counter<string>,
-
-    @InjectMetric('http_request_duration_seconds')
-    private readonly httpRequestDurationHistogram: Histogram<string>,
-
-    @InjectMetric('http_errors_total')
-    private readonly httpErrorCounter: Counter<string>
+    @InjectMetric('http_requests_total') private readonly httpRequestCounter: Counter<string>,
+    @InjectMetric('http_request_duration_seconds') private readonly httpRequestDurationHistogram: Histogram<string>,
+    @InjectMetric('http_errors_total') private readonly httpErrorCounter: Counter<string>,
   ) {}
 
-  // Método para obtener métricas personalizadas
-  getMetrics() {
-    return {
-      http_requests_total: this.httpRequestCounter.get(),
-      http_request_duration_seconds: this.httpRequestDurationHistogram.get(),
-      http_errors_total: this.httpErrorCounter.get(),
-    };
-  }
-
-  // Método para incrementar el contador de solicitudes HTTP
   incrementHttpRequests(method: string, path: string, status: string) {
-    // Validar el método HTTP
     const validMethod = this.validateHttpMethod(method);
-    
-    // Normalizar la ruta
     const normalizedPath = this.normalizePath(path);
-  
-    // Validar el estado HTTP
     const validStatus = this.validateHttpStatus(status);
-  
-    // Incrementar el contador solo si todos los valores son válidos
+
     if (validMethod && validStatus) {
       this.httpRequestCounter.inc({ method: validMethod, path: normalizedPath, status: validStatus });
     }
   }
 
-  // Método para incrementar el contador de errores HTTP
   incrementHttpErrors(method: string, path: string, status: string) {
     const validMethod = this.validateHttpMethod(method);
     const normalizedPath = this.normalizePath(path);
@@ -53,8 +31,7 @@ export class MetricsService {
       this.httpErrorCounter.inc({ method: validMethod, path: normalizedPath, status });
     }
   }
-  
-  // Método para registrar la duración de una solicitud HTTP
+
   observeHttpRequestDuration(method: string, path: string, duration: number) {
     const validMethod = this.validateHttpMethod(method);
     const normalizedPath = this.normalizePath(path);
@@ -64,7 +41,8 @@ export class MetricsService {
     }
   }
 
-  // Validar el método HTTP
+  // Métodos auxiliares
+
   private validateHttpMethod(method: string): string | null {
     const upperMethod = method.toUpperCase();
     if (this.validHttpMethods.includes(upperMethod)) {
@@ -74,12 +52,10 @@ export class MetricsService {
     return null;
   }
 
-  // Normalizar la ruta eliminando posibles parámetros dinámicos
   private normalizePath(path: string): string {
     return path.replace(/\/\d+/g, '/:id');
   }
 
-  // Validar el estado HTTP
   private validateHttpStatus(status: string): string | null {
     const statusCode = parseInt(status, 10);
     if (!isNaN(statusCode) && statusCode >= 100 && statusCode <= 599) {
