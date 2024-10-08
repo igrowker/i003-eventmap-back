@@ -12,7 +12,6 @@ export class AuthService {
     private jwtService: JwtService,
   ) { }
 
-
   async signUp(createUserDto: CreateUserDto) {
     try {
       const errors = [];

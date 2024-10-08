@@ -2,8 +2,6 @@ import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform 
 import { EventQuerys } from 'src/utils/types';
 import { checkDateFormatQuery, checkTypeQuery } from 'src/utils/utils';
 
-// npm audit fix --> probar esto para las vulnerabilidades
-
 @Injectable()
 export class ValidationDateRangePipe implements PipeTransform {
   transform(value: EventQuerys, metadata: ArgumentMetadata) {
