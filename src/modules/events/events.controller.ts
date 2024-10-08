@@ -9,7 +9,6 @@ import { RoleGuard } from 'src/guards/role/role.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { QueryEventsDto } from './dto/query-event.dto';
 import { userSelf } from 'src/guards/auth/userSelf.guard';
-import { getImgByIdCloudinary } from 'src/utils/utils';
 
 @Controller('/events')
 export class EventsController {
@@ -19,12 +18,6 @@ export class EventsController {
     // async crearEventos() {
     //     return await this.eventsService.crearEventos();
     // }
-
-    @Get("cloudinaryUrl")
-    async getUrl(){
-        const url = await getImgByIdCloudinary("gilf9c7fotvs2io03lc9");
-        return true;
-    }
 
     @Get('/all')
     async getAllEventsWithoutFilter() {
@@ -63,7 +56,6 @@ export class EventsController {
     ) {
         return await this.eventsService.updateEvent(id, event, files);
     }
-
 
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
