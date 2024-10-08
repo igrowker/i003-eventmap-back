@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { EventsModule } from './modules/events/events.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MailModule } from './modules/mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
 import dotenvOptions from './config/dotenvConfig';
 
@@ -12,6 +13,7 @@ import dotenvOptions from './config/dotenvConfig';
     EventsModule, 
     AuthModule, 
     UsersModule,
+    MailModule,
     JwtModule.register({
       global : true,
       signOptions : {expiresIn : dotenvOptions.JWT_TOKEN_EXPIRED},

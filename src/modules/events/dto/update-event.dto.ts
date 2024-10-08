@@ -1,8 +1,6 @@
 import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateString, IsDate } from 'class-validator';
 import { TypeEvents } from 'src/utils/enum';
 
-// export class UpdateEventDto extends PartialType (UpdateEventDto) {} forma de replicar el createEventDto. quedaria todo opcional.
-
 export class UpdateEventDto {
   @IsString()
   id?: string;

@@ -66,8 +66,6 @@ async function uploadFile(files: Express.Multer.File[]) {
                 }).end(file.buffer);
             });
         }
-
-
     } catch (error) {
         console.log(error);
         throw new HttpException('Error al intentar subir las fotos', HttpStatus.BAD_REQUEST);
