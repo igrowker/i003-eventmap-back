@@ -1,20 +1,19 @@
-import { Controller } from "@nestjs/common";
+import { Controller, Post, Body, Query } from '@nestjs/common';
+import { MailService } from './mail.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
-@Controller('/events')
+@Controller('restore-password')
 export class MailController {
-    // @Post('forgot-password')
-    // async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
-    //     return await this.authService.requestPasswordReset(forgotPasswordDto);
-    // }
+  constructor(private readonly authService:  MailService) { }
 
-    // @Get('verify-token')
-    // async verifyToken(@Query('token') token: string): Promise<{ message: string; user: User }> {
-    //     const user = await this.authService.verifyToken(token);
-    //     return { message: 'Token verificado correctamente', user };
-    // }
+  @Post('forgot-password')
+  async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
+    return await this.authService.requestPasswordReset(forgotPasswordDto);
+  }
 
-    // @Post('reset-password')
-    // async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto) {
-    //     return await this.authService.resetPassword(token, resetPasswordDto);
-    // }
+  @Post('reset-password')
+  async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto) {
+    return await this.authService.resetPassword(token, resetPasswordDto);
+  }
 }

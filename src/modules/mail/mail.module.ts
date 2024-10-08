@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { MailService } from './mail.service'; 
-import { ConfigModule } from '@nestjs/config'; 
 import { MailController } from './mail.controller';
+import { MailService } from './mail.service';
+import { PrismaService } from 'src/prisma.service';
 
 @Module({
-  imports: [ConfigModule], 
   controllers : [MailController],
-  providers: [MailService],
-  exports: [MailService],  
+  providers: [MailService, PrismaService],
 })
 export class MailModule {}
