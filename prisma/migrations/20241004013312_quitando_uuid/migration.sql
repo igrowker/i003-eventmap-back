@@ -4,11 +4,9 @@ CREATE TYPE "Type" AS ENUM ('Deportivo', 'Artistico', 'Gastronomico');
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('Company', 'Admin');
 
-ALTER TABLE "Event" ALTER COLUMN "userId" TYPE UUID USING "userId"::uuid;
-
 -- CreateTable
 CREATE TABLE "Event" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "type" "Type" NOT NULL,
     "date" TEXT NOT NULL,

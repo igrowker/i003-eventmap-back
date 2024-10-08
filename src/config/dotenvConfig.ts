@@ -4,7 +4,6 @@ export const dotenvFun = ()=>{
     dotenv.config();
 }
 
-const PRUEBA = process.env.PRUEBA;
 const DATABASE_URL_LOCAL = process.env.DATABASE_URL;
 const PORT = process.env.PORT;
 const RADIUS = process.env.RADIUS;
@@ -18,9 +17,9 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 const MAX_SIZE_IMAGE = process.env.MAX_SIZE_IMAGE;
+const DEFAULT_IMG_EVENT_CLOUDINARY = process.env.DEFAULT_IMG_EVENT_CLOUDINARY;
 
 const dotenvOptions = {
-    PRUEBA,
     DATABASE_URL_LOCAL,
     PORT,
     RADIUS,
@@ -34,6 +33,7 @@ const dotenvOptions = {
     CLOUDINARY_API_KEY_SECRET,
     CLOUDINARY_API_KEY_NAME,
     MAX_SIZE_IMAGE,
+    DEFAULT_IMG_EVENT_CLOUDINARY,
 }
 
 export default dotenvOptions;
