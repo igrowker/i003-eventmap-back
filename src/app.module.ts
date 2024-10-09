@@ -7,6 +7,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
+import { SeedModule } from './seed/seed.module';
 import dotenvOptions from './config/dotenvConfig';
 
 @Module({
@@ -20,6 +21,7 @@ import dotenvOptions from './config/dotenvConfig';
       signOptions: { expiresIn: dotenvOptions.JWT_TOKEN_EXPIRED },
       secret: dotenvOptions.JWT_SECRET,
     }),
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
