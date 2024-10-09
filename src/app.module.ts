@@ -41,8 +41,8 @@ export class AppModule implements NestModule {
     //   .apply(createRateLimiter({ windowMs: 30 * 60 * 1000, max: 5 }))
     //   .forRoutes('auth/register');
 
-    // consumer
-    //   .apply(createRateLimiter({ windowMs: 15 * 60 * 1000, max: 10 }))
-    //   .forRoutes('auth/login');
+  //   consumer
+  //     .apply(createRateLimiter({ windowMs: 15 * 60 * 1000, max: 10 }))
+  //     .forRoutes('auth/login');
   }
 }
