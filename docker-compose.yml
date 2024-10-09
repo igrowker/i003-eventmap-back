@@ -41,9 +41,21 @@ services:
     image: grafana/grafana
     restart: unless-stopped
     ports:
-      - '3002:3000'
+      - '3001:3000'
     volumes:
       - grafana-data:/var/lib/grafana
+    networks:
+      - eventmap
+
+  app_eventmap:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - PORT=${PORT}
     networks:
       - eventmap
 

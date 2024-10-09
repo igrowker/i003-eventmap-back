@@ -58,4 +58,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Ignorar el archivo .dockerignore
 .dockerignore
 
-/src/metrics/
+# Ignorar archivos de Prometheus
+.src/metrics/
+.src/middleware/metrics.middleware.ts
