@@ -25,11 +25,14 @@ export class JwtAuthGuard implements CanActivate {
     const secret = process.env.JWT_SECRET;
 
     try {
-      const decodedToken = jwt.verify(token, secret) as {id: number, email: string; rol: string };
-      
+      const decodedToken = jwt.verify(token, secret) as { id: number; email: string; rol: string };
+
       request['user'] = decodedToken;
+
       return true;
     } catch (error) {
+      console.log('JWT Error:', error);
+
       if (error instanceof jwt.TokenExpiredError) {
         throw new UnauthorizedException('El token ha expirado.');
       } else {

@@ -1,9 +1,6 @@
 import { ArgumentMetadata, HttpException, HttpStatus, Injectable, PipeTransform } from '@nestjs/common';
-import { IsString } from 'class-validator';
 import { EventQuerys } from 'src/utils/types';
 import { checkDateFormatQuery, checkTypeQuery } from 'src/utils/utils';
-
-// npm audit fix --> probar esto para las vulnerabilidades
 
 @Injectable()
 export class ValidationDateRangePipe implements PipeTransform {

@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { ValidatorConstraintInterface } from "class-validator";
-// import { QueryEvents, UserInfo } from "./types";
 import dotenvOptions from '../config/dotenvConfig';
 
 export class TimeValidator implements ValidatorConstraintInterface {
@@ -10,34 +9,12 @@ export class TimeValidator implements ValidatorConstraintInterface {
     }
 }
 
-// export function filterEventsUserRequest(events: any, query: QueryEvents) {
-//     //hacer validacion de q array es un array de objetos
-
-//     const arrayEventsRequested = [];
-//     const startDate = new Date(query.startDate);
-//     const endDate = new Date(query.endDate);
-
-//     for (let index = 0; index < events.length; index++) {
-//         const event = events[index];
-//         const dateEvent = new Date(event.date);
-
-//         if (event.type === query.type && dateEvent >= startDate && dateEvent <= endDate) {
-//             arrayEventsRequested.push(event);
-//         }
-//     }
-
-//     return arrayEventsRequested;
-// }
-
 export function filterEventsRadius(events: any, userLat: string, userLon: string) {
-    const arrayFilterEventsRadius = [];
-    
     const radiusParse = parseFloat(dotenvOptions.RADIUS.toString());
     const latUserParse = parseFloat(userLat.toString());
     const lonUserParse = parseFloat(userLon.toString());
 
-    for (let index = 0; index < events.length; index++) {
-        const event = events[index];
+    return events.filter((event : any) => {
         const lat = event.location.lat;
         const lon = event.location.lon;
 
@@ -46,13 +23,8 @@ export function filterEventsRadius(events: any, userLat: string, userLon: string
         const thirdEquation = firstEquation + secondEquation;
         const fourthEquation = Math.sqrt(thirdEquation);
 
-        if (fourthEquation <= radiusParse) {
-            console.log("dentro del if");
-            arrayFilterEventsRadius.push(event);
-        }
-    }
-
-    return arrayFilterEventsRadius;
+        return fourthEquation <= radiusParse
+    })
 }
 
 export function isString(type: any) {

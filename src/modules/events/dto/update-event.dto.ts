@@ -1,14 +1,13 @@
-import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateString } from 'class-validator';
+import { IsOptional, IsString, IsNotEmpty, IsArray, IsNumber, Matches, IsDateString, IsDate } from 'class-validator';
 import { TypeEvents } from 'src/utils/enum';
 
 export class UpdateEventDto {
-  //id del evento q se pasa por body
+  @IsString()
+  id?: string;
 
-  @IsOptional()
   @IsString()
   name?: string;
 
-  @IsOptional()
   @IsString()
   @Matches(/^(Deportivo|Artistico|Gastronomico)$/i, { message: 'El tipo de evento debe ser uno de los siguientes: Deportivo, Artistico, Gastronomico' })
   type?: TypeEvents;
@@ -21,8 +20,13 @@ export class UpdateEventDto {
   @Matches(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/, { message: 'El formato de hora debe ser HH:MM (24 horas)' })
   time?: string;
 
-  @IsOptional()
-  location?: { lat: string; log: string };
+  @IsNumber()
+  @IsNotEmpty()
+  lat: number
+
+  @IsNumber()
+  @IsNotEmpty()
+  lon: number
 
   @IsOptional()
   @IsArray()
@@ -37,7 +41,15 @@ export class UpdateEventDto {
   @IsNumber()
   amount?: number;
 
-  @IsOptional()
+  @IsNotEmpty()
+  @IsDate()
+  createdAt?: Date;
+
   @IsString()
-  comment?: string;
+  @IsNotEmpty()
+  capacity: string
+
+  @IsString()
+  @IsNotEmpty()
+  addres: string
 }

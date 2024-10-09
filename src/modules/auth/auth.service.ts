@@ -1,17 +1,16 @@
-import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthLoginDto } from './dto/auth.login.dto';
 import { PrismaService } from '../../prisma.service';
-import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/auth.register.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) { }
-
 
   async signUp(createUserDto: CreateUserDto) {
     try {
@@ -21,7 +20,7 @@ export class AuthService {
       if (existingUserEmail) {
         errors.push('Email already in use');
       }
-  
+
       const existingUserCuit = await this.prisma.user.findUnique({ where: { cuit: createUserDto.cuit } });
       if (existingUserCuit) {
         errors.push('CUIT already in use');
@@ -30,11 +29,12 @@ export class AuthService {
       if (errors.length > 0) {
         throw new ConflictException(errors);
       }
-  
+
       const passwordHash: string = await bcrypt.hash(createUserDto.password, 10);
 
       const newUser = await this.prisma.user.create({
         data: {
+          // id: uuidv4(),
           name: createUserDto.name,
           lastName: createUserDto.lastName,
           email: createUserDto.email,
@@ -44,10 +44,8 @@ export class AuthService {
           state: createUserDto.state || true,
         },
       });
+      return { message: `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!` };
 
-  
-      return {message : `Usuario creado con éxito. ¡Bienvenido, ${newUser.name}!`};
-      
     } catch (error) {
       if (error instanceof ConflictException) {
         throw error;
@@ -86,6 +84,7 @@ export class AuthService {
 
       return {
         profile: {
+          id: user.id,
           name: user.name,
           lastName: user.lastName,
           email: user.email,

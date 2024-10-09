@@ -1,14 +1,14 @@
-import { Controller,Post, Body, HttpCode, HttpStatus, HttpException, Res } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthLoginDto } from './dto/auth.login.dto';
 import { CreateUserDto } from './dto/auth.register.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('register')
-  async create(@Res({ passthrough: true}) res: Response, @Body() createUserDto: CreateUserDto) {
+  async create(@Res({ passthrough: true }) res: Response, @Body() createUserDto: CreateUserDto) {
     return await this.authService.signUp(createUserDto);
   }
 
