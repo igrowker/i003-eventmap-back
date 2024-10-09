@@ -9,6 +9,8 @@ import * as bcrypt from 'bcrypt';
 import * as nodemailer from 'nodemailer';
 import * as fs from 'fs';
 import * as path from 'path';
+import { SubscribeDto } from './dto/subscribe.dto';
+import { EventsService } from '../events/events.service';
 
 @Injectable()
 export class MailService {
@@ -16,7 +18,8 @@ export class MailService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly eventsService: EventsService
   ) {
     this.transporter = createTransporter();
   }
@@ -36,6 +39,44 @@ export class MailService {
     };
 
     try {
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.error('Error al enviar correo electrónico:', error);
+      throw new Error('Error enviando el correo');
+    }
+  }
+
+  async sendNotificationsToEmail(to: string, events: any) {
+    try {
+    // const resetLink = `${process.env.FRONTEND_URL}/restore-password/reset-password?token=${}`;
+    const templatePath = path.join(process.cwd(), 'src', 'utils', 'notificationTemplate.html');
+
+    let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
+    // emailTemplate = emailTemplate.replace('{{resetLink}}', resetLink);
+
+    const eventsHighAmount = events.filter((event : any) => event.amount >= 0.8);
+
+    // Genera el HTML de la lista de eventos
+    const eventList = eventsHighAmount.map((event : any) => `
+    <tr>
+      <td>${event.name}</td>
+      <td>${event.date}</td>
+      <td>${event.time}</td>
+      <td>${event.addres}</td>
+    </tr>
+  `).join('');
+
+    // Busca y reemplaza el <tbody> con la nueva lista de eventos
+    const tbodyRegex = /<tbody>(.*?)<\/tbody>/s;
+    emailTemplate = emailTemplate.replace(tbodyRegex, `<tbody>${eventList}</tbody>`);
+
+    const mailOptions = {
+      from: '"Event Map" <no-reply@eventmap.com>',
+      to,
+      subject: 'Eventos mas esperados',
+      html: emailTemplate,
+    };
+
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
       console.error('Error al enviar correo electrónico:', error);
@@ -103,4 +144,23 @@ export class MailService {
       throw new InternalServerErrorException('Ocurrió un error al procesar la solicitud de restablecimiento de contraseña.');
     }
   }
+
+  async subscribe(sub: SubscribeDto) {
+    const { email } = sub;
+
+    //xq el modulo de mail necesita del service de cloudinary si getEvents no usa cloudinary ?, osea usa las url generadas por cloudinary pero no crea ni elimina nada
+    try {
+      //guardarlo en una tabla de emails (esto capaz implementarlo a futuro)s
+
+      const events = await this.eventsService.getEventsWhitoutFilter();
+
+      await this.sendNotificationsToEmail(email, events);
+
+    } catch (error) {
+      console.log(error);
+    }
+
+    return true;
+  }
+
 }
