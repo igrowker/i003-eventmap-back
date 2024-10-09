@@ -3,7 +3,6 @@ import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import {filterEventsRadius} from 'src/utils/utils';
-// import { deleteImgCloudinary, uploadFilesToCloudinary } from 'src/utils/utils.cloudinary';
 import { QueryEventsDto } from './dto/query-event.dto';
 import {CloudinaryService} from '../cloudinary/cloudinary.service'
 
