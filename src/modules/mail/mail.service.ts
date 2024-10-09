@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { createTransporter } from './config/nodemailer.config';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { PrismaService } from '../../prisma.service';
@@ -10,20 +11,14 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 @Injectable()
-export class MailService { // pasar congig de nodemailer a una carpeta config
+export class MailService {
   private transporter: nodemailer.Transporter;
 
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService
   ) {
-    this.transporter = nodemailer.createTransport({
-      service: 'Gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
+    this.transporter = createTransporter();
   }
 
   async sendResetPasswordEmail(to: string, token: string) {
@@ -34,7 +29,7 @@ export class MailService { // pasar congig de nodemailer a una carpeta config
     emailTemplate = emailTemplate.replace('{{resetLink}}', resetLink);
 
     const mailOptions = {
-      from: 'EventMap',
+      from: '"Event Map" <no-reply@eventmap.com>',
       to,
       subject: 'Recuperación de contraseña',
       html: emailTemplate,

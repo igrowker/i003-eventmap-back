@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { createRateLimiter } from './middlewares/rateLimit/rate-limiter.factory';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EventsModule } from './modules/events/events.module';
@@ -7,7 +8,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
 import dotenvOptions from './config/dotenvConfig';
-import { createRateLimiter } from './middlewares/rateLimit/rate-limiter.factory';
 
 @Module({
   imports: [
