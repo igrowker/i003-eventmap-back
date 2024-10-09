@@ -32,9 +32,6 @@ COPY --from=builder /app/deploy.sh ./deploy.sh
 # Asegurarse de que el script sea ejecutable
 RUN chmod 755 deploy.sh
 
-# Exponer el puerto 80, que es el que espera Azure App Service
-EXPOSE 80
-
 # Ejecutar Prisma generate en el contenedor de producción
 RUN npx prisma generate --schema ./prisma/schema.prisma
 
