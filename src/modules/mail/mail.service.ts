@@ -10,7 +10,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 @Injectable()
-export class MailService {
+export class MailService { // pasar congig de nodemailer a una carpeta config
   private transporter: nodemailer.Transporter;
 
   constructor(
@@ -50,24 +50,17 @@ export class MailService {
 
   async requestPasswordReset(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
-    console.log('Correo electrónico recibido para el restablecimiento de contraseña:', email);
 
     try {
       const user = await this.prisma.user.findUnique({ where: { email } });
 
       if (!user) {
-        console.log('Usuario no encontrado para el correo:', email);
         throw new NotFoundException('Usuario no encontrado');
       }
 
-      console.log('Usuario encontrado:', user);
-
       const token = this.jwtService.sign({ userId: user.id }, { expiresIn: '2h' });
-      console.log('Token generado:', token);
 
-      // No necesitas usar `this.mailService`, ya estás en el mismo servicio
       await this.sendResetPasswordEmail(user.email, token);
-      console.log('Correo de recuperación enviado a:', user.email);
 
       return { message: 'Correo de recuperación enviado' };
     } catch (error) {

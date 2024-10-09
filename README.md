@@ -1,5 +1,21 @@
 ![EventMap](https://i.ibb.co/0ZrrLLc/Captura-de-pantalla-2024-10-04-090452.png)
 
+<div style="text-align: center;">
+  <h2>Integrantes del proyecto BackEnd</h2>
+</div>
+
+<div style="text-align: center; padding: 20px;">
+  <a href="https://www.linkedin.com/in/ulises-rodriguez-desarrolloweb-fullstack/" target="_blank" style="margin: 10px;">
+    <img src="https://img.shields.io/badge/Ulises Rodriguez%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Ulises Rodriguez Badge">
+  </a>
+  <a href="http://linkedin.com/in/santiagobalbarrey" target="_blank" style="margin: 10px;">
+    <img src="https://img.shields.io/badge/Santiago Balbarrey%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
+  </a>
+  <a href="https://github.com/octa-quintero" target="_blank" style="margin: 10px;">
+    <img src="https://img.shields.io/badge/Octavio Quintero-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Octavio Quintero Badge">
+  </a>
+</div>
+
 ## Tecnologías utilizadas
 
 <div style="text-align: center; padding: 20px;">
@@ -44,9 +60,8 @@
 - Descarga e instala PostgreSQL en tu máquina local desde el siguiente enlace:  
   [PostgreSQL Download](https://www.postgresql.org/download/)
 
-- Descarga e instala Node en tu máquina local desde el siguiente enlace:
+- Descarga e instala Node en tu máquina local desde el siguiente enlace:    
   [NodeJS Download](https://nodejs.org/en) --version 20.3.1
-
 
 
 ### Paso 2: Instalar Dependencias
@@ -164,25 +179,5 @@ i003-eventmap-back/
 ├── tsconfig.build.json         # Configuración específica de TypeScript para la construcción
 └── tsconfig.json               # Configuración principal de TypeScript
 ```
-
-
-<div style="text-align: center;">
-  <h2>Integrantes del proyecto BackEnd</h2>
-</div>
-
-<div style="text-align: center; padding: 20px;">
-  <a href="https://www.linkedin.com/in/ulises-rodriguez-desarrolloweb-fullstack/" target="_blank" style="margin: 10px;">
-    <img src="https://img.shields.io/badge/Ulises Rodriguez%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Ulises Rodriguez Badge">
-  </a>
-  <a href="http://linkedin.com/in/santiagobalbarrey" target="_blank" style="margin: 10px;">
-    <img src="https://img.shields.io/badge/Santiago Balbarrey%20-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Santiago Balbarrey Badge">
-  </a>
-  <a href="https://github.com/octa-quintero" target="_blank" style="margin: 10px;">
-    <img src="https://img.shields.io/badge/Octavio Quintero-stackedit?style=for-the-badge&logo=rocket&logoColor=%23000000&logoSize=auto&color=%235bca1b" alt="Octavio Quintero Badge">
-  </a>
-</div>
-
-
-
 
 ![EventMap](https://i.ibb.co/dtCqRzD/4688bb3888c033b886921ae5c59216b5.png)
