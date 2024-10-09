@@ -1,9 +1,7 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { ValidatorConstraintInterface } from "class-validator";
-// import { QueryEvents, UserInfo } from "./types";
 import dotenvOptions from '../config/dotenvConfig';
 import cloudinary from "src/config/cloudinary.config";
-import { resolve } from "path";
 import { ImgExtension } from "./enum";
 
 export class TimeValidator implements ValidatorConstraintInterface {
@@ -12,25 +10,6 @@ export class TimeValidator implements ValidatorConstraintInterface {
         return timeRegex.test(value as string);
     }
 }
-
-// export function filterEventsUserRequest(events: any, query: QueryEvents) {
-//     //hacer validacion de q array es un array de objetos
-
-//     const arrayEventsRequested = [];
-//     const startDate = new Date(query.startDate);
-//     const endDate = new Date(query.endDate);
-
-//     for (let index = 0; index < events.length; index++) {
-//         const event = events[index];
-//         const dateEvent = new Date(event.date);
-
-//         if (event.type === query.type && dateEvent >= startDate && dateEvent <= endDate) {
-//             arrayEventsRequested.push(event);
-//         }
-//     }
-
-//     return arrayEventsRequested;
-// }
 
 export function filterEventsRadius(events: any, userLat: string, userLon: string) {
     const arrayFilterEventsRadius = [];

@@ -91,6 +91,7 @@ export class AuthService {
 
       return {
         profile: {
+          id: user.id,
           name: user.name,
           lastName: user.lastName,
           email: user.email,
