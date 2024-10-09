@@ -1,5 +1,7 @@
 ![EventMap](https://i.ibb.co/0ZrrLLc/Captura-de-pantalla-2024-10-04-090452.png)
 
+[![Deploy to Prod](https://github.com/igrowker/i003-eventmap-back/actions/workflows/ci-deploy-to-prod.yml/badge.svg)](https://github.com/igrowker/i003-eventmap-back/actions/workflows/ci-deploy-to-prod.yml)
+
 <div style="text-align: center;">
   <h2>Integrantes del proyecto BackEnd</h2>
 </div>
