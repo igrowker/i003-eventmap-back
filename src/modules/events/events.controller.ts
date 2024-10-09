@@ -14,11 +14,6 @@ import { userSelf } from 'src/guards/auth/userSelf.guard';
 export class EventsController {
     constructor(private eventsService: EventsService) { }
 
-    // @Post("/crearEvents")
-    // async crearEventos() {
-    //     return await this.eventsService.crearEventos();
-    // }
-
     @Get('/all')
     async getAllEventsWithoutFilter() {
         return await this.eventsService.getEventsWhitoutFilter();
@@ -35,10 +30,11 @@ export class EventsController {
     }
 
     @Roles(Role.Admin, Role.Company)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @Post('/')
+    @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
+    @Post('/:id')
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
+        // @Param('id') id : string,
         @Body() event: CreateEventDto,
         @UploadedFiles() files: Array<Express.Multer.File>
     ) {

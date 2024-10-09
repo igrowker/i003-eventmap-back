@@ -3,7 +3,6 @@ import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
 import {filterEventsRadius} from 'src/utils/utils';
-// import { deleteImgCloudinary, uploadFilesToCloudinary } from 'src/utils/utils.cloudinary';
 import { QueryEventsDto } from './dto/query-event.dto';
 import {CloudinaryService} from '../cloudinary/cloudinary.service'
 
@@ -12,28 +11,6 @@ import {CloudinaryService} from '../cloudinary/cloudinary.service'
 export class EventsService {
 
   constructor(private cloudinaryService : CloudinaryService,private prisma: PrismaService) { }
-
-  // async crearEventos() {
-  //   for (let index = 0; index < events.length; index++) {
-  //     const element = events[index];
-
-  //     await this.prisma.event.create({
-  //       data: {
-  //         userId: element.userId,
-  //         name: element.name,
-  //         type: element.type,
-  //         date: element.date,
-  //         time: element.time,
-  //         location: generateRandomCoordinates((-34.605500), (-58.384500), 5),
-  //         photos: element.photos,
-  //         description: element.description,
-  //         amount: element.amount,
-  //         createdAt: element.createdAt
-  //       }
-  //     });
-  //   }
-  //   return true
-  // }
 
   async getEventsWhitoutFilter() {
     try {
