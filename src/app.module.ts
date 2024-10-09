@@ -25,18 +25,18 @@ import dotenvOptions from './config/dotenvConfig';
       global: true,
       signOptions: { expiresIn: dotenvOptions.JWT_TOKEN_EXPIRED },
       secret: dotenvOptions.JWT_SECRET,
-      global: true,
-      signOptions: { expiresIn: dotenvOptions.JWT_TOKEN_EXPIRED },
-      secret: dotenvOptions.JWT_SECRET,
     }),
     SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
+
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // // (Aplica rate limit para 'auth/register' (5 peticiones cada 30 minutos))
+    consumer.apply(MetricsMiddleware).forRoutes('*'); 
+  
+    // (Aplica rate limit para 'auth/register' (5 peticiones cada 30 minutos))
     // consumer
     //   .apply(createRateLimiter({ windowMs: 30 * 60 * 1000, max: 5 }))
     //   .forRoutes('auth/register');
@@ -44,11 +44,5 @@ export class AppModule {
     // consumer
     //   .apply(createRateLimiter({ windowMs: 15 * 60 * 1000, max: 10 }))
     //   .forRoutes('auth/login');
-  }
-}
-
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(MetricsMiddleware).forRoutes('*');
   }
 }
