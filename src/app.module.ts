@@ -28,13 +28,13 @@ import dotenvOptions from './config/dotenvConfig';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    // // (Aplica rate limit para 'auth/register' (5 peticiones cada 30 minutos))
-    // consumer
-    //   .apply(createRateLimiter({ windowMs: 30 * 60 * 1000, max: 5 }))
-    //   .forRoutes('auth/register');
+    // (Aplica rate limit para 'auth/register' (5 peticiones cada 30 minutos))
+  //   consumer
+  //     .apply(createRateLimiter({ windowMs: 30 * 60 * 1000, max: 5 }))
+  //     .forRoutes('auth/register');
 
-    // consumer
-    //   .apply(createRateLimiter({ windowMs: 15 * 60 * 1000, max: 10 }))
-    //   .forRoutes('auth/login');
+  //   consumer
+  //     .apply(createRateLimiter({ windowMs: 15 * 60 * 1000, max: 10 }))
+  //     .forRoutes('auth/login');
   }
 }
