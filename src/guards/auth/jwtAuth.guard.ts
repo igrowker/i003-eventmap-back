@@ -17,7 +17,6 @@ export class JwtAuthGuard implements CanActivate {
 
     const tokenBearer = authHeader.split(' ');
 
-
     if (tokenBearer.length !== 2 || tokenBearer[0] !== 'Bearer') {
       throw new UnauthorizedException('Formato de token incorrecto.');
     }
