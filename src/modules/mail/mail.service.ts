@@ -48,34 +48,42 @@ export class MailService {
 
   async sendNotificationsToEmail(to: string, events: any) {
     try {
-    // const resetLink = `${process.env.FRONTEND_URL}/restore-password/reset-password?token=${}`;
-    const templatePath = path.join(process.cwd(), 'src', 'utils', 'notificationTemplate.html');
+      // const resetLink = `${process.env.FRONTEND_URL}/restore-password/reset-password?token=${}`;
+      const templatePath = path.join(process.cwd(), 'src', 'utils', 'notificationTemplate.html');
 
-    let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
-    // emailTemplate = emailTemplate.replace('{{resetLink}}', resetLink);
+      let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
 
-    const eventsHighAmount = events.filter((event : any) => event.amount >= 0.8);
+      const eventsHighAmount = events.filter((event: any) => event.amount >= 0.8);
 
-    // Genera el HTML de la lista de eventos
-    const eventList = eventsHighAmount.map((event : any) => `
-    <tr>
-      <td>${event.name}</td>
-      <td>${event.date}</td>
-      <td>${event.time}</td>
-      <td>${event.addres}</td>
-    </tr>
-  `).join('');
+      const aux = eventsHighAmount.slice(0, 3);
 
-    // Busca y reemplaza el <tbody> con la nueva lista de eventos
-    const tbodyRegex = /<tbody>(.*?)<\/tbody>/s;
-    emailTemplate = emailTemplate.replace(tbodyRegex, `<tbody>${eventList}</tbody>`);
+      // Busca y reemplaza el <tbody> con la nueva lista de eventos
+      const spanRegex = /<span id="eventTitleOne">(.*?)<\/span>/s;
 
-    const mailOptions = {
-      from: '"Event Map" <no-reply@eventmap.com>',
-      to,
-      subject: 'Eventos mas esperados',
-      html: emailTemplate,
-    };
+      //       const htmlString = `
+      //   <span id="eventTitleOne">
+      //     How to pair pieces of clothing&nbsp;correctly
+      //   </span>
+      // `;
+
+      //       const match = htmlString.match(spanRegex);
+
+      //       if (match) {
+      //         console.log("Found span:", match[1]); // Access captured content (inner text)
+      //       } else {
+      //         console.log("Span not found");
+      //       }
+
+
+
+      emailTemplate = emailTemplate.replace(spanRegex, `<span>${aux[0].name}</span>`);
+
+      const mailOptions = {
+        from: '"Event Map" <no-reply@eventmap.com>',
+        to,
+        subject: 'Eventos mas esperados',
+        html: emailTemplate,
+      };
 
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
@@ -148,7 +156,6 @@ export class MailService {
   async subscribe(sub: SubscribeDto) {
     const { email } = sub;
 
-    //xq el modulo de mail necesita del service de cloudinary si getEvents no usa cloudinary ?, osea usa las url generadas por cloudinary pero no crea ni elimina nada
     try {
       //guardarlo en una tabla de emails (esto capaz implementarlo a futuro)s
 
