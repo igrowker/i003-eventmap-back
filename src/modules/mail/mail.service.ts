@@ -11,6 +11,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { SubscribeDto } from './dto/subscribe.dto';
 import { EventsService } from '../events/events.service';
+import {Response} from 'express';
+import dotenvOptions from 'src/config/dotenvConfig';
 
 @Injectable()
 export class MailService {
@@ -118,8 +120,6 @@ export class MailService {
       console.error('Error al enviar el correo:', error);
     }
   }
-  
-  
 
   async requestPasswordReset(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
@@ -155,7 +155,7 @@ export class MailService {
     }
   }
 
-  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto, response : Response) {
     try {
       const decodedUser = await this.verifyToken(token);
 
@@ -176,6 +176,8 @@ export class MailService {
         data: { password: hashedPassword },
       });
 
+      response.redirect(`${dotenvOptions.FRONTEND_URL}login`); //preguntar a cesar no seria a login restore-password/reset-password ?
+
       return { message: 'Contraseña actualizada correctamente.' };
     } catch (error) {
       throw new InternalServerErrorException('Ocurrió un error al procesar la solicitud de restablecimiento de contraseña.');
@@ -185,7 +187,6 @@ export class MailService {
   async subscribe(sub: SubscribeDto) {
     const { email } = sub;
 
-    //xq el modulo de mail necesita del service de cloudinary si getEvents no usa cloudinary ?, osea usa las url generadas por cloudinary pero no crea ni elimina nada
     try {
       //guardarlo en una tabla de emails (esto capaz implementarlo a futuro)s
 
