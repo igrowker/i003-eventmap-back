@@ -11,6 +11,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { SubscribeDto } from './dto/subscribe.dto';
 import { EventsService } from '../events/events.service';
+import {Response} from 'express';
+import dotenvOptions from 'src/config/dotenvConfig';
 
 @Injectable()
 export class MailService {
@@ -48,47 +50,74 @@ export class MailService {
 
   async sendNotificationsToEmail(to: string, events: any) {
     try {
-      // const resetLink = `${process.env.FRONTEND_URL}/restore-password/reset-password?token=${}`;
       const templatePath = path.join(process.cwd(), 'src', 'utils', 'notificationTemplate.html');
-
       let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
+  
+      // Filtrar los eventos y tomar los tres primeros
+      const eventsHighAmount = events.filter((event: any) => event.amount >= 0.8).slice(0, 3);
+  
+      // Genera el HTML de la lista de eventos
+      const eventList = eventsHighAmount.map((event: any) => `
+<tr>
+<td style="display: inline-block; width: 80%; vertical-align: top; background-color: #f9f9f9; border-radius: 10px; margin-bottom:20px;">
+    <!-- Texto a la izquierda -->
+    <table cellpadding="0" cellspacing="0" align="left" class="es-left" role="none" style="width:48%; float:left; padding-right:2%;">
+      <tr>
+        <td align="left">
+          <table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+            <tr>
+              <td align="left" style="padding-bottom:0px">
+                <h3 class="es-m-txt-l" style="color:#333333;font-size:24px;font-weight:bold;">${event.name}</h3>
+              </td>
+            </tr>
+            <tr>
+              <td align="left" style="padding-bottom:0px">
+                <p style="color:#666666;font-size:16px">Fecha: ${event.date} | Tipo: ${event.type} | Cantidad: ${event.amount}</p>
+              </td>
+            </tr>
+            <tr>
+              <td align="left" style="padding-bottom:0px">
+                <p style="color:#666666;font-size:14px">${event.description}</p>
+              </td>
+            </tr>
+            <tr>
+              <td align="left" style="padding-top:10px">
+                <a href="https://i003-eventmap-front.vercel.app/events/${event.id}" target="_blank" style="color:#ffffff;font-size:16px;padding:10px 20px;background-color:#5C68E2;border-radius:5px;text-decoration:none;display:inline-block;">Ver más</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    
+    <!-- Imagen a la derecha -->
+    <table cellspacing="0" align="right" class="es-right" role="none" style="width:48%; float:right;">
+      <tr>
+        <td align="center" style="width:100%;border-radius:8px;overflow:hidden;">
+          <img src="${event.photos[0]}" alt="${event.name}" width="60%" style="display:block;border:0;outline:none;text-decoration:none;border-radius:8px;">
+        </td>
+      </tr>
+    </table>
+  </td>
+</tr>
 
-      const eventsHighAmount = events.filter((event: any) => event.amount >= 0.8);
-
-      const aux = eventsHighAmount.slice(0, 3);
-
+      `).join('');
+  
       // Busca y reemplaza el <tbody> con la nueva lista de eventos
-      const spanRegex = /<span id="eventTitleOne">(.*?)<\/span>/s;
-
-      //       const htmlString = `
-      //   <span id="eventTitleOne">
-      //     How to pair pieces of clothing&nbsp;correctly
-      //   </span>
-      // `;
-
-      //       const match = htmlString.match(spanRegex);
-
-      //       if (match) {
-      //         console.log("Found span:", match[1]); // Access captured content (inner text)
-      //       } else {
-      //         console.log("Span not found");
-      //       }
-
-
-
-      emailTemplate = emailTemplate.replace(spanRegex, `<span>${aux[0].name}</span>`);
-
+      const tbodyRegex = /<tbody id="eventList">(.*?)<\/tbody>/s;
+      emailTemplate = emailTemplate.replace(tbodyRegex, `<tbody id="eventList">${eventList}</tbody>`);
+  
       const mailOptions = {
-        from: '"Event Map" <no-reply@eventmap.com>',
+        from: '"Event Map" <your-email@example.com>',
         to,
-        subject: 'Eventos mas esperados',
+        subject: 'Notificaciones de Eventos',
         html: emailTemplate,
       };
-
+  
+      // Enviar el correo
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
-      console.error('Error al enviar correo electrónico:', error);
-      throw new Error('Error enviando el correo');
+      console.error('Error al enviar el correo:', error);
     }
   }
 
@@ -126,7 +155,7 @@ export class MailService {
     }
   }
 
-  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto, response : Response) {
     try {
       const decodedUser = await this.verifyToken(token);
 
@@ -146,6 +175,8 @@ export class MailService {
         where: { id: user.id },
         data: { password: hashedPassword },
       });
+
+      response.redirect(`${dotenvOptions.FRONTEND_URL}login`); //no seria a login restore-password/reset-password ?
 
       return { message: 'Contraseña actualizada correctamente.' };
     } catch (error) {
