@@ -18,10 +18,14 @@ const EMAIL_USER = process.env.EMAIL_USER;
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;
 const MAX_SIZE_IMAGE = process.env.MAX_SIZE_IMAGE;
 const DEFAULT_IMG_EVENT_CLOUDINARY = process.env.DEFAULT_IMG_EVENT_CLOUDINARY;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 const dotenvOptions = {
     DATABASE_URL_LOCAL,
     PORT,
+    ADMIN_EMAIL,
+    ADMIN_PASSWORD,
     RADIUS,
     JWT_SECRET,
     JWT_TOKEN_EXPIRED,
