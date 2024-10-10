@@ -176,7 +176,7 @@ export class MailService {
         data: { password: hashedPassword },
       });
 
-      response.redirect(`${dotenvOptions.FRONTEND_URL}login`); //no seria a login restore-password/reset-password ?
+      response.redirect(`${dotenvOptions.FRONTEND_URL}login`); //preguntar a cesar no seria a login restore-password/reset-password ?
 
       return { message: 'Contraseña actualizada correctamente.' };
     } catch (error) {
