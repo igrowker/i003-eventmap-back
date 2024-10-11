@@ -2,38 +2,15 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import { deleteImgCloudinary, filterEventsRadius, uploadFilesToCloudinary } from 'src/utils/utils';
-import { events, generateRandomCoordinates } from './events';
+import {filterEventsRadius} from 'src/utils/utils';
 import { QueryEventsDto } from './dto/query-event.dto';
-import { error } from 'console';
+import {CloudinaryService} from '../cloudinary/cloudinary.service'
 
 
 @Injectable()
 export class EventsService {
 
-  constructor(private prisma: PrismaService) { }
-
-  // async crearEventos() {
-  //   for (let index = 0; index < events.length; index++) {
-  //     const element = events[index];
-
-  //     await this.prisma.event.create({
-  //       data: {
-  //         userId: element.userId,
-  //         name: element.name,
-  //         type: element.type,
-  //         date: element.date,
-  //         time: element.time,
-  //         location: generateRandomCoordinates((-34.605500), (-58.384500), 5),
-  //         photos: element.photos,
-  //         description: element.description,
-  //         amount: element.amount,
-  //         createdAt: element.createdAt
-  //       }
-  //     });
-  //   }
-  //   return true
-  // }
+  constructor(private cloudinaryService : CloudinaryService,private prisma: PrismaService) { }
 
   async getEventsWhitoutFilter() {
     try {
@@ -75,7 +52,7 @@ export class EventsService {
 
   async createEvent(event: CreateEventDto, files: Array<Express.Multer.File>) {
     try {
-      const photoUrls = await uploadFilesToCloudinary(files); //dentro de esto hace un condicional q si el array de files llega vacio asignas por defecto al array de imgs la imagen de eventos por defecto
+      const photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(files);
 
       event.photos = photoUrls;
 
@@ -95,7 +72,6 @@ export class EventsService {
       });
 
       if (aux === null || aux === undefined) {
-        console.log("entro");
         return new HttpException('Alguno de los datos ingresados no es correcto', HttpStatus.BAD_REQUEST);
       }
 
@@ -115,13 +91,13 @@ export class EventsService {
         }
       )
 
-      const response = await deleteImgCloudinary(findEvent.photos);
+      const response = await this.cloudinaryService.deleteImgCloudinary(findEvent.photos);
 
       if (!response) {
         return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
-      event.photos = await uploadFilesToCloudinary(files);
+      event.photos = await this.cloudinaryService.uploadFilesToCloudinary(files);
 
       const { lat, lon, ...eventInfo } = event;
 
@@ -155,7 +131,7 @@ export class EventsService {
     }
   }
 
-  async updateEventStatus(id: string, updateData: Partial<UpdateEventDto>) { // modificar la logica
+  async updateEventStatus(id: string, updateData: Partial<UpdateEventDto>) {
     try {
       return await this.prisma.event.update({
         where: { id },
@@ -173,7 +149,7 @@ export class EventsService {
         { where: { id: eventId } }
       )
 
-      const response = await deleteImgCloudinary(findEvent.photos);
+      const response = await this.cloudinaryService.deleteImgCloudinary(findEvent.photos);
 
       if (!response) {
         return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
