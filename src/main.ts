@@ -13,7 +13,7 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors(); // conexiones
+  app.enableCors();
   app.use(cookieParser());
   app.use(bodyParser.json());
   app.use(new LoggerMiddleware().use);
@@ -35,6 +35,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("docs", app, document);
 
-  await app.listen(dotenvOptions.PORT, '0.0.0.0');
+  await app.listen(dotenvOptions.PORT);
 }
 bootstrap();

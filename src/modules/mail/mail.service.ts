@@ -82,7 +82,7 @@ export class MailService {
             </tr>
             <tr>
               <td align="left" style="padding-top:10px">
-                <a href="https://i003-eventmap-front.vercel.app/events/${event.id}" target="_blank" style="color:#ffffff;font-size:16px;padding:10px 20px;background-color:#5C68E2;border-radius:5px;text-decoration:none;display:inline-block;">Ver más</a>
+                <a href="${dotenvOptions.FRONTEND_URL}/events/${event.id}" target="_blank" style="color:#ffffff;font-size:16px;padding:10px 20px;background-color:#5C68E2;border-radius:5px;text-decoration:none;display:inline-block;">Ver más</a>
               </td>
             </tr>
           </table>
