@@ -53,13 +53,13 @@ export class EventsController {
                 amount: { type: 'number', example: 0.5 },
                 capacity: { type: 'string', example: '100' },
                 addres: { type: 'string', example: 'los laureles' },
-                // files: {
-                //     type: 'array',
-                //     items: {
-                //         type: 'string',
-                //         format: 'binary'
-                //     }
-                // }
+                files: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        format: 'binary'
+                    }
+                }
             }
         }
     })
