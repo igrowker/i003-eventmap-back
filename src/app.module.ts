@@ -8,7 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
 import { SeedModule } from './seed/seed.module';
-import { MetricsModule } from 'src/metrics/metrics.module';
+import { MetricsModule } from './metrics/metrics.module';
 import dotenvOptions from './config/dotenvConfig';
 
 @Module({
