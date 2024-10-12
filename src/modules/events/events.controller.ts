@@ -34,7 +34,7 @@ export class EventsController {
     @Post('/:id')
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
-        // @Param('id') id : string,
+        // @Param('id') id : string ,
         @Body() event: CreateEventDto,
         @UploadedFiles() files?: Array<Express.Multer.File>
     ) {
