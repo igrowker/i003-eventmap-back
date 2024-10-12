@@ -51,21 +51,18 @@ export class EventsService {
     }
   }
 
-  async createEvent(event: CreateEventDto, files: Array<Express.Multer.File>) {
+  async createEvent(event: CreateEventDto, filesArray: Array<Express.Multer.File>) {
     try {
-      console.log(files);
+      const { lat, lon, files, ...eventInfo } = event;
+
       let photoUrls: string[] = [];
 
-      if (!files || files.length === 0) {
+      if (!filesArray || filesArray.length === 0) {
         photoUrls = [dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY];
       }
       else {
-        photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(files);
+        photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(filesArray);
       }
-
-      event.photos = photoUrls;
-
-      const { lat, lon, ...eventInfo } = event;
 
       const aux = await this.prisma.event.create({
         data: {
@@ -74,6 +71,7 @@ export class EventsService {
             lat,
             lon,
           },
+          photos : photoUrls,
           createdAt: event.createdAt || new Date()
         }
       }).catch((error) => {
@@ -90,8 +88,10 @@ export class EventsService {
     }
   }
 
-  async updateEvent(userId: string, event: UpdateEventDto, files: Express.Multer.File[]) {
+  async updateEvent(userId: string, event: UpdateEventDto, filesArray: Express.Multer.File[]) {
     try {
+      const { lat, lon, files, ...eventInfo } = event;
+
       const findEvent = await this.prisma.event.findUnique(
         {
           where: {
@@ -100,35 +100,29 @@ export class EventsService {
         }
       )
 
-      const response = await this.cloudinaryService.deleteImgCloudinary(findEvent.photos);
+      let response = true;
+      let photoUrls: string[] = findEvent.photos;
 
+      if (!filesArray || filesArray.length !== 0) {
+        console.log("entro a borrar xq llegaron nuevas imagenes");
+        response = await this.cloudinaryService.deleteImgCloudinary(findEvent.photos);
+        photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(filesArray);
+      }
+      
       if (!response) {
         return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
       }
-
-      event.photos = await this.cloudinaryService.uploadFilesToCloudinary(files);
-
-      const { lat, lon, ...eventInfo } = event;
 
       const eventUpdated = await this.prisma.event.update({
         where: { id: event.id, userId: userId },
         data: {
           ...eventInfo,
-          // id: event.id,
-          // name: event.name,
-          // type: event.type,
-          // date: event.date,
-          // time: event.time,
           location: {
             lat: event.lat,
             lon: event.lon
           },
+          photos : photoUrls,
           createdAt: event.createdAt || new Date()
-          // location: event.location ? { lat: event.location.lat, log: event.location.log } : undefined,
-          // createdAt: event.createdAt,
-          // photos: event.photos,
-          // description: event.description,
-          // amount: event.amount,
         },
       }).catch((error) => {
         return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);

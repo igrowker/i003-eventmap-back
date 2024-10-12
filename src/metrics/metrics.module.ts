@@ -1,9 +1,8 @@
-// metrics.module.ts
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MetricsController } from './metrics.controller';
-import { MetricsService } from './metrics.service';
-import { MetricsMiddleware } from '../middlewares/metrics.middleware';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { MetricsService } from './metrics.service';
+import { MetricsMiddleware } from 'src/middlewares/metrics.middleware';
 import {
   httpRequestCounterProvider,
   httpRequestDurationHistogramProvider,
