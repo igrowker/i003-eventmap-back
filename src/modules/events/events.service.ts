@@ -58,7 +58,6 @@ export class EventsService {
       let photoUrls: string[] = [];
 
       if (!filesArray || filesArray.length === 0) {
-        console.log("entro");
         photoUrls = [dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY];
       }
       else {
@@ -89,8 +88,10 @@ export class EventsService {
     }
   }
 
-  async updateEvent(userId: string, event: UpdateEventDto, files: Express.Multer.File[]) {
+  async updateEvent(userId: string, event: UpdateEventDto, filesArray: Express.Multer.File[]) {
     try {
+      const { lat, lon, files, ...eventInfo } = event;
+
       const findEvent = await this.prisma.event.findUnique(
         {
           where: {
@@ -99,35 +100,26 @@ export class EventsService {
         }
       )
 
-      const response = await this.cloudinaryService.deleteImgCloudinary(findEvent.photos);
-
+      console.log("llego 1");
+        const response = await this.cloudinaryService.deleteImgCloudinary(findEvent.photos);
+      
+      console.log("lelgo 2", response);
       if (!response) {
         return new HttpException('Error intentar eliminar de cloudinary las imagenes', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
-      event.photos = await this.cloudinaryService.uploadFilesToCloudinary(files);
-
-      const { lat, lon, ...eventInfo } = event;
+      const photosUrl = await this.cloudinaryService.uploadFilesToCloudinary(filesArray);
 
       const eventUpdated = await this.prisma.event.update({
         where: { id: event.id, userId: userId },
         data: {
           ...eventInfo,
-          // id: event.id,
-          // name: event.name,
-          // type: event.type,
-          // date: event.date,
-          // time: event.time,
           location: {
             lat: event.lat,
             lon: event.lon
           },
+          photos : photosUrl,
           createdAt: event.createdAt || new Date()
-          // location: event.location ? { lat: event.location.lat, log: event.location.log } : undefined,
-          // createdAt: event.createdAt,
-          // photos: event.photos,
-          // description: event.description,
-          // amount: event.amount,
         },
       }).catch((error) => {
         return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
