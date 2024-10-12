@@ -51,21 +51,19 @@ export class EventsService {
     }
   }
 
-  async createEvent(event: CreateEventDto, files: Array<Express.Multer.File>) {
+  async createEvent(event: CreateEventDto, filesArray: Array<Express.Multer.File>) {
     try {
-      console.log(files);
+      const { lat, lon, files, ...eventInfo } = event;
+
       let photoUrls: string[] = [];
 
-      if (!files || files.length === 0) {
+      if (!filesArray || filesArray.length === 0) {
+        console.log("entro");
         photoUrls = [dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY];
       }
       else {
-        photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(files);
+        photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(filesArray);
       }
-
-      event.photos = photoUrls;
-
-      const { lat, lon, ...eventInfo } = event;
 
       const aux = await this.prisma.event.create({
         data: {
@@ -74,6 +72,7 @@ export class EventsService {
             lat,
             lon,
           },
+          photos : photoUrls,
           createdAt: event.createdAt || new Date()
         }
       }).catch((error) => {
