@@ -18,7 +18,7 @@ export class MetricsMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: Function) {
     // Normaliza la ruta reemplazando parámetros numéricos por ':id'
-    const normalizedPath = req.path.replace(/\/\d+/g, '/:id');
+    const normalizedPath = req.path.replace(/\/[^\/]+$/, '/:id');
 
     // Verifica si la ruta actual está en la lista de rutas monitoreadas
     if (this.monitoredRoutes.includes(normalizedPath)) {
