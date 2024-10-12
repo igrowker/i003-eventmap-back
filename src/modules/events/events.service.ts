@@ -2,15 +2,16 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
 import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
 import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
-import {filterEventsRadius} from 'src/utils/utils';
+import { filterEventsRadius } from 'src/utils/utils';
 import { QueryEventsDto } from './dto/query-event.dto';
-import {CloudinaryService} from '../cloudinary/cloudinary.service'
+import { CloudinaryService } from '../cloudinary/cloudinary.service'
+import dotenvOptions from 'src/config/dotenvConfig';
 
 
 @Injectable()
 export class EventsService {
 
-  constructor(private cloudinaryService : CloudinaryService,private prisma: PrismaService) { }
+  constructor(private cloudinaryService: CloudinaryService, private prisma: PrismaService) { }
 
   async getEventsWhitoutFilter() {
     try {
@@ -52,7 +53,15 @@ export class EventsService {
 
   async createEvent(event: CreateEventDto, files: Array<Express.Multer.File>) {
     try {
-      const photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(files);
+      console.log(files);
+      let photoUrls: string[] = [];
+
+      if (!files || files.length === 0) {
+        photoUrls = [dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY];
+      }
+      else {
+        photoUrls = await this.cloudinaryService.uploadFilesToCloudinary(files);
+      }
 
       event.photos = photoUrls;
 
@@ -65,7 +74,7 @@ export class EventsService {
             lat,
             lon,
           },
-          createdAt : event.createdAt || new Date()
+          createdAt: event.createdAt || new Date()
         }
       }).catch((error) => {
         return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
@@ -114,7 +123,7 @@ export class EventsService {
             lat: event.lat,
             lon: event.lon
           },
-          createdAt : event.createdAt || new Date()
+          createdAt: event.createdAt || new Date()
           // location: event.location ? { lat: event.location.lat, log: event.location.log } : undefined,
           // createdAt: event.createdAt,
           // photos: event.photos,
@@ -156,11 +165,11 @@ export class EventsService {
       }
 
       const deletedEvent = await this.prisma.event.delete(
-        { where: { id: eventId} }
+        { where: { id: eventId } }
       ).catch((error) => {
         return new HttpException(`${error.meta.message}`, HttpStatus.BAD_REQUEST);
       });
-      
+
       return deletedEvent;
 
     } catch (error) {
