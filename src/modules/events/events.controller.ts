@@ -48,7 +48,7 @@ export class EventsController {
     async updateEvent(
         @Param('id') id: string,
         @Body() event: UpdateEventDto,
-        @UploadedFiles() files: Array<Express.Multer.File>
+        @UploadedFiles() files?: Array<Express.Multer.File>
     ) {
         return await this.eventsService.updateEvent(id, event, files);
     }
