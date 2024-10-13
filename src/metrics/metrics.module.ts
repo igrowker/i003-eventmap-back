@@ -13,7 +13,7 @@ import {
   imports: [
     PrometheusModule.register({
       defaultMetrics: {
-        enabled: false, //desactivar metricas por defecto
+        enabled: false, //metricas por defecto
       },
     }),
   ],
