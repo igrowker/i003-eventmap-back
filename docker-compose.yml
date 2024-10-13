@@ -1,71 +1,26 @@
 services:
-  sonarqube:
-    image: sonarqube
-    restart: unless-stopped
-    ports:
-      - '9000:9000'
-    environment:
-      SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
-      SONAR_JDBC_USERNAME: sonar
-      SONAR_JDBC_PASSWORD: sonar
-    networks:
-      - eventmap
-    volumes:
-      - sonarqube-data:/opt/sonarqube/data
-      - sonarqube-logs:/opt/sonarqube/logs
-
-  db:
-    image: postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: sonar
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: sonar
-    networks:
-      - eventmap
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-
   prometheus:
-    image: prom/prometheus
-    restart: unless-stopped
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus-data:/prometheus
+    image: prom/prometheus:latest
+    container_name: prometheus
     ports:
-      - '9090:9090'
-    networks:
-      - eventmap
+      - "9090:9090"
+    # expose:
+    #   - '9090'
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    # network_mode: "host"
 
   grafana:
-    image: grafana/grafana
-    restart: unless-stopped
+    image: grafana/grafana:latest
+    container_name: grafana
     ports:
-      - '3001:3000'
+      - "3001:3001"
+    environment:
+      - GF_SERVER_HTTP_PORT=3001
     volumes:
       - grafana-data:/var/lib/grafana
-    networks:
-      - eventmap
-
-  app_eventmap:
-    build: .
-    restart: unless-stopped
-    env_file:
-      - ./.env
-    ports:
-      - "${PORT}:${PORT}"
-    environment:
-      - PORT=${PORT}
-    networks:
-      - eventmap
-
-networks:
-  eventmap:
-    driver: bridge
 
 volumes:
-  sonarqube-data:
-  sonarqube-logs:
-  postgres-data:
   prometheus-data:
   grafana-data:
