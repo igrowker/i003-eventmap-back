@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, Delete, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, Res, UseGuards, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
@@ -25,8 +25,12 @@ export class UsersController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
   @Roles(Role.Admin, Role.Company)
-  async findOneUser(@Param('id') id: string) {
-    return await this.usersService.findOneUser(id);
+  async findOneUser(
+    @Param('id') id: string,
+    @Query('userid') userId: string,
+  ) {
+    
+    return await this.usersService.findOneUser(userId);
   }
   
   @ApiBearerAuth()
@@ -41,7 +45,11 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
   @Roles(Role.Admin)
-  async removeUser(@Param('id') id: string, @Res() res: Response) {
-    return await this.usersService.removeUser(id, res);
+  async removeUser(
+    @Param('id') id: string,
+    @Res() res: Response,
+    @Query('userid') userId: string,
+  ) {
+    return await this.usersService.removeUser(userId, res);
   }
 }
