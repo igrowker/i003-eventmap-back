@@ -155,7 +155,7 @@ export class MailService {
     }
   }
 
-  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto, response : Response) {
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
     try {
       const decodedUser = await this.verifyToken(token);
 
@@ -175,8 +175,6 @@ export class MailService {
         where: { id: user.id },
         data: { password: hashedPassword },
       });
-
-      response.redirect(`${dotenvOptions.FRONTEND_URL}login`); //preguntar a cesar no seria a login restore-password/reset-password ?
 
       return { message: 'Contraseña actualizada correctamente.' };
     } catch (error) {
