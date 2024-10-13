@@ -50,7 +50,7 @@ export class CloudinaryService {
     const photoUrls: string[] = [];
     try {
 
-      if (files.length === 0) {
+      if (files.length === 0 || !files) {
         photoUrls.push(dotenvOptions.DEFAULT_IMG_EVENT_CLOUDINARY);
 
         return photoUrls;

@@ -66,9 +66,9 @@ export class EventsController {
     @Post('/:id')
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
-        // @Param('id') id : string,
+        // @Param('id') id : string ,
         @Body() event: CreateEventDto,
-        @UploadedFiles() files: Array<Express.Multer.File>
+        @UploadedFiles() files?: Array<Express.Multer.File>
     ) {
         
         return await this.eventsService.createEvent(event, files);
@@ -111,7 +111,7 @@ export class EventsController {
     async updateEvent(
         @Param('id') id: string,
         @Body() event: UpdateEventDto,
-        @UploadedFiles() files: Array<Express.Multer.File>
+        @UploadedFiles() files?: Array<Express.Multer.File>
     ) {
         return await this.eventsService.updateEvent(id, event, files);
     }

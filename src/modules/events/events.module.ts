@@ -17,11 +17,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 export class EventsModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer
-            .apply(LoggerMiddleware)
+            .apply(LoggerMiddleware, MetricsMiddleware)
             .forRoutes('events');
-
-        consumer
-            .apply(MetricsMiddleware)
-            .forRoutes('*');
     }
 }
