@@ -17,8 +17,8 @@ export class MailController {
   }
 
   @Post('reset-password')
-  async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto, @Res() response: Response) {
-    return await this.mailService.resetPassword(token, resetPasswordDto, response);
+  async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto) {
+    return await this.mailService.resetPassword(token, resetPasswordDto);
   }
 
   @Post('subscribe')
