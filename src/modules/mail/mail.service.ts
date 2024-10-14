@@ -69,12 +69,12 @@ export class MailService {
           <table cellpadding="0" cellspacing="0" width="100%" role="presentation">
             <tr>
               <td align="left" style="padding-bottom:0px">
-                <h3 class="es-m-txt-l" style="color:#333333;font-size:24px;font-weight:bold;">${event.name}</h3>
+                <h5 class="es-m-txt-l" style="color:#333333;font-size:20px;font-weight:bold;">${event.name}</h5>
               </td>
             </tr>
             <tr>
               <td align="left" style="padding-bottom:0px">
-                <p style="color:#666666;font-size:16px">Fecha: ${event.date} | Tipo: ${event.type} | Cantidad: ${event.amount}</p>
+                <p style="color:#666666;font-size:16px; margin:px">Fecha: ${event.date} | Tipo: ${event.type} | Cantidad: ${event.amount}</p>
               </td>
             </tr>
             <tr>
