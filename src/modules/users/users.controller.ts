@@ -7,7 +7,7 @@ import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
 import { userSelf } from 'src/guards/auth/userSelf.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiQuery, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('users')
 @Controller('users')
@@ -25,6 +25,12 @@ export class UsersController {
   @Get(':id')
   @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
   @Roles(Role.Admin, Role.Company)
+  @ApiQuery({
+    name: 'userid',
+    description: 'ID del usuario a buscar',
+    example: '123456',
+    required: true,
+  })
   async findOneUser(
     @Param('id') id: string,
     @Query('userid') userId: string,
@@ -37,6 +43,20 @@ export class UsersController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
   @Roles(Role.Admin, Role.Company)
+  @ApiBody({
+    description: 'Datos a actualizar del usuario',
+    schema: {
+      example: {
+        name: 'Juan',
+        lastName: 'Pérez',
+        email: 'juan.perez@example.com',
+        password: 'MyNewStrongP@ssw0rd',
+        cuit: '20-12345678-9',
+        rol: 'Company',
+        state: true
+      },
+    },
+  })
   async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.usersService.updateUser(id, updateUserDto);
   }
@@ -45,6 +65,12 @@ export class UsersController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
   @Roles(Role.Admin)
+  @ApiQuery({
+    name: 'userid',
+    description: 'ID del usuario a eliminar',
+    example: '123456',
+    required: true,
+  })
   async removeUser(
     @Param('id') id: string,
     @Res() res: Response,
