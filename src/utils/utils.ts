@@ -10,21 +10,36 @@ export class TimeValidator implements ValidatorConstraintInterface {
 }
 
 export function filterEventsRadius(events: any, userLat: string, userLon: string) {
-    const radiusParse = parseFloat(dotenvOptions.RADIUS.toString());
+    const RADIUS_EARTH = 6371; // Radio de la Tierra en kilómetros
+    // const radiusLimit = 5; // Radio de 5 kilómetros
+    const radiusLimit = parseFloat(dotenvOptions.RADIUS.toString()); // Radio de 5 kilómetros
     const latUserParse = parseFloat(userLat.toString());
     const lonUserParse = parseFloat(userLon.toString());
 
-    return events.filter((event : any) => {
-        const lat = event.location.lat;
-        const lon = event.location.lon;
+    return events.filter((event: any) => {
+        const latEvent = event.location.lat;
+        const lonEvent = event.location.lon;
 
-        const firstEquation = Math.pow((lat - (latUserParse)), 2);
-        const secondEquation = Math.pow((lon - (lonUserParse)), 2);
-        const thirdEquation = firstEquation + secondEquation;
-        const fourthEquation = Math.sqrt(thirdEquation);
+        // Conversión de grados a radianes
+        const latUserRad = (latUserParse * Math.PI) / 180;
+        const lonUserRad = (lonUserParse * Math.PI) / 180;
+        const latEventRad = (latEvent * Math.PI) / 180;
+        const lonEventRad = (lonEvent * Math.PI) / 180;
 
-        return fourthEquation <= radiusParse
-    })
+        // Diferencias de latitud y longitud
+        const dLat = latEventRad - latUserRad;
+        const dLon = lonEventRad - lonUserRad;
+
+        // Fórmula de Haversine
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(latUserRad) * Math.cos(latEventRad) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Distancia entre el evento y el usuario en kilómetros
+        const distance = RADIUS_EARTH * c;
+
+        return distance <= radiusLimit;
+    });
 }
 
 export function isString(type: any) {

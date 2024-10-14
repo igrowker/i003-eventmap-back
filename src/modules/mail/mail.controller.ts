@@ -4,7 +4,9 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SubscribeDto } from './dto/subscribe.dto';
 import {Response} from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('mail')
 @Controller('restore-password')
 export class MailController {
   constructor(private readonly mailService:  MailService) { }
@@ -15,8 +17,8 @@ export class MailController {
   }
 
   @Post('reset-password')
-  async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto, @Res() response: Response) {
-    return await this.mailService.resetPassword(token, resetPasswordDto, response);
+  async resetPassword(@Query('token') token: string, @Body() resetPasswordDto: ResetPasswordDto) {
+    return await this.mailService.resetPassword(token, resetPasswordDto);
   }
 
   @Post('subscribe')

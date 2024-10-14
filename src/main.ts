@@ -6,6 +6,7 @@ import dotenvOptions  from './config/dotenvConfig';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 dotenv.config();
 
@@ -24,6 +25,15 @@ async function bootstrap() {
       enableImplicitConversion: true,
     }
   }));
+
+  const config = new DocumentBuilder()
+    .setTitle("EventMap")
+    .setDescription("The EventMap API description")
+    .setVersion("1.0")
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("docs", app, document);
 
   await app.listen(dotenvOptions.PORT);
 }
