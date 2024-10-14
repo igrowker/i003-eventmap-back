@@ -31,7 +31,7 @@ export class EventsController {
         name: 'id',
         description: 'ID del evento a buscar',
         example: '4ca24b91-70c2-47ca-aee9-4f54b8f8eec5',
-      })
+    })
     async getEventById(@Param('id') id: string) {
         return await this.eventsService.getEvent(id);
     }
