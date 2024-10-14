@@ -1,3 +1,5 @@
+import dotenvOptions from "src/config/dotenvConfig";
+
 export const notificationTemplate = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="es">
@@ -110,7 +112,7 @@ a[x-apple-data-detectors],
                   <td valign="top" align="center" class="es-m-p0r" style="padding:0;Margin:0;width:560px">
                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td align="center" style="padding:0;Margin:0;padding-bottom:20px;font-size:0px"><a target="_blank" href="https://i003-eventmap-front.vercel.app/" style="mso-line-height-rule:exactly;text-decoration:underline;color:#666666;font-size:14px"><img src="https://epfdjrh.stripocdn.email/content/guids/CABINET_a028dd3d6d0bb6697abde033e4f158504e0cbb8b7ca4c066380e1a9f2c5d18cd/images/imagotipo_b.png" alt="Logo" width="125" title="Logo" class="adapt-img" style="display:block;font-size:12px;border:0;outline:none;text-decoration:none"></a></td>
+                      <td align="center" style="padding:0;Margin:0;padding-bottom:20px;font-size:0px"><a target="_blank" href=${dotenvOptions.FRONTEND_URL} style="mso-line-height-rule:exactly;text-decoration:underline;color:#666666;font-size:14px"><img src="https://epfdjrh.stripocdn.email/content/guids/CABINET_a028dd3d6d0bb6697abde033e4f158504e0cbb8b7ca4c066380e1a9f2c5d18cd/images/imagotipo_b.png" alt="Logo" width="125" title="Logo" class="adapt-img" style="display:block;font-size:12px;border:0;outline:none;text-decoration:none"></a></td>
                      </tr>
                    </table></td>
                  </tr>
@@ -172,7 +174,7 @@ a[x-apple-data-detectors],
                   <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                      <tr>
-                      <td align="center" style="padding:0;Margin:0"><span class="es-button-border" style="border-style:solid;border-color:#333333;background:#9bf5ed;border-width:3px;display:inline-block;border-radius:10px;width:auto"><a href="https://i003-eventmap-front.vercel.app/" target="_blank" class="es-button" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#333333;font-size:20px;padding:10px 30px 10px 30px;display:inline-block;background:#9bf5ed;border-radius:10px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:24px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #9bf5ed">Ver mas</a></span></td>
+                      <td align="center" style="padding:0;Margin:0"><span class="es-button-border" style="border-style:solid;border-color:#333333;background:#9bf5ed;border-width:3px;display:inline-block;border-radius:10px;width:auto"><a href=${dotenvOptions.FRONTEND_URL} target="_blank" class="es-button" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#333333;font-size:20px;padding:10px 30px 10px 30px;display:inline-block;background:#9bf5ed;border-radius:10px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:24px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #9bf5ed">Ver mas</a></span></td>
                      </tr>
                    </table></td>
                  </tr>
