@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { MetricsService } from '../metrics/metrics.service';
+import { MetricsService } from 'src/metrics/metrics.service';
 import { ApiExcludeController } from '@nestjs/swagger';
 
 @ApiExcludeController()
