@@ -13,6 +13,8 @@ import { SubscribeDto } from './dto/subscribe.dto';
 import { EventsService } from '../events/events.service';
 import {Response} from 'express';
 import dotenvOptions from 'src/config/dotenvConfig';
+import { notificationTemplate } from 'src/utils/notificationsTemplate';
+import { resetPassTemplate } from 'src/utils/resetPassTemplate';
 
 @Injectable()
 export class MailService {
@@ -28,10 +30,10 @@ export class MailService {
 
   async sendResetPasswordEmail(to: string, token: string) {
     const resetLink = `${process.env.FRONTEND_URL}/restore-password/reset-password?token=${token}`;
-    const templatePath = path.join(process.cwd(), 'src', 'utils', 'emailTemplate.html');
+    // const templatePath = path.join(process.cwd(), 'src', 'utils', 'emailTemplate.html');
 
-    let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
-    emailTemplate = emailTemplate.replace('{{resetLink}}', resetLink);
+    // let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
+    const emailTemplate = resetPassTemplate.replace('{{resetLink}}', resetLink);
 
     const mailOptions = {
       from: '"Event Map" <no-reply@eventmap.com>',
@@ -50,8 +52,8 @@ export class MailService {
 
   async sendNotificationsToEmail(to: string, events: any) {
     try {
-      const templatePath = path.join(process.cwd(), 'src', 'utils', 'notificationTemplate.html');
-      let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
+      // const templatePath = path.join(process.cwd(), 'src', 'utils', 'notificationTemplate.html');
+      // let emailTemplate = fs.readFileSync(templatePath, 'utf-8');
   
       // Filtrar los eventos y tomar los tres primeros
       const eventsHighAmount = events.filter((event: any) => event.amount >= 0.8).slice(0, 3);
@@ -67,12 +69,12 @@ export class MailService {
           <table cellpadding="0" cellspacing="0" width="100%" role="presentation">
             <tr>
               <td align="left" style="padding-bottom:0px">
-                <h3 class="es-m-txt-l" style="color:#333333;font-size:24px;font-weight:bold;">${event.name}</h3>
+                <h5 class="es-m-txt-l" style="color:#333333;font-size:20px;font-weight:bold;">${event.name}</h5>
               </td>
             </tr>
             <tr>
               <td align="left" style="padding-bottom:0px">
-                <p style="color:#666666;font-size:16px">Fecha: ${event.date} | Tipo: ${event.type} | Cantidad: ${event.amount}</p>
+                <p style="color:#666666;font-size:16px; margin:px">Fecha: ${event.date} | Tipo: ${event.type} | Cantidad: ${event.amount}</p>
               </td>
             </tr>
             <tr>
@@ -105,7 +107,7 @@ export class MailService {
   
       // Busca y reemplaza el <tbody> con la nueva lista de eventos
       const tbodyRegex = /<tbody id="eventList">(.*?)<\/tbody>/s;
-      emailTemplate = emailTemplate.replace(tbodyRegex, `<tbody id="eventList">${eventList}</tbody>`);
+      const emailTemplate = notificationTemplate.replace(tbodyRegex, `<tbody id="eventList">${eventList}</tbody>`);
   
       const mailOptions = {
         from: '"Event Map" <your-email@example.com>',

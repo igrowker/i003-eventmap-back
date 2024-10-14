@@ -1,6 +1,5 @@
 ![EventMap](https://i.ibb.co/0ZrrLLc/Captura-de-pantalla-2024-10-04-090452.png)
 
-[![Deploy to Prod](https://github.com/igrowker/i003-eventmap-back/actions/workflows/ci-deploy-to-prod.yml/badge.svg)](https://github.com/igrowker/i003-eventmap-back/actions/workflows/ci-deploy-to-prod.yml)
 
 <div style="text-align: center;">
   <h2>Integrantes del proyecto BackEnd</h2>
@@ -30,10 +29,10 @@
   <img src="https://img.shields.io/badge/Nodemailer-0072C6?style=for-the-badge&logo=nodemailer&logoColor=white" alt="Nodemailer" style="margin: 10px;">
   <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white" alt="Postman" style="margin: 10px;">
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" style="margin: 10px;">
-  <!-- <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" style="margin: 10px;"> -->
+  <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger" style="margin: 10px;"> -->
   <img src="https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white" alt="ESLint" style="margin: 10px;">
   <img src="https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=black" alt="Prettier" style="margin: 10px;">
-  <!-- <img src="https://img.shields.io/badge/Shell_Script-121011?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Shell Script" style="margin: 10px;"> -->
+  <img src="https://img.shields.io/badge/Shell_Script-121011?style=for-the-badge&logo=gnu-bash&logoColor=white" alt="Shell Script" style="margin: 10px;"> -->
   <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="GitHub Actions" style="margin: 10px;">
 </div>
 
@@ -181,5 +180,23 @@ i003-eventmap-back/
 ├── tsconfig.build.json         # Configuración específica de TypeScript para la construcción
 └── tsconfig.json               # Configuración principal de TypeScript
 ```
+
+
+
+
+### Rutas Disponibles para Swagger
+
+**Interfaz Interactiva de Swagger**
+   - **URL**: [http://localhost:3000/docs](http://localhost:3000/docs)
+   - **Descripción**: Esta ruta sirve la interfaz de usuario de Swagger UI, donde puedes ver todos los endpoints documentados, sus métodos, parámetros, y ejemplos de respuesta. Además, puedes realizar peticiones directamente desde esta interfaz para probar los diferentes endpoints de la API.
+   Esta ruta proporciona la especificación completa de la API en formato JSON. Es útil para integraciones automáticas y para generar clientes de API en diferentes lenguajes de programación.
+
+### Backend
+
+- **Despliegue**: [https://i003-eventmap-back-dev-latest.onrender.com](https://i003-eventmap-back-dev-latest.onrender.com)
+- **Repositorio**: [https://github.com/igrowker/i003-eventmap-back](https://github.com/igrowker/i003-eventmap-back)
+- **Documentacion**: [Swagger](https://i003-eventmap-back-dev-latest.onrender.com/docs)
+- **Despliegue a produccion**: [https://github.com/igrowker/i003-eventmap-back/actions/workflows/ci-deploy-to-prod.yml/badge.svg](https://github.com/igrowker/i003-eventmap-back/actions/workflows/ci-deploy-to-prod.yml/badge.svg)
+
 
 ![EventMap](https://i.ibb.co/dtCqRzD/4688bb3888c033b886921ae5c59216b5.png)
