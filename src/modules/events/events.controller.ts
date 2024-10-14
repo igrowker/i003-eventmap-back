@@ -22,18 +22,6 @@ export class EventsController {
     }
 
     @Get('/')
-    @ApiQuery({
-        name: 'page',
-        description: 'Número de la página para la paginación',
-        example: 1,
-        required: false,
-    })
-    @ApiQuery({
-        name: 'limit',
-        description: 'Cantidad de eventos por página',
-        example: 10,
-        required: false,
-    })
     async getAllEvents(@Query() query: QueryEventsDto) {
         return await this.eventsService.getEvents(query);
     }
