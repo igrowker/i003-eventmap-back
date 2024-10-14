@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { EventsService } from './events.service';
-import { CreateEventDto } from 'src/modules/events/dto/create-event.dto';
-import { UpdateEventDto } from 'src/modules/events/dto/update-event.dto';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 import { Roles } from 'src/decorators/Roles.decorator';
 import { Role } from 'src/utils/enum';
 import { JwtAuthGuard } from 'src/guards/auth/jwtAuth.guard';
@@ -22,6 +22,7 @@ export class EventsController {
     }
 
     @Get('/')
+    @ApiBody({ type: QueryEventsDto })
     async getAllEvents(@Query() query: QueryEventsDto) {
         return await this.eventsService.getEvents(query);
     }
@@ -43,74 +44,21 @@ export class EventsController {
         name: 'id'
     })
     @ApiConsumes('multipart/form-data')
-    @ApiBody({
-        schema: {
-            type: 'object',
-            properties: {
-                userId: { type: 'string', example: '4ca24b91-70c2-47ca-aee9-4f54b8f8eec5' },
-                name: { type: 'string', example: 'Torneo rugby' },
-                type: { type: 'string', example: 'Deportivo' },
-                date: { type: 'string', format: 'date', example: '2024-10-12' },
-                time: { type: 'string', example: '15:30' },
-                lat: { type: 'number', example: -34.603722 },
-                lon: { type: 'number', example: -58.381592 },
-                description: { type: 'string', example: 'partido' },
-                amount: { type: 'number', example: 0.5 },
-                capacity: { type: 'string', example: '100' },
-                addres: { type: 'string', example: 'los laureles' },
-                files: {
-                    type: 'array',
-                    items: {
-                        type: 'string',
-                        format: 'binary'
-                    }
-                }
-            }
-        }
-    })
-    @Post('/:id')
+    @ApiBody({ type: CreateEventDto })
+    @Post('/:id')  
     @UseInterceptors(FilesInterceptor('files'))
     async createEvent(
-        // @Param('id') id : string ,
         @Body() event: CreateEventDto,
         @UploadedFiles() files?: Array<Express.Multer.File>
     ) {
-
         return await this.eventsService.createEvent(event, files);
     }
 
     @ApiBearerAuth()
     @Roles(Role.Admin, Role.Company)
     @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
-    @ApiParam({
-        name: 'id'
-    })
     @ApiConsumes('multipart/form-data')
-    @ApiBody({
-        schema: {
-            type: 'object',
-            properties: {
-                userId: { type: 'string', example: '4ca24b91-70c2-47ca-aee9-4f54b8f8eec5' },
-                name: { type: 'string', example: 'Torneo rugby' },
-                type: { type: 'string', example: 'Deportivo' },
-                date: { type: 'string', format: 'date', example: '2024-10-12' },
-                time: { type: 'string', example: '15:30' },
-                lat: { type: 'number', example: -34.603722 },
-                lon: { type: 'number', example: -58.381592 },
-                description: { type: 'string', example: 'partido' },
-                amount: { type: 'number', example: 0.5 },
-                capacity: { type: 'string', example: '100' },
-                addres: { type: 'string', example: 'los laureles' },
-                files: {
-                    type: 'array',
-                    items: {
-                        type: 'string',
-                        format: 'binary'
-                    }
-                }
-            }
-        }
-    })
+    @ApiBody({ type: UpdateEventDto })
     @UseInterceptors(FilesInterceptor('files'))
     @Put('/:id')
     async updateEvent(
@@ -151,7 +99,7 @@ export class EventsController {
     @UseGuards(JwtAuthGuard, RoleGuard, userSelf)
     @ApiParam({ name: 'id', description: 'ID del usuario' })
     @ApiParam({ name: 'idEvent', description: 'ID del evento' })
-    @Delete('/:id/:idEvent')
+    @Delete('/:id/:idEvent')  
     async deleteEvent(@Param('idEvent') idEvent: string) {
         return await this.eventsService.deleteEvent(idEvent);
     }

@@ -12,7 +12,8 @@ import { ApiBearerAuth, ApiTags, ApiQuery, ApiBody } from '@nestjs/swagger';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
+
   @ApiBearerAuth()
   @Get()
   @UseGuards(JwtAuthGuard, RoleGuard)
@@ -31,11 +32,8 @@ export class UsersController {
     example: '123456',
     required: true,
   })
-  async findOneUser(
-    @Param('id') id: string,
-    @Query('userid') userId: string,
-  ) {
-    
+  async findOneUser(@Param('id') id: string,
+  @Query('userid') userId: string,) {
     return await this.usersService.findOneUser(userId);
   }
   
@@ -45,15 +43,23 @@ export class UsersController {
   @Roles(Role.Admin, Role.Company)
   @ApiBody({
     description: 'Datos a actualizar del usuario',
-    schema: {
-      example: {
-        name: 'Juan',
-        lastName: 'Pérez',
-        email: 'juan.perez@example.com',
-        password: 'MyNewStrongP@ssw0rd',
-        cuit: '20-12345678-9',
-        rol: 'Company',
-        state: true
+    type: UpdateUserDto,
+    examples: {
+      example1: {
+        value: {
+          name: 'Juan',
+          lastName: 'Pérez',
+          email: 'juan.perez@example.com',
+          password: 'MyNewStrongP@ssw0rd',
+          cuit: '20-12345678-9',
+        },
+        description: 'Ejemplo de actualización de usuario con todos los campos.',
+      },
+      example2: {
+        value: {
+          email: 'nuevo.correo@example.com',
+        },
+        description: 'Ejemplo de actualización de solo el correo electrónico.',
       },
     },
   })
@@ -71,11 +77,7 @@ export class UsersController {
     example: '123456',
     required: true,
   })
-  async removeUser(
-    @Param('id') id: string,
-    @Res() res: Response,
-    @Query('userid') userId: string,
-  ) {
+  async removeUser(@Param('id') id: string, @Res() res: Response, @Query('userid') userId: string) {
     return await this.usersService.removeUser(userId, res);
   }
 }

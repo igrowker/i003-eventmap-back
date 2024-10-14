@@ -3,26 +3,18 @@ import { MailService } from './mail.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SubscribeDto } from './dto/subscribe.dto';
-import {Response} from 'express';
+import { Response } from 'express';
 import { ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('mail')
 @Controller('restore-password')
 export class MailController {
-  constructor(private readonly mailService:  MailService) { }
+  constructor(private readonly mailService: MailService) { }
 
   @Post('forgot-password')
   @ApiBody({
     description: 'Solicita un enlace para restablecer la contraseña.',
-    schema: {
-      type: 'object',
-      properties: {
-        email: {
-          type: 'string',
-          example: 'user@example.com', 
-        },
-      },
-    },
+    type: ForgotPasswordDto,
   })
   @ApiResponse({ status: 200, description: 'Correo enviado exitosamente.' })
   @ApiResponse({ status: 400, description: 'Petición inválida.' })
@@ -38,15 +30,7 @@ export class MailController {
   })
   @ApiBody({
     description: 'Datos necesarios para restablecer la contraseña.',
-    schema: {
-      type: 'object',
-      properties: {
-        password: {
-          type: 'string',
-          example: 'newPassword123', 
-        },
-      },
-    },
+    type: ResetPasswordDto,
   })
   @ApiResponse({ status: 200, description: 'Contraseña restablecida exitosamente.' })
   @ApiResponse({ status: 400, description: 'Token inválido o datos incorrectos.' })
@@ -57,19 +41,12 @@ export class MailController {
   @Post('subscribe')
   @ApiBody({
     description: 'Datos para suscribirse a la lista de correos.',
-    schema: {
-      type: 'object',
-      properties: {
-        email: {
-          type: 'string',
-          example: 'subscriber@example.com', 
-        },
-      },
-    },
+    type: SubscribeDto,
   })
   @ApiResponse({ status: 200, description: 'Suscripción exitosa.' })
   @ApiResponse({ status: 400, description: 'Datos de suscripción inválidos.' })
-  async subscribe(@Body() sub : SubscribeDto){
+  async subscribe(@Body() sub: SubscribeDto) {
     return await this.mailService.subscribe(sub);
   }
 }
+

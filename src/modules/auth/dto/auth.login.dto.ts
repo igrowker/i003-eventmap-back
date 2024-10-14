@@ -1,6 +1,11 @@
 import { IsEmail, Matches, IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class AuthLoginDto {
+  @ApiProperty({
+    description: 'El correo electrónico del usuario',
+    example: 'juan.perez@example.com',
+  })
   @IsString()
   @IsNotEmpty({ message: 'Correo electrónico es obligatorio' })
   @IsEmail({}, { message: 'El correo electrónico debe ser una dirección de correo válida y tener un dominio permitido.' })
@@ -8,6 +13,10 @@ export class AuthLoginDto {
   @Matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, { message: 'El correo debe tener un formato válido (sin espacios y con un dominio correcto).' })
   email: string;
 
+  @ApiProperty({
+    description: 'La contraseña del usuario',
+    example: 'MyStrongP@ssw0rd',
+  })
   @IsString()
   @IsNotEmpty({ message: 'Contraseña es obligatoria' })
   @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres.' })

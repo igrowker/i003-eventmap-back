@@ -12,15 +12,7 @@ export class AuthController {
   @Post('register')
   @ApiBody({
     description: 'Cuerpo de la solicitud para crear un nuevo usuario',
-    schema: {
-      example: {
-        name: 'Juan',
-        lastName: 'Pérez',
-        email: 'juan.perez@example.com',
-        password: 'MyStrongP@ssw0rd',
-        cuit: '20-12345678-9',
-      },
-    },
+    type: CreateUserDto, // Referencia al DTO aquí
   })
   async create(@Res({ passthrough: true }) res: Response, @Body() createUserDto: CreateUserDto) {
     return await this.authService.signUp(createUserDto);
@@ -29,12 +21,7 @@ export class AuthController {
   @Post('login')
   @ApiBody({
     description: 'Cuerpo de la solicitud para iniciar sesión',
-    schema: {
-      example: {
-        email: 'juan.perez@example.com',
-        password: 'MyStrongP@ssw0rd'
-      },
-    },
+    type: AuthLoginDto, 
   })
   @HttpCode(HttpStatus.OK)
   async login(@Body() loginDto: AuthLoginDto) {
