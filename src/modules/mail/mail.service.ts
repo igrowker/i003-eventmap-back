@@ -11,6 +11,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { SubscribeDto } from './dto/subscribe.dto';
 import { EventsService } from '../events/events.service';
+import {Response} from 'express';
+import dotenvOptions from 'src/config/dotenvConfig';
 
 @Injectable()
 export class MailService {
@@ -80,7 +82,7 @@ export class MailService {
             </tr>
             <tr>
               <td align="left" style="padding-top:10px">
-                <a href="https://i003-eventmap-front.vercel.app/events/${event.id}" target="_blank" style="color:#ffffff;font-size:16px;padding:10px 20px;background-color:#5C68E2;border-radius:5px;text-decoration:none;display:inline-block;">Ver más</a>
+                <a href="${dotenvOptions.FRONTEND_URL}/events/${event.id}" target="_blank" style="color:#ffffff;font-size:16px;padding:10px 20px;background-color:#5C68E2;border-radius:5px;text-decoration:none;display:inline-block;">Ver más</a>
               </td>
             </tr>
           </table>
@@ -118,8 +120,6 @@ export class MailService {
       console.error('Error al enviar el correo:', error);
     }
   }
-  
-  
 
   async requestPasswordReset(forgotPasswordDto: ForgotPasswordDto) {
     const { email } = forgotPasswordDto;
@@ -185,7 +185,6 @@ export class MailService {
   async subscribe(sub: SubscribeDto) {
     const { email } = sub;
 
-    //xq el modulo de mail necesita del service de cloudinary si getEvents no usa cloudinary ?, osea usa las url generadas por cloudinary pero no crea ni elimina nada
     try {
       //guardarlo en una tabla de emails (esto capaz implementarlo a futuro)s
 

@@ -34,6 +34,9 @@ export class UpdateEventDto {
   photos?: string[];
 
   @IsOptional()
+  files?: Array<Express.Multer.File>;
+
+  @IsOptional()
   @IsString()
   description?: string;
 

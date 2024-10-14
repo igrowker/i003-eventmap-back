@@ -41,7 +41,10 @@ export class CreateEventDto{
 
     // @IsArray()
     // @IsString({ each: true })
-    photos : string[]
+    photos ?: string[]
+
+    @IsOptional()
+    files?: Array<Express.Multer.File>;
     
     @IsNotEmpty()
     @IsString()
