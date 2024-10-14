@@ -3,7 +3,6 @@ import { MailService } from './mail.service';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { SubscribeDto } from './dto/subscribe.dto';
-import {Response} from 'express';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('mail')
