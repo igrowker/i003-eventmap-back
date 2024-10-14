@@ -20,6 +20,8 @@ export class EventsController {
     async getAllEventsWithoutFilter() {
         return await this.eventsService.getEventsWhitoutFilter();
     }
+
+    @Get('/')
     async getAllEvents(@Query() query: QueryEventsDto) {
         return await this.eventsService.getEvents(query);
     }
